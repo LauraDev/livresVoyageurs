@@ -1,0 +1,62 @@
+{# This page inherits from base.html #}
+{% extends 'base.html.twig' %}
+
+
+{# Define Style/Script block #}
+{% block stylesheets %}
+
+    <!-- Ionicons -->
+    <link href='http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css' rel='stylesheet' type='text/css'>
+    <!-- Icomoon Icon Fonts-->
+    <link rel="stylesheet" href="{{ asset('assets/css/icomoon.css') }}">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="{{ asset('assets/css/animate.css') }}">
+    <!-- Flexslider -->
+    <link rel="stylesheet" href="{{ asset('assets/css/flexslider.css') }}">
+    <!-- Bootstrap  -->
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}">
+    <!-- Main CSS (SCSS Compile) -->
+    <link rel="stylesheet" id="theme-switch" href="{{ asset('assets/css/style.css') }}">
+
+
+    <!-- jQuery -->
+    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+    <!-- jQuery Cookie -->
+    <script src="{{ asset('assets/js/jquery.cookie.js') }}"></script>
+    <script>
+    if ( $.cookie('styleCookie') === 'style-light.css') {
+        $('html, body').css('background', '#eeeeee');
+    } else if ($.cookie('styleCookie') === 'style.css') {
+        $('html, body').css('background', '#222222');
+    }
+    
+    </script>
+    <!-- jQuery Easing -->
+    <script src="{{ asset('assets/js/jquery.easing.1.3.js') }}"></script>
+    <!-- Bootstrap -->
+    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    <!-- Waypoints -->
+    <script src="{{ asset('assets/js/jquery.waypoints.min.js') }}"></script>
+    <!-- Flexslider -->
+    <script src="{{ asset('assets/js/jquery.flexslider-min.js') }}"></script>
+
+    <!-- Viewport Units Buggyfill -->
+    <script src="{{ asset('assets/js/viewport-units-buggyfill.js') }}"></script>
+
+    <!-- Googgle Map -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCefOgb1ZWqYtj7raVSmN4PL2WkTrc-KyA&sensor=false"></script>
+    <script src="{{ asset('assets/js/google_map.js') }}"></script>
+
+    
+    <!-- Main JS  -->
+    <script src="{{ asset('assets/js/main.js') }}"></script>
+
+    <!-- Modernizr JS -->
+    <script src="{{ asset('assets/js/modernizr-2.6.2.min.js') }}"></script>
+    <!-- FOR IE9 below -->
+    <!--[if lt IE 9]>
+    <script src="{{ asset('assets/js/respond.min.js') }}"></script>
+    <![endif]-->
+
+
+{% endblock %}

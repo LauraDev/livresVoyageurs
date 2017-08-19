@@ -1,0 +1,66 @@
+{# Set which page we are on #}
+{% set active_page = current %}
+{% set active_page = active_page|default('Accueil') %}
+
+
+<!-- classic menu-->
+<div class="container">
+	<nav class="navbar row">
+
+		<!-- left-menu -->
+		<div class="left-menu col-md-3 col-sm-4 col-xs-12">
+			<a href="#" class="logo">
+				<img class="img img-responsive" alt="Logo" src="{{ asset('assets/images/logo.png') }}" />
+			</a>
+		</div> <!-- left-menu -->
+
+
+		<!-- right-menu -->
+		<div class="right-menu col-md-9 col-sm-8 col-xs-12 displayFlex hidden-xs">
+
+			<ul class="displayFlex">
+				{% if app['session'] is defined %}
+					<li {% if active_page == 'Accueil' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_home') }}"> Accueil </a></li>
+					<li><a href="{{ path('livresVoyageurs_deconnexion') }}"> Déconnexion </a></li>
+
+				{% else %}
+					<li {% if active_page == 'Accueil' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_home') }}"> Accueil </a></li>
+					<li {% if active_page == 'Inscription' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_inscription') }}"> Inscription </a></li>
+					<li {% if active_page == 'Connexion' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_connexion') }}"> Connexion </a></li>
+				{% endif %}
+			</ul>
+
+			<div class="search-icon displayFlex">
+				<div class="search-icon-inner">
+					<i class="ion-ios-search-strong"></i>
+				</div>
+				<div class="search-box">
+					<input type="text" placeholder="Un livre..." />
+					<button>Rechercher</button>
+				</div>
+			</div> <!-- search-icon -->
+
+		</div> <!-- right-menu -->
+
+
+
+		<!-- mobile menu-->
+		<div class="menu-res hidden-lg hidden-md hidden-sm ">
+			<div class="menu-res-inner">
+				<ul class="displayFlex">
+					{% if app['session'] is defined %}
+						<li {% if active_page == 'Accueil' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_home') }}"> Accueil </a></li>
+						<li {% if active_page == 'Deconnexion' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_deconnexion') }}"> Déconnexion </a></li>
+
+					{% else %}
+						<li {% if active_page == 'Accueil' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_home') }}"> Accueil </a></li>
+						<li {% if active_page == 'Inscription' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_inscription') }}"> Inscription </a></li>
+						<li {% if active_page == 'Connexion' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_connexion') }}"> Connexion </a></li>
+					{% endif %}
+				</ul>
+			</div>
+		</div> <!-- mobile menu -->
+
+
+	</nav>
+</div> <!-- container -->

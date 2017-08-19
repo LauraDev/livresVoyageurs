@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+	<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="{% block seodescription '' %}" />
+        <meta name="keywords" content="livres voyageurs, partage de livres, communaute de partage, recyclage de livres, donner ses livres" />
+        <meta name="author" content="LOIC GALLAY ET LAURA TRAORE" />
+        <title>{% block title '' %} - Les Livres Voyageurs</title>
+        
+        <!-- CSS & JS Block -->
+        {% block stylesheets %}{% endblock %}
+	</head>
+	
+	<body>
+		<!-- Loader -->
+		<div class="loader"></div>
+		
+		<div id="page">
+			
+			<!-- Menu using HttpFragmentServiceProvider -->
+			{{ render(controller('LivresVoyageurs\\Controller\\UserController::menu')) }}
+
+			<div class="container">
+
+				<!-- Content Block -->
+				{% block content %}{% endblock %}
+
+			</div>
+
+				<!-- Include Footer -->
+			{% include 'inc/footer.html' %}
+
+		</div>	
+	</body>
+</html>
