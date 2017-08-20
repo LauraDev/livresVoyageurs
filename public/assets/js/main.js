@@ -26,24 +26,9 @@
 	};
 
 	// Loading page
-	var loaderPage = function() {
-		$(".loader").fadeOut("slow");
+	var loadPage = function() {
+		$(".loading").fadeOut("slow");
 	};
-
-
-
-	// Scroll Next
-	var ScrollNext = function() {
-		$('body').on('click', '.scroll-btn', function(e){
-			e.preventDefault();
-
-			$('html, body').animate({
-				scrollTop: $( $(this).closest('[data-next="yes"]').next()).offset().top
-			}, 1000, 'easeInOutExpo');
-			return false;
-		});
-	};
-
 	
 
 	var styleToggle = function() {
@@ -114,7 +99,7 @@
 
 	var contentWayPoint = function() {
 		var i = 0;
-		$('.animate-box').waypoint( function( direction ) {
+		$('.animation').waypoint( function( direction ) {
 
 			if( direction === 'down' && !$(this.element).hasClass('animated') ) {
 				
@@ -123,7 +108,7 @@
 				$(this.element).addClass('item-animate');
 				setTimeout(function(){
 
-					$('body .animate-box.item-animate').each(function(k){
+					$('body .animation.item-animate').each(function(k){
 						var el = $(this);
 						setTimeout( function () {
 							el.addClass('fadeInUp animated');
@@ -137,26 +122,14 @@
 
 		} , { offset: '95%' } );
 	};
-	
 
-	var moreProjectSlider = function() {
-		$('.flexslider').flexslider({
-			animation: "slide",
-			animationLoop: false,
-			itemWidth: 310,
-			itemMargin: 20,
-			controlNav: false
-		});
-	}
 	
 
 	// Document on load.
 	$(function(){
 		
 		gotToNextSection();
-		loaderPage();
-		ScrollNext();
-		moreProjectSlider();
+		loadPage();
 		styleToggle();
 		
 		// Animate
@@ -169,13 +142,13 @@
 
 
 $(document).ready(function() {
-
+	
 	$("body").css("display", "none");
 
-    $("body").fadeIn(2000);
-    $("body").stop().animate({
-    	opacity: 1
-    });
+	$("body").fadeIn(2000);
+	$("body").stop().animate({
+		opacity: 1
+	});
 
 
 	$("a.transition").click(function(event){
@@ -190,4 +163,5 @@ $(document).ready(function() {
 		window.location = linkLocation;
 	}
 	
-});
+	
+}); 

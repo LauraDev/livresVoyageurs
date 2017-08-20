@@ -1,0 +1,43 @@
+{# This page inherits from base.html #}
+{% extends 'layout.html.twig' %}
+
+{# Define Title #}
+{% block title %} Contact {% endblock %}
+
+
+{# Define Content #}
+{% block content %}
+
+    <section id="contact">
+        <div class="container">
+            <div class="row" id="contactForm">
+                <div class="col-md-6 animation" id="myMap"></div>
+                <div class="col-md-offset-1 col-md-4 animation" id="form"> 
+                    <form id="sendMsg" method="post" action="ajax/traitementContact.php">
+                        <h2>Contact</h2>
+                        <div class="form-group">
+                            <input type="text" class="inputs" name="nom" required placeholder="Nom et Prenom *">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="inputs" name="email" required placeholder="Email *">
+                        </div>
+                        <div class="form-group">
+                            <textarea name="message" class="inputs" rows="5" required placeholder="Message *"></textarea>
+                        </div>
+                        <p>
+                            <span class="required"></span>
+                            <em>* Champs obligatoires</em>
+                        </p>
+                        <div class="form-group">
+                            <input type="submit" name="btnSub" Value="Envoyer" class="btn">
+                        </div> 
+                        <div id="sent"></div>
+                    </form>
+                </div> <!-- col -->
+            </div> <!-- row -->
+
+        </div> <!-- container -->
+        <div class="divider"></div>
+    </section>
+
+{% endblock %}

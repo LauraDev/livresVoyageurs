@@ -8,7 +8,7 @@
 	<nav class="navbar row">
 
 		<!-- left-menu -->
-		<div class="left-menu col-md-3 col-sm-4 col-xs-12">
+		<div class="left-menu animation col-md-3 col-sm-4 col-xs-12">
 			<a href="#" class="logo">
 				<img class="img img-responsive" alt="Logo" src="{{ asset('assets/images/logo.png') }}" />
 			</a>
@@ -16,7 +16,7 @@
 
 
 		<!-- right-menu -->
-		<div class="right-menu col-md-9 col-sm-8 col-xs-12 displayFlex hidden-xs">
+		<div class="right-menu col-md-5 col-sm-offset-4 col-sm-4 col-xs-12 displayFlex hidden-xs">
 
 			<ul class="displayFlex">
 				{% if app['session'] is defined %}
@@ -24,13 +24,13 @@
 					<li><a href="{{ path('livresVoyageurs_deconnexion') }}"> Déconnexion </a></li>
 
 				{% else %}
-					<li {% if active_page == 'Accueil' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_home') }}"> Accueil </a></li>
-					<li {% if active_page == 'Inscription' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_inscription') }}"> Inscription </a></li>
-					<li {% if active_page == 'Connexion' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_connexion') }}"> Connexion </a></li>
+					<li class="animation" {% if active_page == 'Accueil' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_home') }}"> Accueil </a></li>
+					<li class="animation" {% if active_page == 'Inscription' %} class="active"{% endif%}><a id="inscription" href="{{ path('livresVoyageurs_inscription') }}"> Inscription </a></li>
+					<li class="animation" {% if active_page == 'Connexion' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_connexion') }}"> Connexion </a></li>
 				{% endif %}
 			</ul>
 
-			<div class="search-icon displayFlex">
+			{# <div class="search-icon displayFlex">
 				<div class="search-icon-inner">
 					<i class="ion-ios-search-strong"></i>
 				</div>
@@ -38,7 +38,7 @@
 					<input type="text" placeholder="Un livre..." />
 					<button>Rechercher</button>
 				</div>
-			</div> <!-- search-icon -->
+			</div> <!-- search-icon --> #}
 
 		</div> <!-- right-menu -->
 
