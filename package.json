@@ -1,0 +1,6 @@
+{
+    "dependencies": {
+        "mysql": "^2.5.5",
+        "socket.io": "^2.0.3"
+    }
+}

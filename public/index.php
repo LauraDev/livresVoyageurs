@@ -18,6 +18,7 @@ $app['debug'] = true;
 // 4- Define routes
 $app->mount('/', new LivresVoyageurs\Controller\Provider\UserControllerProvider() );
 $app->mount('/private', new LivresVoyageurs\Controller\Provider\AdminControllerProvider() );
+$app->mount('/chat', new LivresVoyageurs\Controller\Provider\ChatControllerProvider() );
 
 
 
@@ -61,6 +62,7 @@ $app->register(new Idiorm\Silex\Provider\IdiormServiceProvider(), array(
         )
     ),
 ));
+
 
 // 8- Allow render(controller()) in the view
 $app->register(new Silex\Provider\HttpFragmentServiceProvider());

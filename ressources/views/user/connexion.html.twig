@@ -11,8 +11,40 @@
 
     <div class="row">
 
-        Connexion
+        <h1> Connexion </h1>
 
-    </div>
+        <div class="col-md-offset-3 col-md-6">
+            <!-- Connexion Form -->
+            <form id="formUserConnexion" action="" method="">
+
+                <!-- Pseudo -->
+                <div class="form-group">
+                    <label for="pseudoUser">Pseudo</label>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input type="text" name="pseudoUser" class="form-control" required>
+                    </div>
+                    <p class="error alert alert-danger">Vous n'avez pas indiqué votre Pseudo</p>
+                    <p class="error alert alert-danger">Ce pseudo n'existe pas</p>
+                </div>
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="passUser">Mot de passe</label>
+                    <div class="input-group">
+                        <div class="input-group-addon"><span class="ion-android-lock"></span></div>
+                        <input type="password" name="passUser" class="form-control" required>
+                    </div>
+                    <p class="error alert alert-danger">Vous n'avez pas indiqué votre Mot de passe</p>
+                    <p class="error alert alert-danger">Mot de passe incorrect</p>
+                </div>
+                <!-- Submission -->
+                <div class="form-group text-center">
+                    <input type="submit" name="btnSub" value="Entrer" id="btnUserConnexion" class="btn btn-success">
+                </div>
+
+            </form>
+        </div> <!-- col-md -->
+
+    </div> <!-- row -->
 
 {% endblock %}

@@ -20,12 +20,23 @@ class  AdminController
     //Affichage de la page d'accueil
     public function administrateurAction(Application $app, $prenomAdmin) {
         
-        # Page active pour le menu
-        $app['current'] = 'Accueil';
+        if( isset($app['pseudoAdmin']) ) 
+        {
+            # Page active pour le menu
+            $app['current'] = 'Accueil';
 
-        return $app['twig']->render('private/admin.html.twig', [
-            'prenomAdmin' => $prenomAdmin
-        ]);
+            return $app['twig']->render('private/admin.html.twig', [
+                'prenomAdmin' => $prenomAdmin
+            ]);
+        }
+        else 
+        {    
+            # Page active pour le menu
+            $app['current'] = 'Accueil';
+            
+            return $app->redirect($app['url_generator']->generate('livresVoyageurs_connexionAdmin'));
+        }
+    
     }
 
 }

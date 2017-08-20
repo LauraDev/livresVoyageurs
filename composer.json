@@ -5,7 +5,10 @@
         "symfony/asset": "^3.3",
         "symfony/twig-bridge": "^3.3",
         "doctrine/dbal": "2.2",
-        "j4mie/idiorm": "^1.5"
+        "j4mie/idiorm": "^1.5",
+        "symfony/form": "^3.3",
+        "symfony/validator": "^3.3",
+        "symfony/config": "^3.3"
     },
 
     "autoload": {

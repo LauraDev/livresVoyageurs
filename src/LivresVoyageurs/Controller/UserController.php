@@ -42,12 +42,22 @@ class  UserController
     //Affichage de l'espace personnel
     public function espacePersoAction(Application $app, $pseudo) {
 
-        # Page active pour le menu
-        $app['current'] = 'Espace Personnel';
-
-        return $app['twig']->render('user/espacePerso.html.twig', [
-            'pseudo' => $pseudo
-        ]);
+        if( isset($app['pseudo']) ) 
+        {
+            # Page active pour le menu
+            $app['current'] = 'Espace Personnel';
+    
+            return $app['twig']->render('user/espacePerso.html.twig', [
+                'pseudo' => $pseudo
+            ]);
+        }
+        else 
+        {
+            # Page active pour le menu
+            $app['current'] = 'Connexion';
+        
+            return $app->redirect($app['url_generator']->generate('livresVoyageurs_connexion'));
+        }
     }
 
     
