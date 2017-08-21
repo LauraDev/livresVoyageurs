@@ -1,20 +1,23 @@
 
-    {# This page inherits from base.html #}
-    {% extends 'layout.html.twig' %}
+{# This page inherits from base.html #}
+{% extends 'layout.html.twig' %}
 
-    {# Define Title #}
-    {% block title %} Mon Espace {% endblock %}
+{# Define Title #}
+{% block title %} Mon Espace {% endblock %}
+
+{#  Breadcrumb trail #}
+{% set active_page = 'Espace' %}
 
 
-    {# Define Content #}
-    {% block content %}
+{# Define Content #}
+{% block content %}
 
-        <div class="row">
+    <div class="row">
 
-            <h1> Tableau de bord </h1>
+        <h1> Tableau de bord </h1>
 
-        </div>
+    </div>
 
-    {% endblock %}
+{% endblock %}
 
 

@@ -35,7 +35,7 @@
 			</div>
 			
 			<!-- Menu using HttpFragmentServiceProvider -->
-			{{ render(controller('LivresVoyageurs\\Controller\\UserController::menu')) }}
+			{{ render(controller('LivresVoyageurs\\Controller\\UserController::menu', {'active_page' : active_page})) }}
 
 			<div class="container">
 

@@ -3,73 +3,58 @@
 namespace LivresVoyageurs\Controller;
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
 
 class  UserController
 {
 
-    //Affichage de la page d'accueil
+    //Display Home page
     public function indexAction(Application $app) {
-
-        # Page active pour le menu
-        $app['current'] = 'Accueil';
-
 
         return $app['twig']->render('user/index.html.twig');
     }
 
 
-    //Affichage de la page Inscriptiom
+    //Display Inscription page
     public function inscriptionAction(Application $app) {
-
-        
-        # Page active pour le menu
-        $app['current'] = 'Inscription';
 
         return $app['twig']->render('user/inscription.html.twig');
     }
 
 
-    //Affichage de la page Connexion
-    public function connexionAction(Application $app) {
-    
-        # Page active pour le menu
-        $app['current'] = 'Connexion';
+    //Display Connexion page
+    public function connexionAction(Application $app, Request $request) {
 
-        return $app['twig']->render('user/connexion.html.twig');
+        return $app['twig']->render('user/connexion.html.twig',[
+            'error'         => $app['security.last_error']($request),
+            'last_username' => $app['session']->get('_security.last_username')
+        ]);
     }
 
 
-    //Affichage de l'espace personnel
+    //Display Personal Space
     public function espacePersoAction(Application $app, $pseudo) {
-
-        if( isset($app['pseudo']) ) 
-        {
-            # Page active pour le menu
-            $app['current'] = 'Espace Personnel';
     
-            return $app['twig']->render('user/espacePerso.html.twig', [
-                'pseudo' => $pseudo
-            ]);
-        }
-        else 
-        {
-            # Page active pour le menu
-            $app['current'] = 'Connexion';
-        
-            return $app->redirect($app['url_generator']->generate('livresVoyageurs_connexion'));
-        }
+        return $app['twig']->render('user/espacePerso.html.twig', [
+            'pseudo' => $pseudo
+        ]);
     }
 
     
-    //Affichage du menu
-    public function menu(Application $app) {
-        
-        # Page active pour le menu
-        $current = ucfirst($app['current']);
 
-        # Transmission à la vue
+    //Display the menu
+    public function menu(Application $app, $active_page) {
+
         return $app['twig']->render('menu.html.twig', [
-            'current' => $current ]);
+            'active_page' => $active_page ]);
     }
+
+    //Disconnection
+    public function deconnexionAction(Application $app) {
+        # Empty Session
+        $app['session']->clear();
+        # Redirect to Home
+        return $app->redirect( $app['url_generator']->generate('livresVoyageurs_home') ); 
+    } 
 
 }
