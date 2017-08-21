@@ -32,14 +32,6 @@ class  UserController
     }
 
 
-    //Display Personal Space
-    public function espacePersoAction(Application $app, $pseudo) {
-    
-        return $app['twig']->render('user/espacePerso.html.twig', [
-            'pseudo' => $pseudo
-        ]);
-    }
-
     
 
     //Display the menu

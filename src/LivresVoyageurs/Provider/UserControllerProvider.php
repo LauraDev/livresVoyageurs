@@ -24,8 +24,6 @@ class UserControllerProvider implements ControllerProviderInterface
                 ->bind('livresVoyageurs_home');
 
 
-
-
             # Inscription Page
             $controllers
 
@@ -42,17 +40,6 @@ class UserControllerProvider implements ControllerProviderInterface
                 ->get('/connexion', 'LivresVoyageurs\Controller\UserController::connexionAction')
                 # Route name
                 ->bind('livresVoyageurs_connexion');
-
-
-            # Personal space
-            $controllers
-            
-                # Associate a route with a controller and an action
-                ->get('/espace/{pseudo}', 'LivresVoyageurs\Controller\UserController::espacePersoAction')
-                # Specify the type of parameters / using Regex
-                ->assert('pseudo' , '[^/]+')
-                # Route name
-                ->bind('livresVoyageurs_espace');
 
             
             # Disconnect

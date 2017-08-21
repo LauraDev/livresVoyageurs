@@ -45,14 +45,15 @@
 		<div class="menu-res hidden-lg hidden-md hidden-sm ">
 			<div class="menu-res-inner">
 				<ul class="displayFlex">
-					{% if app['session'] is defined %}
+					{% if is_granted('IS_AUTHENTICATED_FULLY') %}
 						<li {% if active_page == 'Accueil' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_home') }}"> Accueil </a></li>
-						<li {% if active_page == 'Deconnexion' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_deconnexion') }}"> Déconnexion </a></li>
-
+						<li><a href="{{ path('livresVoyageurs_deconnexion') }}"> Déconnexion </a></li>
+					{% elseif is_granted('ROLE_ADMIN') %}
+						<li><a href="{{ path('livresVoyageurs_administrator') }}"> Administration </a></li>
 					{% else %}
-						<li {% if active_page == 'Accueil' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_home') }}"> Accueil </a></li>
-						<li {% if active_page == 'Inscription' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_inscription') }}"> Inscription </a></li>
-						<li {% if active_page == 'Connexion' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_connexion') }}"> Connexion </a></li>
+						<li class="animation" {% if active_page == 'Accueil' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_home') }}"> Accueil </a></li>
+						<li class="animation" {% if active_page == 'Inscription' %} class="active"{% endif%}><a id="inscription" href="{{ path('livresVoyageurs_inscription') }}"> Inscription </a></li>
+						<li class="animation" {% if active_page == 'Connexion' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_connexion') }}"> Connexion </a></li>
 					{% endif %}
 				</ul>
 			</div>
