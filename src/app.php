@@ -23,13 +23,21 @@ $app->extend('twig', function($twig, $app) {
 #5 : Asset Activation (link to CSS/JS/IMG...)
 $app->register(new Silex\Provider\AssetServiceProvider() );
 
-#6 : Doctrine DBAL
+#6 : Forms
+$app->register(new Silex\Provider\FormServiceProvider());
+$app->register(new Silex\Provider\LocaleServiceProvider());
+$app->register(new Silex\Provider\ValidatorServiceProvider());
+$app->register(new Silex\Provider\TranslationServiceProvider(), array(
+    'translator.domains' => array(),
+));
+
+#7 : Doctrine DBAL
 require PATH_RESSOURCES . '/config/database.config.php';
 
-#7 : Security
+#8 : Security
 require PATH_RESSOURCES . '/config/security.php';
 
-#8 : Return $app
+#9 : Return $app
 return $app;
 
 
