@@ -111,7 +111,7 @@
                 <!-- Form: Personal data management -->
                 <h2> Compte </h2>
                 <!-- Inscription form -->
-            <form id="formMemberModification" action="" method="">
+            <form id="formMemberModification" action="" method="POST" enctype="multipart/form-data">
 
                 <!-- Pseudo -->
                 <div class="form-group">
@@ -156,7 +156,6 @@
                 <div class="form-group">
                     <label for="avatar_member">Avatar</label>
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-camera"></i></span>
                         <input type="text" name="avatar_member" class="form-control">
                     </div>
                     <p class="error alert alert-danger">L'image est trop lourde</p>

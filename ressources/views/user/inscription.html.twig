@@ -19,7 +19,7 @@
 
         <div class="col-md-offset-3 col-md-6">
             <!-- Inscription form -->
-            <form id="formMemberInscription" action="" method="">
+            <form id="formMemberInscription" action="" method="POST" enctype="multipart/form-data">
 
                 <!-- Pseudo -->
                 <div class="form-group">
@@ -64,7 +64,6 @@
                 <div class="form-group">
                     <label for="avatar_member">Avatar</label>
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-camera"></i></span>
                         <input type="text" name="avatar_member" class="form-control">
                     </div>
                     <p class="error alert alert-danger">L'image est trop lourde</p>
