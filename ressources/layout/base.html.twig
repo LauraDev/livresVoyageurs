@@ -11,15 +11,15 @@
         <meta name="keywords" content="livres voyageurs, partage de livres, communaute de partage, recyclage de livres, donner ses livres" />
         <meta name="author" content="LOIC GALLAY ET LAURA TRAORE" />
         <title>{% block title '' %} - Les Livres Voyageurs</title>
-        
+
         <!-- CSS & JS Block -->
         {% block stylesheets %}{% endblock %}
 	</head>
-	
+
 	<body>
 		<!-- Loader -->
 		<div class="loader"></div>
-		
+
 		<div class="page">
 
 			<div class="bg-clipper">
@@ -33,7 +33,7 @@
 					</svg>
 				</div>
 			</div>
-			
+
 			<!-- Menu using HttpFragmentServiceProvider -->
 			{{ render(controller('LivresVoyageurs\\Controller\\UserController::menu', {'active_page' : active_page})) }}
 
@@ -47,6 +47,9 @@
 				<!-- Include Footer -->
 			{% include 'inc/footer.html' %}
 
-		</div>	
+
+		</div>
+		<!-- Javascripts block -->
+		{% block javascripts %}{% endblock %}
 	</body>
 </html>
