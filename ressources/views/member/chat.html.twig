@@ -9,7 +9,7 @@
 
 {# Define Content #}
 {% block content %}
-
+    
     {# Display massages #}
     <div>
         <ul id="messages"></ul>
@@ -27,42 +27,35 @@
     {# Messages management by socket.IO #}
 	<script src="http://localhost:3000/socket.io/socket.io.js"></script>
 	<script>
-
         // Define a sender
         var sender = $('#sender').val();
 		// Define Socket
 		var socket = io('http://localhost:3000/');
-
-        // socket.emit('join', $('#sender').val());
+		
+        socket.emit('join', $('#sender').val());
         {# socket.emit('initiate private message', $('#receiver').val()); #}
-
 		{# Sender Side #}
 		$('#formMessage').submit(function(event){
-
+            
 			socket.emit('chat message', { msg: $('#msg').val(), from: $('#sender').val(), to: $('#receiver').val() });
 			$('#msg').val('');
 			event.preventDefault();
 		});
-
         {# General #}
 		{# socket.emit('connect', , {user: $('#sender').val()} ); #}
-
         $('#disconnect').click(function(){
-
 			socket.disconnect();
 		});
-
+		
 		{# Receiver side #}
 		socket.on('chat message', function(data){
 			$('#messages').append($('<li>').append( data.from,': ', data.msg));
 		});
-
         {# General #}
 		socket.on('connect', function () {
 			$('#messages').append($('<li style="color:red">').append('Vous êtes connecté'));
 		});
         socket.on('member', function(name){
-
             if(name != sender)
             {
 			    $('#messages').append($('<li style="color:red">').append( name,' est connecté '));
@@ -77,15 +70,12 @@
         socket.on('private chat message', function (data) {
 			$('#messages').append($('<li>').append(data));
 		});
-
 		socket.on('disconnect', function () {
 			$('#messages').append($('<li style="color:red">').append('Vous êtes déconnecté'));
 		});
-
         socket.on('error', function(err) {
                 $('#messages').append($('<li class="alert alert-danger">').append(err));
         });
-
 	</script>
 
 {% endblock %}

@@ -12,7 +12,7 @@ class  MemberController
 
         # Define messages sender
         // $sender = $app['pseudo']; 
-$sender = 'Lolo';
+$sender = 'Loic';
         
         return $app['twig']->render('member/chat.html.twig', [
             'receiver' => $receiver,
