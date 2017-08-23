@@ -201,7 +201,7 @@ ALTER TABLE `members`
 --
 ALTER TABLE `pointers`
   ADD PRIMARY KEY (`id_pointer`),
-  ADD KEY `number_book` (`id_book`);
+  ADD KEY `id_book` (`id_book`);
 
 --
 -- Indexes for table `startpoints`
