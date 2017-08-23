@@ -2,10 +2,10 @@
 
 #1 : Doctrine DBAL Activation
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
-    'db.options' => array(
+    'db.options'   => array(
         'driver'   => 'pdo_mysql',
         'host'     => 'localhost',
-        'dbname'   => 'livresVoyageurs',
+        'dbname'   => 'livresvoyageurs',
         'user'     => 'lola',
         'password' => 'lola'
     ),
@@ -14,7 +14,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 #2 : Idiorm Activation
 $app->register(new Idiorm\Silex\Provider\IdiormServiceProvider(), array(
     'idiorm.db.options'       => array(
-        'connection_string'   => 'mysql:host=localhost;dbname=livresVoyageurs',
+        'connection_string'   => 'mysql:host=localhost;dbname=livresvoyageurs',
         'username'            => 'lola',
         'password'            => 'lola'
         // ,
