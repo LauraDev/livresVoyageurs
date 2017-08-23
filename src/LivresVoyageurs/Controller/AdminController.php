@@ -8,11 +8,11 @@ class  AdminController
 {
 
     //Display Administation Page
-    public function administrateurAction(Application $app, $prenomAdmin) {
+    public function administrateurAction(Application $app, $pseudoAdmin) {
 
         return $app['twig']->render('private/admin.html.twig', [
-            'prenomAdmin' => $prenomAdmin
-        ]);    
+            'pseudoAdmin' => $pseudoAdmin
+        ]);
     }
 
 }

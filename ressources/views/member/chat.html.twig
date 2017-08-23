@@ -9,7 +9,7 @@
 
 {# Define Content #}
 {% block content %}
-    
+
     {# Display massages #}
     <div>
         <ul id="messages"></ul>
@@ -32,13 +32,13 @@
         var sender = $('#sender').val();
 		// Define Socket
 		var socket = io('http://localhost:3000/');
-		
-        socket.emit('join', $('#sender').val());
+
+        // socket.emit('join', $('#sender').val());
         {# socket.emit('initiate private message', $('#receiver').val()); #}
 
 		{# Sender Side #}
 		$('#formMessage').submit(function(event){
-            
+
 			socket.emit('chat message', { msg: $('#msg').val(), from: $('#sender').val(), to: $('#receiver').val() });
 			$('#msg').val('');
 			event.preventDefault();
@@ -51,7 +51,7 @@
 
 			socket.disconnect();
 		});
-		
+
 		{# Receiver side #}
 		socket.on('chat message', function(data){
 			$('#messages').append($('<li>').append( data.from,': ', data.msg));

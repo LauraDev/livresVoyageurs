@@ -27,13 +27,13 @@ $app->register(new SecurityServiceProvider(), array(
             // }
         )
     ),
-    'security.access_rules' => array(
-        array('^/espace', 'ROLE_MEMBER', 'http'),
-        array('^/private', 'ROLE_ADMIN', 'http')
-    ),
-    'security.role_hierarchy' => array(
-        'ROLE_ADMIN' => array('ROLE_MEMBER')
-    )
+    // 'security.access_rules' => array(
+    //     array('^/espace', 'ROLE_MEMBER', 'http'),
+    //     array('^/private', 'ROLE_ADMIN', 'http')
+    // ),
+    // 'security.role_hierarchy' => array(
+    //     'ROLE_ADMIN' => array('ROLE_MEMBER')
+    // )
 ));
 
 # use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;

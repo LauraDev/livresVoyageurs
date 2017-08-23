@@ -41,12 +41,25 @@ class UserControllerProvider implements ControllerProviderInterface
                 # Route name
                 ->bind('livresVoyageurs_connexion');
 
-            
+
             # Disconnect
             $controllers
 
                 ->get('/deconnexion', 'LivresVoyageurs\Controller\UserController::deconnexionAction')
                 ->bind('livresVoyageurs_deconnexion');
+
+            #Contact
+            $controllers
+
+                ->get('/contact', 'LivresVoyageurs\Controller\UserController::contactAction')
+                ->bind('livresVoyageurs_contact');
+
+            #Mentions
+            $controllers
+
+                ->get('/mentions', 'LivresVoyageurs\Controller\UserController::mentionsAction')
+                ->bind('livresVoyageurs_mentions');
+
 
 
         // Return the controllers (ControllerCollection)

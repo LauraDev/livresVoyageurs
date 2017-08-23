@@ -31,8 +31,16 @@ class  UserController
         ]);
     }
 
+    // Display mentions page
+    public function mentionsAction(Application $app){
+        return $app['twig']->render('user/mentions.html.twig');
+    }
 
-    
+    // Contact
+    public function contactAction(Application $app){
+        return $app['twig']->render('contact.html.twig');
+    }
+
 
     //Display the menu
     public function menu(Application $app, $active_page) {
@@ -46,7 +54,8 @@ class  UserController
         # Empty Session
         $app['session']->clear();
         # Redirect to Home
-        return $app->redirect( $app['url_generator']->generate('livresVoyageurs_home') ); 
-    } 
+        return $app->redirect( $app['url_generator']->generate('livresVoyageurs_home') );
+    }
+
 
 }
