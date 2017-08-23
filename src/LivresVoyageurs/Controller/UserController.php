@@ -57,5 +57,10 @@ class  UserController
         return $app->redirect( $app['url_generator']->generate('livresVoyageurs_home') );
     }
 
+    //Reset Password
+    public function resetPasswordAction(Application $app) {
+        return $app['twig']->render('user/resetPassword.html.twig');
+    }
+
 
 }

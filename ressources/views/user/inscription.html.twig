@@ -11,9 +11,74 @@
 {% block content %}
 
 
-    <div class="row">
 
+
+    <div class="row">
+        
         <h1> Inscription </h1>
+
+        <div class="col-md-offset-3 col-md-6">
+            <!-- Inscription form -->
+            <form id="formMemberInscription" action="" method="">
+
+                <!-- Pseudo -->
+                <div class="form-group">
+                    <label for="pseudo_member">Pseudo *</label>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input type="text" name="pseudo_member" class="form-control" required>
+                    </div>
+                    <!-- Help-text -->
+                    <p id="pseudo-helptext">Votre Pseudo doit contenir au moins 6 caractères et un 1 chiffre</p>
+                    <!-- Pseudo Errors -->
+                    <p class="error alert alert-danger">Vous n'avez pas indiqué votre Pseudo</p>
+                    <p class="error alert alert-danger">Votre Pseudo doit contenir au moins 6 caractères et un 1 chiffre</p>
+                    <p class="error alert alert-danger">Ce pseudo existe déjà</p>
+                </div>
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="mail_member">Email *</label>
+                    <div class="input-group">
+                        <div class="input-group-addon">@</div>
+                        <input type="email" name="mail_member" class="form-control" required>
+                    </div>
+                    <p class="error alert alert-danger">Vous n'avez pas indiqué votre Email</p>
+                    <p class="error alert alert-danger">Email Incorrect</p>
+                </div>
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="pass_member">Mot de passe *</label>
+                    <div class="input-group">
+                        <div class="input-group-addon"><span class="ion-android-lock"></span></div>
+                        <input type="password" name="pass_member" class="form-control" required>
+                    </div>
+                    <!-- Help-text -->
+                    <p id="pass-helptext">Votre mot de passe doit contenir au moins 8 caractères, une majuscule et un chiffre</p>
+                    <!-- Password Errors -->
+                    <p class="error alert alert-danger">Vous n'avez pas indiqué votre Mot de passe</p>
+                    <p class="error alert alert-danger">Mot de passe doit contenir au moins 8 caractères</p>
+                    <p class="error alert alert-danger">Le mot de passe doit contenir au moins une majuscule</p>
+                    <p class="error alert alert-danger">Le mot de passe doit contenir au moins un chiffre</p>
+                </div>
+                <!-- Picture -->
+                <div class="form-group">
+                    <label for="avatar_member">Avatar</label>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-camera"></i></span>
+                        <input type="text" name="avatar_member" class="form-control">
+                    </div>
+                    <p class="error alert alert-danger">L'image est trop lourde</p>
+                    <p class="error alert alert-danger">L'image doit être au format: jpg, jpeg ou png</p>
+                </div>
+                <!-- Submission -->
+                <div class="form-group text-center">
+                    <input type="submit" name="btnSub" value="Entrer" id="btn_memberInscription" class="btn btn-success">
+                </div>
+
+            </form>
+        </div> <!-- col-md -->
+
+    </div> <!-- row -->
 
         
 

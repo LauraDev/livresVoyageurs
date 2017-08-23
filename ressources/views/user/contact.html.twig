@@ -10,13 +10,15 @@
 {# Define Content #}
 {% block content %}
 
+    <h1> Contact </h1>
+    
     <section id="contact">
         <div class="container">
             <div class="row" id="contactForm">
-                <div class="col-md-6 animation" id="myMap"></div>
-                <div class="col-md-offset-1 col-md-4 animation" id="form"> 
+                <div class="animation" id="myMap"></div>
+                <div class="col-md-offset-3 col-md-6" id="form"> 
                     <form id="sendMsg" method="post" action="ajax/traitementContact.php">
-                        <h2>Contact</h2>
+
                         <div class="form-group">
                             <input type="text" class="inputs" name="nom" required placeholder="Nom et Prenom *">
                         </div>

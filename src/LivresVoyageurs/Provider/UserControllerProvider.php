@@ -48,6 +48,12 @@ class UserControllerProvider implements ControllerProviderInterface
                 ->get('/deconnexion', 'LivresVoyageurs\Controller\UserController::deconnexionAction')
                 ->bind('livresVoyageurs_deconnexion');
 
+            # Reset Password
+            $controllers
+            
+                ->get('/mdpPerdu', 'LivresVoyageurs\Controller\UserController::resetPasswordAction')
+                ->bind('livresVoyageurs_resetPassword');
+
             #Contact
             $controllers
 
