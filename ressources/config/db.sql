@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Aug 23, 2017 at 10:02 PM
+-- Generation Time: Aug 24, 2017 at 12:13 AM
 -- Server version: 5.6.35
 -- PHP Version: 7.0.15
 
@@ -116,7 +116,8 @@ CREATE TABLE `friends` (
   `id_member_1` int(11) NOT NULL,
   `id_member_2` int(11) NOT NULL,
   `action_friend` int(11) NOT NULL,
-  `status_friend` tinyint(4) NOT NULL
+  `status_friend` tinyint(4) NOT NULL,
+  `date_friend` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
