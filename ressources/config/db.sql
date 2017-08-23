@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Aug 23, 2017 at 02:29 PM
+-- Generation Time: Aug 23, 2017 at 04:58 PM
 -- Server version: 5.6.35
 -- PHP Version: 7.0.15
 
@@ -11,7 +11,7 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 --
--- Database: `livresVoyageurs`
+-- Database: `livresvoyageurs`
 --
 
 -- --------------------------------------------------------
@@ -33,32 +33,31 @@ CREATE TABLE `authors` (
 --
 
 CREATE TABLE `books` (
-  `id_book` int(11) NOT NULL,
+  `id_book` int(8) NOT NULL,
   `id_member` int(11) NOT NULL,
   `id_author` int(11) NOT NULL,
   `id_category` int(11) NOT NULL,
-  `number_book` int(11) NOT NULL,
   `title_book` varchar(100) NOT NULL,
   `summary_book` longtext NOT NULL,
   `photo_book` varchar(255) NOT NULL,
   `ISBN_book` int(11) NOT NULL,
-  `disponibility_book` tinyint(4) NOT NULL,
-  `language_book` varchar(60) NOT NULL
+  `disponibility_book` tinyint(4) NOT NULL DEFAULT '0',
+  `language_book` varchar(60) NOT NULL DEFAULT 'Français'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `capture`
+-- Table structure for table `captures`
 --
 
-CREATE TABLE `capture` (
+CREATE TABLE `captures` (
   `id_capture` int(11) NOT NULL,
   `id_member` int(11) NOT NULL,
-  `id_book` int(11) NOT NULL,
+  `id_book` int(8) NOT NULL,
   `comment_capture` varchar(500) NOT NULL,
   `date_capture` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- --------------------------------------------------------
 
@@ -68,22 +67,22 @@ CREATE TABLE `capture` (
 
 CREATE TABLE `categories` (
   `id_category` int(11) NOT NULL,
-  `libelle_category` varchar(60) NOT NULL
+  `name_category` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `chat`
+-- Table structure for table `chats`
 --
 
-CREATE TABLE `chat` (
+CREATE TABLE `chats` (
   `id_chat` int(11) NOT NULL,
   `id_sender` int(11) NOT NULL,
   `id_receiver` int(11) NOT NULL,
   `message_chat` varchar(150) NOT NULL,
   `date_chat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- --------------------------------------------------------
 
@@ -110,13 +109,37 @@ CREATE TABLE `members` (
   `mail_member` varchar(100) NOT NULL,
   `pass_member` varchar(100) NOT NULL,
   `avatar_member` varchar(250) NOT NULL,
-  `lat_member` float NOT NULL,
-  `lng_member` float NOT NULL,
-  `city_member` varchar(100) NOT NULL,
   `token_member` varchar(40) NOT NULL,
   `date_member` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `role_member` varchar(11) NOT NULL,
   `active_member` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pointers`
+--
+
+CREATE TABLE `pointers` (
+  `id_pointer` int(11) NOT NULL,
+  `id_book` int(8) NOT NULL,
+  `lat_pointer` float NOT NULL,
+  `lng_pointer` float NOT NULL,
+  `city_pointer` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `startpoints`
+--
+
+CREATE TABLE `startpoints` (
+  `id_book` int(8) NOT NULL,
+  `lat_startpoint` float NOT NULL,
+  `lng_startpoint` float NOT NULL,
+  `city_startpoint` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -136,13 +159,12 @@ ALTER TABLE `books`
   ADD PRIMARY KEY (`id_book`),
   ADD KEY `id_member` (`id_member`),
   ADD KEY `id_author` (`id_author`),
-  ADD KEY `id_category` (`id_category`),
-  ADD KEY `number_book` (`number_book`);
+  ADD KEY `id_category` (`id_category`);
 
 --
--- Indexes for table `capture`
+-- Indexes for table `captures`
 --
-ALTER TABLE `capture`
+ALTER TABLE `captures`
   ADD PRIMARY KEY (`id_capture`),
   ADD KEY `id_member` (`id_member`),
   ADD KEY `id_book` (`id_book`);
@@ -154,9 +176,9 @@ ALTER TABLE `categories`
   ADD PRIMARY KEY (`id_category`);
 
 --
--- Indexes for table `chat`
+-- Indexes for table `chats`
 --
-ALTER TABLE `chat`
+ALTER TABLE `chats`
   ADD PRIMARY KEY (`id_chat`),
   ADD KEY `id_sender` (`id_sender`),
   ADD KEY `id_receiver` (`id_receiver`);
@@ -175,6 +197,19 @@ ALTER TABLE `members`
   ADD PRIMARY KEY (`id_member`);
 
 --
+-- Indexes for table `pointers`
+--
+ALTER TABLE `pointers`
+  ADD PRIMARY KEY (`id_pointer`),
+  ADD KEY `id_book` (`id_book`);
+
+--
+-- Indexes for table `startpoints`
+--
+ALTER TABLE `startpoints`
+  ADD KEY `id_book` (`id_book`);
+
+--
 -- Constraints for dumped tables
 --
 
@@ -188,7 +223,7 @@ ALTER TABLE `authors`
 -- Constraints for table `books`
 --
 ALTER TABLE `books`
-  ADD CONSTRAINT `books_ibfk_1` FOREIGN KEY (`id_book`) REFERENCES `capture` (`id_book`);
+  ADD CONSTRAINT `books_ibfk_1` FOREIGN KEY (`id_book`) REFERENCES `startpoints` (`id_book`);
 
 --
 -- Constraints for table `categories`
@@ -200,4 +235,4 @@ ALTER TABLE `categories`
 -- Constraints for table `members`
 --
 ALTER TABLE `members`
-  ADD CONSTRAINT `members_ibfk_1` FOREIGN KEY (`id_member`) REFERENCES `chat` (`id_sender`);
+  ADD CONSTRAINT `members_ibfk_1` FOREIGN KEY (`id_member`) REFERENCES `chats` (`id_sender`);
