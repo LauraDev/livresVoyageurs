@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Aug 23, 2017 at 09:25 PM
+-- Generation Time: Aug 23, 2017 at 10:02 PM
 -- Server version: 5.6.35
 -- PHP Version: 7.0.15
 
@@ -26,6 +26,14 @@ CREATE TABLE `authors` (
   `lastname_author` varchar(80) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `authors`
+--
+
+INSERT INTO `authors` (`id_author`, `firstname_author`, `lastname_author`) VALUES
+(1, 'laura', 'traore'),
+(2, 'loic', 'gallay');
+
 -- --------------------------------------------------------
 
 --
@@ -42,8 +50,16 @@ CREATE TABLE `books` (
   `photo_book` varchar(255) NOT NULL,
   `ISBN_book` int(11) NOT NULL,
   `disponibility_book` tinyint(4) NOT NULL DEFAULT '0',
-  `language_book` varchar(60) NOT NULL DEFAULT 'Français'
+  `language_book` varchar(60) NOT NULL DEFAULT 'Français',
+  `date_book` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `books`
+--
+
+INSERT INTO `books` (`id_book`, `id_member`, `id_author`, `id_category`, `title_book`, `summary_book`, `photo_book`, `ISBN_book`, `disponibility_book`, `language_book`, `date_book`) VALUES
+(12345678, 1, 2, 1, 'La science fiction', 'La fiction bla als bla lorem ipsum', '', 123456, 0, 'Français', '2017-08-23 20:01:28');
 
 -- --------------------------------------------------------
 
@@ -67,6 +83,14 @@ CREATE TABLE `categories` (
   `id_category` int(11) NOT NULL,
   `name_category` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id_category`, `name_category`) VALUES
+(1, 'fiction'),
+(2, 'comique');
 
 -- --------------------------------------------------------
 
@@ -112,6 +136,13 @@ CREATE TABLE `members` (
   `role_member` varchar(11) NOT NULL,
   `active_member` tinyint(4) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `members`
+--
+
+INSERT INTO `members` (`id_member`, `pseudo_member`, `mail_member`, `pass_member`, `avatar_member`, `token_member`, `date_member`, `role_member`, `active_member`) VALUES
+(1, 'loles34', 'loles34_4@hotmail.com', 'loles34', '', '', '2017-08-23 19:57:29', 'ROLE_ADMIN', 0);
 
 -- --------------------------------------------------------
 
@@ -208,35 +239,75 @@ ALTER TABLE `startpoints`
   ADD KEY `id_book` (`id_book`);
 
 --
--- Constraints for dumped tables
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- Constraints for table `authors`
+-- AUTO_INCREMENT for table `authors`
 --
 ALTER TABLE `authors`
-  ADD CONSTRAINT `authors_ibfk_1` FOREIGN KEY (`id_author`) REFERENCES `books` (`id_author`);
+  MODIFY `id_author` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `id_category` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `chats`
+--
+ALTER TABLE `chats`
+  MODIFY `id_chat` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `members`
+--
+ALTER TABLE `members`
+  MODIFY `id_member` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `pointers`
+--
+ALTER TABLE `pointers`
+  MODIFY `id_pointer` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- Constraints for dumped tables
+--
 
 --
 -- Constraints for table `books`
 --
 ALTER TABLE `books`
-  ADD CONSTRAINT `books_ibfk_1` FOREIGN KEY (`id_book`) REFERENCES `startpoints` (`id_book`);
+  ADD CONSTRAINT `books_ibfk_1` FOREIGN KEY (`id_member`) REFERENCES `members` (`id_member`),
+  ADD CONSTRAINT `books_ibfk_2` FOREIGN KEY (`id_author`) REFERENCES `authors` (`id_author`),
+  ADD CONSTRAINT `books_ibfk_3` FOREIGN KEY (`id_category`) REFERENCES `categories` (`id_category`);
 
 --
--- Constraints for table `categories`
+-- Constraints for table `captures`
 --
-ALTER TABLE `categories`
-  ADD CONSTRAINT `categories_ibfk_1` FOREIGN KEY (`id_category`) REFERENCES `books` (`id_category`);
+ALTER TABLE `captures`
+  ADD CONSTRAINT `captures_ibfk_1` FOREIGN KEY (`id_member`) REFERENCES `members` (`id_member`),
+  ADD CONSTRAINT `captures_ibfk_2` FOREIGN KEY (`id_pointer`) REFERENCES `pointers` (`id_pointer`);
 
 --
--- Constraints for table `members`
+-- Constraints for table `chats`
 --
-ALTER TABLE `members`
-  ADD CONSTRAINT `members_ibfk_1` FOREIGN KEY (`id_member`) REFERENCES `chat` (`id_sender`);
+ALTER TABLE `chats`
+  ADD CONSTRAINT `chats_ibfk_1` FOREIGN KEY (`id_sender`) REFERENCES `members` (`id_member`),
+  ADD CONSTRAINT `chats_ibfk_2` FOREIGN KEY (`id_receiver`) REFERENCES `members` (`id_member`);
+
+--
+-- Constraints for table `friends`
+--
+ALTER TABLE `friends`
+  ADD CONSTRAINT `friends_ibfk_1` FOREIGN KEY (`id_member_1`) REFERENCES `members` (`id_member`),
+  ADD CONSTRAINT `friends_ibfk_2` FOREIGN KEY (`id_member_2`) REFERENCES `members` (`id_member`);
 
 --
 -- Constraints for table `pointers`
 --
 ALTER TABLE `pointers`
-  ADD CONSTRAINT `pointers_ibfk_1` FOREIGN KEY (`id_pointer`) REFERENCES `captures` (`id_pointer`);
+  ADD CONSTRAINT `pointers_ibfk_1` FOREIGN KEY (`id_book`) REFERENCES `books` (`id_book`);
+
+--
+-- Constraints for table `startpoints`
+--
+ALTER TABLE `startpoints`
+  ADD CONSTRAINT `startpoints_ibfk_1` FOREIGN KEY (`id_book`) REFERENCES `books` (`id_book`);
