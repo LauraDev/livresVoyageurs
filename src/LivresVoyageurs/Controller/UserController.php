@@ -38,7 +38,7 @@ class  UserController
 
     // Contact
     public function contactAction(Application $app){
-        return $app['twig']->render('contact.html.twig');
+        return $app['twig']->render('user/contact.html.twig');
     }
 
 
