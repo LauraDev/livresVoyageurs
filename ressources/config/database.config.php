@@ -6,17 +6,17 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
         'driver'   => 'pdo_mysql',
         'host'     => 'localhost',
         'dbname'   => 'livresVoyageurs',
-        'user'     => 'root',
-        'password' => 'root'
+        'user'     => 'lola',
+        'password' => 'lola'
     ),
 ));
 
 #2 : Idiorm Activation
 $app->register(new Idiorm\Silex\Provider\IdiormServiceProvider(), array(
-    'idiorm.db.options' => array(
+    'idiorm.db.options'       => array(
         'connection_string'   => 'mysql:host=localhost;dbname=livresVoyageurs',
-        'username'     => 'root',
-        'password' => 'root'
+        'username'            => 'lola',
+        'password'            => 'lola'
         // ,
         // 'id_column_overrides' => array(
         // 'view_articles' => 'IDARTICLE'
