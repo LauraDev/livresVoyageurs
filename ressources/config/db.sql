@@ -1,23 +1,31 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.5.2
+-- version 4.7.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:8889
--- Generation Time: Aug 23, 2017 at 04:58 PM
--- Server version: 5.6.35
--- PHP Version: 7.0.15
+-- Hôte : 127.0.0.1
+-- Généré le :  mer. 23 août 2017 à 23:14
+-- Version du serveur :  10.1.22-MariaDB
+-- Version de PHP :  7.1.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
 --
--- Database: `livresvoyageurs`
+-- Base de données :  `livresvoyageurs`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `authors`
+-- Structure de la table `authors`
 --
 
 CREATE TABLE `authors` (
@@ -29,7 +37,7 @@ CREATE TABLE `authors` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `books`
+-- Structure de la table `books`
 --
 
 CREATE TABLE `books` (
@@ -48,7 +56,7 @@ CREATE TABLE `books` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `captures`
+-- Structure de la table `captures`
 --
 
 CREATE TABLE `captures` (
@@ -62,7 +70,7 @@ CREATE TABLE `captures` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `categories`
+-- Structure de la table `categories`
 --
 
 CREATE TABLE `categories` (
@@ -73,7 +81,7 @@ CREATE TABLE `categories` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `chats`
+-- Structure de la table `chats`
 --
 
 CREATE TABLE `chats` (
@@ -87,20 +95,20 @@ CREATE TABLE `chats` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `friends`
+-- Structure de la table `friends`
 --
 
 CREATE TABLE `friends` (
   `id_member_1` int(11) NOT NULL,
   `id_member_2` int(11) NOT NULL,
   `action_friend` int(11) NOT NULL,
-  `status_friend` tinyint(4) NOT NULL
+  `status_friend` tinyint(4) NOT NULL COMMENT '0: pending, 1: accepted, 2: blocked, 3: rejected'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `members`
+-- Structure de la table `members`
 --
 
 CREATE TABLE `members` (
@@ -118,7 +126,7 @@ CREATE TABLE `members` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pointers`
+-- Structure de la table `pointers`
 --
 
 CREATE TABLE `pointers` (
@@ -132,7 +140,7 @@ CREATE TABLE `pointers` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `startpoints`
+-- Structure de la table `startpoints`
 --
 
 CREATE TABLE `startpoints` (
@@ -142,18 +150,78 @@ CREATE TABLE `startpoints` (
   `city_startpoint` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
 --
--- Indexes for dumped tables
+-- Doublure de structure pour la vue `view_book`
+-- (Voir ci-dessous la vue réelle)
+--
+CREATE TABLE `view_book` (
+`id_book` int(8)
+,`id_member` int(11)
+,`id_author` int(11)
+,`id_category` int(11)
+,`title_book` varchar(100)
+,`summary_book` longtext
+,`photo_book` varchar(255)
+,`ISBN_book` int(11)
+,`disponibility_book` tinyint(4)
+,`language_book` varchar(60)
+,`firstname_author` varchar(80)
+,`lastname_author` varchar(80)
+,`name_category` varchar(60)
+,`lat_startpoint` float
+,`lng_startpoint` float
+,`city_startpoint` varchar(60)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Doublure de structure pour la vue `view_story`
+-- (Voir ci-dessous la vue réelle)
+--
+CREATE TABLE `view_story` (
+`id_book` int(8)
+,`title_book` varchar(100)
+,`lat_startpoint` float
+,`lng_startpoint` float
+,`city_startpoint` varchar(60)
+,`lat_pointer` float
+,`lng_pointer` float
+,`city_pointer` int(11)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la vue `view_book`
+--
+DROP TABLE IF EXISTS `view_book`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_book`  AS  select `b`.`id_book` AS `id_book`,`b`.`id_member` AS `id_member`,`b`.`id_author` AS `id_author`,`b`.`id_category` AS `id_category`,`b`.`title_book` AS `title_book`,`b`.`summary_book` AS `summary_book`,`b`.`photo_book` AS `photo_book`,`b`.`ISBN_book` AS `ISBN_book`,`b`.`disponibility_book` AS `disponibility_book`,`b`.`language_book` AS `language_book`,`a`.`firstname_author` AS `firstname_author`,`a`.`lastname_author` AS `lastname_author`,`c`.`name_category` AS `name_category`,`s`.`lat_startpoint` AS `lat_startpoint`,`s`.`lng_startpoint` AS `lng_startpoint`,`s`.`city_startpoint` AS `city_startpoint` from (((`books` `b` join `authors` `a` on((`a`.`id_author` = `b`.`id_author`))) join `categories` `c` on((`c`.`id_category` = `b`.`id_category`))) join `startpoints` `s` on((`s`.`id_book` = `b`.`id_book`))) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la vue `view_story`
+--
+DROP TABLE IF EXISTS `view_story`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_story`  AS  select `vb`.`id_book` AS `id_book`,`vb`.`title_book` AS `title_book`,`vb`.`lat_startpoint` AS `lat_startpoint`,`vb`.`lng_startpoint` AS `lng_startpoint`,`vb`.`city_startpoint` AS `city_startpoint`,`p`.`lat_pointer` AS `lat_pointer`,`p`.`lng_pointer` AS `lng_pointer`,`p`.`city_pointer` AS `city_pointer` from (`view_book` `vb` join `pointers` `p` on((`p`.`id_book` = `vb`.`id_book`))) ;
+
+--
+-- Index pour les tables déchargées
 --
 
 --
--- Indexes for table `authors`
+-- Index pour la table `authors`
 --
 ALTER TABLE `authors`
   ADD PRIMARY KEY (`id_author`);
 
 --
--- Indexes for table `books`
+-- Index pour la table `books`
 --
 ALTER TABLE `books`
   ADD PRIMARY KEY (`id_book`),
@@ -162,7 +230,7 @@ ALTER TABLE `books`
   ADD KEY `id_category` (`id_category`);
 
 --
--- Indexes for table `captures`
+-- Index pour la table `captures`
 --
 ALTER TABLE `captures`
   ADD PRIMARY KEY (`id_capture`),
@@ -170,13 +238,13 @@ ALTER TABLE `captures`
   ADD KEY `id_book` (`id_book`);
 
 --
--- Indexes for table `categories`
+-- Index pour la table `categories`
 --
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id_category`);
 
 --
--- Indexes for table `chats`
+-- Index pour la table `chats`
 --
 ALTER TABLE `chats`
   ADD PRIMARY KEY (`id_chat`),
@@ -184,55 +252,60 @@ ALTER TABLE `chats`
   ADD KEY `id_receiver` (`id_receiver`);
 
 --
--- Indexes for table `friends`
+-- Index pour la table `friends`
 --
 ALTER TABLE `friends`
   ADD KEY `id_member_1` (`id_member_1`),
   ADD KEY `id_member_2` (`id_member_2`);
 
 --
--- Indexes for table `members`
+-- Index pour la table `members`
 --
 ALTER TABLE `members`
   ADD PRIMARY KEY (`id_member`);
 
 --
--- Indexes for table `pointers`
+-- Index pour la table `pointers`
 --
 ALTER TABLE `pointers`
   ADD PRIMARY KEY (`id_pointer`),
   ADD KEY `id_book` (`id_book`);
 
 --
--- Indexes for table `startpoints`
+-- Index pour la table `startpoints`
 --
 ALTER TABLE `startpoints`
   ADD KEY `id_book` (`id_book`);
 
 --
--- Constraints for dumped tables
+-- Contraintes pour les tables déchargées
 --
 
 --
--- Constraints for table `authors`
+-- Contraintes pour la table `authors`
 --
 ALTER TABLE `authors`
   ADD CONSTRAINT `authors_ibfk_1` FOREIGN KEY (`id_author`) REFERENCES `books` (`id_author`);
 
 --
--- Constraints for table `books`
+-- Contraintes pour la table `books`
 --
 ALTER TABLE `books`
   ADD CONSTRAINT `books_ibfk_1` FOREIGN KEY (`id_book`) REFERENCES `startpoints` (`id_book`);
 
 --
--- Constraints for table `categories`
+-- Contraintes pour la table `categories`
 --
 ALTER TABLE `categories`
   ADD CONSTRAINT `categories_ibfk_1` FOREIGN KEY (`id_category`) REFERENCES `books` (`id_category`);
 
 --
--- Constraints for table `members`
+-- Contraintes pour la table `members`
 --
 ALTER TABLE `members`
   ADD CONSTRAINT `members_ibfk_1` FOREIGN KEY (`id_member`) REFERENCES `chats` (`id_sender`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
