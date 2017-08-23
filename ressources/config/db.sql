@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Aug 23, 2017 at 04:58 PM
+-- Generation Time: Aug 23, 2017 at 09:25 PM
 -- Server version: 5.6.35
 -- PHP Version: 7.0.15
 
@@ -52,11 +52,9 @@ CREATE TABLE `books` (
 --
 
 CREATE TABLE `captures` (
-  `id_capture` int(11) NOT NULL,
+  `id_pointer` int(11) NOT NULL,
   `id_member` int(11) NOT NULL,
-  `id_book` int(8) NOT NULL,
-  `comment_capture` varchar(500) NOT NULL,
-  `date_capture` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `comment_capture` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- --------------------------------------------------------
@@ -112,7 +110,7 @@ CREATE TABLE `members` (
   `token_member` varchar(40) NOT NULL,
   `date_member` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `role_member` varchar(11) NOT NULL,
-  `active_member` tinyint(4) NOT NULL
+  `active_member` tinyint(4) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -126,7 +124,8 @@ CREATE TABLE `pointers` (
   `id_book` int(8) NOT NULL,
   `lat_pointer` float NOT NULL,
   `lng_pointer` float NOT NULL,
-  `city_pointer` int(11) NOT NULL
+  `city_pointer` int(11) NOT NULL,
+  `date_pointer` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -165,9 +164,8 @@ ALTER TABLE `books`
 -- Indexes for table `captures`
 --
 ALTER TABLE `captures`
-  ADD PRIMARY KEY (`id_capture`),
   ADD KEY `id_member` (`id_member`),
-  ADD KEY `id_book` (`id_book`);
+  ADD KEY `id_pointer` (`id_pointer`);
 
 --
 -- Indexes for table `categories`
@@ -235,4 +233,10 @@ ALTER TABLE `categories`
 -- Constraints for table `members`
 --
 ALTER TABLE `members`
-  ADD CONSTRAINT `members_ibfk_1` FOREIGN KEY (`id_member`) REFERENCES `chats` (`id_sender`);
+  ADD CONSTRAINT `members_ibfk_1` FOREIGN KEY (`id_member`) REFERENCES `chat` (`id_sender`);
+
+--
+-- Constraints for table `pointers`
+--
+ALTER TABLE `pointers`
+  ADD CONSTRAINT `pointers_ibfk_1` FOREIGN KEY (`id_pointer`) REFERENCES `captures` (`id_pointer`);
