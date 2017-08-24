@@ -65,19 +65,19 @@ class UserController
             ])
             ->add('avatar_member', FileType::class, [
 
-               'required'      =>  false,
-               'label'         =>  false,
-               'attr'          =>  [
-                   'class'         => 'dropify'
-               ]
-           ])
-           ->add('submit', SubmitType::class, ['label' => 'Publier'])
+                'required'      =>  false,
+                'label'         =>  false,
+                'attr'          =>  [
+                    'class'         => 'dropify'
+                ]
+            ])
+            ->add('submit', SubmitType::class, ['label' => 'Publier'])
 
-           ->getForm();
+            ->getForm();
 
-      # Traitement des données POST
-      # use Symfony\Component\HttpFoundation\Request;
-      $form->handleRequest($request);
+        # Traitement des données POST
+        # use Symfony\Component\HttpFoundation\Request;
+        $form->handleRequest($request);
 
         if ($form->isValid()) :
             //Inscription
@@ -88,11 +88,11 @@ class UserController
 
             $member = $form->getData();
             $memberDb = $app['idiorm.db']->for_table('members')->create();
-            $memberDb->pseudo_member      = $member['pseudo_member'];
-            $memberDb->mail_member           = $member['mail_member'];
-            $memberDb->pass_member          = $member['pass_member'];
-            $memberDb->avatar_member        = $member['avatar_member' ];
-            $memberDb->role_member           = $member['role_member'];
+            $memberDb->pseudo_member        = $member['pseudo_member'];
+            $memberDb->mail_member          = $member['mail_member'];
+            $memberDb->pass_member          = $member['pass_member']->encodePassword($request->get('pass_member'), '');
+            $memberDb->avatar_member        = $member['avatar_member'];
+            $memberDb->role_member          = $member['role_member'];
             $memberDb->save();
 
             # Redirection
