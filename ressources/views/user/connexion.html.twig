@@ -18,14 +18,14 @@
 
         <div class="col-md-offset-3 col-md-6">
             <!-- Connexion Form -->
-            <form id="formMemberConnexion" action="" method="">
+            <form id="formMemberConnexion" action="{{ url('connexion_login_check')}}" method="post">
 
                 <!-- Pseudo -->
                 <div class="form-group">
                     <label for="pseudo_member">Pseudo</label>
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <input type="text" name="pseudo_member" class="form-control" required>
+                        <input type="text" name="pseudo_member" class="form-control" value="{{ last_username }}" required>
                     </div>
                     <p class="error alert alert-danger">Vous n'avez pas indiqué votre Pseudo</p>
                     <p class="error alert alert-danger">Ce pseudo n'existe pas</p>
@@ -44,6 +44,8 @@
                 <div class="form-group text-center">
                     <input type="submit" name="btnSub" value="Entrer" id="btn_memberConnexion" class="btn btn-success">
                 </div>
+
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
             </form>
 

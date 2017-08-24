@@ -6,7 +6,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class Member implements UserInterface
 {
     # Attributes
-    private $id_members;
+    private $id_member;
     private $pseudo_member;
     private $mail_member;
     private $pass_member;
@@ -17,7 +17,7 @@ class Member implements UserInterface
     private $active_member;
 
     /**
-     * @param int $id_members
+     * @param int $id_member
      * @param string $pseudo_member
      * @param string $mail_member
      * @param string $pass_member
@@ -28,7 +28,7 @@ class Member implements UserInterface
      * @param int $active_member
      */
     public function __construct(
-        $id_members,
+        $id_member,
         $pseudo_member,
         $mail_member,
         $pass_member,
@@ -38,7 +38,7 @@ class Member implements UserInterface
         $role_member,
         $active_member
     ) {
-        $this->id_members    = $id_members;
+        $this->id_member    = $id_member;
         $this->pseudo_member = $pseudo_member;
         $this->mail_member   = $mail_member;
         $this->pass_member   = $pass_member;
@@ -54,9 +54,9 @@ class Member implements UserInterface
     /**
      * @return int
      */
-    public function getId_members()
+    public function getId_member()
     {
-        return $this->id_members;
+        return $this->id_member;
     }
 
     /**
@@ -125,13 +125,13 @@ class Member implements UserInterface
 
     /*setters*/
     /**
-     * @param mixed $id_members
+     * @param mixed $id_member
      *
      * @return static
      */
-    public function setId_members($id_members)
+    public function setId_member($id_member)
     {
-        $this->id_members = $id_members;
+        $this->id_member = $id_member;
         return $this;
     }
 
@@ -227,7 +227,7 @@ class Member implements UserInterface
 
     public function getPassword()
     {
-        return $this->mail_member;
+        return $this->pass_member;
     }
 
     public function eraseCredentials() {}
@@ -237,13 +237,13 @@ class Member implements UserInterface
         return null;
     }
 
-    public function getRole()
+    public function getRoles()
     {
         return $this->role_member;
     }
 
     public function getUsername()
     {
-        return $this->mail_member;
+        return $this->pseudo_member;
     }
 }

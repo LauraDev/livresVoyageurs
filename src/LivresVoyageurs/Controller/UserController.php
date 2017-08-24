@@ -60,7 +60,7 @@ class UserController
             ))
             ->add('role_member', HiddenType::class, [
                 'attr' => [
-                    'value' => 'role_member'
+                    'value' => 'ROLE_MEMBER'
                 ]
             ])
             ->add('avatar_member', FileType::class, [
@@ -80,17 +80,13 @@ class UserController
         $form->handleRequest($request);
 
         if ($form->isValid()) :
-            //Inscription
 
-    # Connect to DB : Register a new member
-
-
-
+            # Connect to DB : Register a new member
             $member = $form->getData();
             $memberDb = $app['idiorm.db']->for_table('members')->create();
             $memberDb->pseudo_member        = $member['pseudo_member'];
             $memberDb->mail_member          = $member['mail_member'];
-            $memberDb->pass_member          = $member['pass_member']->encodePassword($request->get('pass_member'), '');
+            $memberDb->pass_member          = $app['security.encoder.digest']->encodePassword($member['pass_member'], '');
             $memberDb->avatar_member        = $member['avatar_member'];
             $memberDb->role_member          = $member['role_member'];
             $memberDb->save();
