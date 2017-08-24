@@ -3,3 +3,4 @@
 /build
 /composer.lock
 /node_modules
+/ressources/config/database.config.php
