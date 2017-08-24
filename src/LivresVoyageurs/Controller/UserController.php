@@ -2,6 +2,9 @@
 
 namespace LivresVoyageurs\Controller;
 
+use Swift_Mailer;
+use Swift_Message;
+use Swift_SmtpTransport;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -119,6 +122,7 @@ class UserController
     // Contact
     public function contactAction(Application $app, Request $request)
     {
+<<<<<<< HEAD
         $form = $app['form.factory']->createBuilder(FormType::class)
         
             ->add('name', TextType::class, [            
@@ -169,6 +173,13 @@ class UserController
 			'form'  => $form->createView(),
 		));
 	}
+=======
+
+        return $app['twig']->render('user/contact.html.twig', [
+            'user' => $app['user']->getUsername('pseudo_member')
+        ]);
+    }
+>>>>>>> b9ab65767f85bf2782e9aefb1dadfb1287a770bc
 
 
     //Display the menu
@@ -188,8 +199,57 @@ class UserController
     }
 
     //Reset Password
-    public function resetPasswordAction(Application $app)
+    public function resetPasswordAction(Application $app, Request $request)
     {
-        return $app['twig']->render('user/resetPassword.html.twig');
+        $form = $app['form.factory']->createBuilder(FormType::class)
+
+        //create an email input type
+        ->add('mail_member', EmailType::class, [
+
+            'required'      =>  true,
+            'label'         =>  false,
+            'constraints'   =>  array(new NotBlank()),
+            'attr'          =>  [
+                'class'     => 'form-control',
+            ]
+        ])
+        //create a submit
+        ->add('submit', SubmitType::class, ['label' => 'Envoyer'])
+
+        ->getForm();
+
+        $form->handleRequest($request);
+
+
+        $mail = $form->getData();
+        //check if email exist
+        $checkMail = $app['idiorm.db']->for_table('members')
+                                      ->where('mail_member', $mail['mail_member'])
+                                      ->count();
+            // if ($checkMail) {
+
+                // Create the Transport
+    $transport = (new Swift_SmtpTransport('smtp.orange.fr', 465, 'ssl'))
+      ->setUsername('lgallay@orange.fr')
+      ->setPassword('luciol16')
+    ;
+
+    // Create the Mailer using your created Transport
+    $mailer = new Swift_Mailer($transport);
+
+    // Create a message
+    $message = (new Swift_Message('Test'))
+      ->setFrom('lgallay@orange.fr')
+      ->setTo($mail['mail_member'])
+      ->setBody('Coucou')
+      ;
+
+    // Send the message
+    $result = $mailer->send($message);
+
+            // }
+
+
+        return $app['twig']->render('user/resetPassword.html.twig',  ['form'=>$form->createView()]);
     }
 }

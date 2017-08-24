@@ -18,11 +18,11 @@
         <h2 class="text-center">Bonjour {{ app.user.pseudo_member }}</h2>
 
             <div class="col-md-offset-3 col-md-6">
-                
+
                 <!-- Form: Add a book -->
                 <h2> Ajouter un livre </h2>
                 <form id="formAddBook" action="" method="POST" enctype="multipart/form-data">
-                    
+
                     <!-- Id Member -->
                     <input type="hidden" name="id_member" value="{{ app.user.id_member }}">
                     <!-- Id Author -->
@@ -56,7 +56,7 @@
                     <div class="form-group text-center">
                         <input type="submit" name="btnSub" value="Ajouter" id="btn_memberInscription" class="btn btn-success">
                     </div>
-                
+
                 </form>
 
 
@@ -183,5 +183,3 @@
     </div>
 
 {% endblock %}
-
-

@@ -1,4 +1,5 @@
 <?php
+use Silex\Provider\SwiftmailerServiceProvider;
 
 #1 : Debug Mode Activation
 $app['debug'] = true;
@@ -14,7 +15,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
     ],
 ));
 
-#4 : Add LivresVoyageursTwig as a Twig Extension 
+#4 : Add LivresVoyageursTwig as a Twig Extension
 $app->extend('twig', function($twig, $app) {
     $twig->addExtension(new LivresVoyageurs\Extension\LivresVoyageursTwigExtension());
     return $twig;
@@ -32,10 +33,10 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'translator.domains' => array(),
 ));
 
-#7 : Email
-$app->register(new Silex\Provider\SwiftmailerServiceProvider());
+#7 : Swiftmailer
+$app->register(new SwiftmailerServiceProvider());
 
-#8 : Idiorm
+#8 : Doctrine DBAL
 require PATH_RESSOURCES . '/config/database.config.php';
 
 #9 : Security
@@ -43,16 +44,3 @@ require PATH_RESSOURCES . '/config/security.php';
 
 #10 : Return $app
 return $app;
-
-
-
-
-
-
-
-
-
-
-
-
-
