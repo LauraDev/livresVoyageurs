@@ -6,8 +6,8 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
         'driver'   => 'pdo_mysql',
         'host'     => 'localhost',
         'dbname'   => 'livresvoyageurs',
-        'user'     => 'lola',
-        'password' => 'lola'
+        'user'     => 'root',
+        'password' => ''
     ),
 ));
 
@@ -15,8 +15,8 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 $app->register(new Idiorm\Silex\Provider\IdiormServiceProvider(), array(
     'idiorm.db.options'       => array(
         'connection_string'   => 'mysql:host=localhost;dbname=livresvoyageurs',
-        'username'            => 'lola',
-        'password'            => 'lola'
+        'username'            => 'root',
+        'password'            => ''
         ,
         'id_column_overrides' => array(
         'authors' => 'id_author',
