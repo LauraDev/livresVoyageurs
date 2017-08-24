@@ -3,8 +3,4 @@
 /build
 /composer.lock
 /node_modules
-<<<<<<< HEAD
 /ressources/config/database.config.php
-=======
-/ressources/config/database.config.php
->>>>>>> dev
