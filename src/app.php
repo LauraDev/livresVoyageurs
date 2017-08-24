@@ -24,6 +24,7 @@ $app->extend('twig', function($twig, $app) {
 $app->register(new Silex\Provider\AssetServiceProvider() );
 
 #6 : Forms
+$app->register(new Silex\Provider\CsrfServiceProvider());
 $app->register(new Silex\Provider\FormServiceProvider());
 $app->register(new Silex\Provider\LocaleServiceProvider());
 $app->register(new Silex\Provider\ValidatorServiceProvider());
