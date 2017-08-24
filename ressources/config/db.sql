@@ -2,17 +2,10 @@
 -- version 4.7.0
 -- https://www.phpmyadmin.net/
 --
-<<<<<<< HEAD
--- Hôte : 127.0.0.1
--- Généré le :  mer. 23 août 2017 à 23:14
--- Version du serveur :  10.1.22-MariaDB
--- Version de PHP :  7.1.4
-=======
 -- Host: localhost:8889
 -- Generation Time: Aug 24, 2017 at 12:13 AM
 -- Server version: 5.6.35
 -- PHP Version: 7.0.15
->>>>>>> dev
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -131,12 +124,8 @@ CREATE TABLE `friends` (
   `id_member_1` int(11) NOT NULL,
   `id_member_2` int(11) NOT NULL,
   `action_friend` int(11) NOT NULL,
-<<<<<<< HEAD
-  `status_friend` tinyint(4) NOT NULL COMMENT '0: pending, 1: accepted, 2: blocked, 3: rejected'
-=======
   `status_friend` tinyint(4) NOT NULL,
   `date_friend` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
->>>>>>> dev
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -319,19 +308,11 @@ ALTER TABLE `startpoints`
   ADD KEY `id_book` (`id_book`);
 
 --
-<<<<<<< HEAD
--- Contraintes pour les tables déchargées
---
-
---
--- Contraintes pour la table `authors`
-=======
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
 -- AUTO_INCREMENT for table `authors`
->>>>>>> dev
 --
 ALTER TABLE `authors`
   MODIFY `id_author` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
@@ -368,28 +349,13 @@ ALTER TABLE `books`
   ADD CONSTRAINT `books_ibfk_3` FOREIGN KEY (`id_category`) REFERENCES `categories` (`id_category`);
 
 --
-<<<<<<< HEAD
--- Contraintes pour la table `categories`
-=======
 -- Constraints for table `captures`
->>>>>>> dev
 --
 ALTER TABLE `captures`
   ADD CONSTRAINT `captures_ibfk_1` FOREIGN KEY (`id_member`) REFERENCES `members` (`id_member`),
   ADD CONSTRAINT `captures_ibfk_2` FOREIGN KEY (`id_pointer`) REFERENCES `pointers` (`id_pointer`);
 
 --
-<<<<<<< HEAD
--- Contraintes pour la table `members`
---
-ALTER TABLE `members`
-  ADD CONSTRAINT `members_ibfk_1` FOREIGN KEY (`id_member`) REFERENCES `chats` (`id_sender`);
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-=======
 -- Constraints for table `chats`
 --
 ALTER TABLE `chats`
@@ -414,4 +380,3 @@ ALTER TABLE `pointers`
 --
 ALTER TABLE `startpoints`
   ADD CONSTRAINT `startpoints_ibfk_1` FOREIGN KEY (`id_book`) REFERENCES `books` (`id_book`);
->>>>>>> dev

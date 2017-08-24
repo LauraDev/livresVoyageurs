@@ -28,7 +28,8 @@ class UserControllerProvider implements ControllerProviderInterface
             $controllers
 
                 # Associate a route with a controller and an action
-                ->get('/inscription', 'LivresVoyageurs\Controller\UserController::inscriptionAction')
+                ->match('/inscription', 'LivresVoyageurs\Controller\UserController::inscriptionAction')
+                ->method('GET|POST')
                 # Route name
                 ->bind('livresVoyageurs_inscription');
 
@@ -50,7 +51,7 @@ class UserControllerProvider implements ControllerProviderInterface
 
             # Reset Password
             $controllers
-            
+
                 ->get('/mdpPerdu', 'LivresVoyageurs\Controller\UserController::resetPasswordAction')
                 ->bind('livresVoyageurs_resetPassword');
 

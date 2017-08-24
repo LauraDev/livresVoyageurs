@@ -9,18 +9,18 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class MemberProvider implements UserProviderInterface
 {
-    
+
     private $_db;
-    
+
     /**
-    * Récupération de l'instance de la BDD
-    * @param Idiorm ou Doctrine DBAL $db
+    * Database connection object
+    * @param Idiorm $db
     */
     public function __construct($db)
     {
         $this->_db = $db;
     }
-    
+
     /**
     * {@inheritDoc}
     * @see \Symfony\Component\Security\Core\User\UserProviderInterface::supportsClass()
@@ -29,41 +29,40 @@ class MemberProvider implements UserProviderInterface
     {
         return $class === 'LivresVoayageurs\Model\Member';
     }
-    
+
     /**
     * {@inheritDoc}
     * @see \Symfony\Component\Security\Core\User\UserProviderInterface::refreshUser()
     */
     public function refreshUser(UserInterface $member)
     {
-        # use LivresVoayageurs\Model\member;
-        # On s'assure de bien avoir un Objet de la classe member
+        # use LivresVoyageurs\Model\member;
         if(!$member instanceof Member) {
             throw new UnsupportedUserException(
-                sprintf('Les instances de "%s" ne sont pas autorisées.', 
+                sprintf('Les instances de "%s" ne sont pas autorisées.',
                     get_class($member)));
         }
-        
+
         return $this->loadUserByUsername($member->getUsername());
     }
-    
+
     /**
     * {@inheritDoc}
     * @see \Symfony\Component\Security\Core\User\UserProviderInterface::loadUserByUsername()
     */
-    public function loadUserByUsername($EMAIL)
+    public function loadUserByUsername($mail_member)
     {
-        $member = $this->_db->for_table('member')
-                            ->where('EMAIL', $EMAIL)
+        $member = $this->_db->for_table('members')
+                            ->where('mail_member', $mail_member)
                             ->find_one();
-        
+
         if(empty($member)) {
             throw new UsernameNotFoundException(
-                sprintf('Cet utilisateur "%s" n\'existe pas.', $EMAIL));
+                sprintf('Cet utilisateur "%s" n\'existe pas.', $mail_member));
         }
-        
-        return new Member($member->ID, $member->NOM, 
-            $member->PRENOM, $member->EMAIL, $member->MDP, 
-            $member->ROLES);
+
+        return new Member($member->id_member, $member->pseudo_member,
+            $member->mail_member, $member->pass_member, $member->avatar_member,
+            $member->token_member,$member->date_member,$member->role_member,$member->active_member);
     }
 }
