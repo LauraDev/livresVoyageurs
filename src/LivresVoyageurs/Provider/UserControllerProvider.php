@@ -53,7 +53,8 @@ class UserControllerProvider implements ControllerProviderInterface
             # Reset Password
             $controllers
 
-                ->get('/mdpPerdu', 'LivresVoyageurs\Controller\UserController::resetPasswordAction')
+                ->match('/mdpPerdu', 'LivresVoyageurs\Controller\UserController::resetPasswordAction')
+                ->method('GET|POST')
                 ->bind('livresVoyageurs_resetPassword');
 
             #Contact
