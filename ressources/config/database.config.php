@@ -17,10 +17,16 @@ $app->register(new Idiorm\Silex\Provider\IdiormServiceProvider(), array(
         'connection_string'   => 'mysql:host=localhost;dbname=livresVoyageurs',
         'username'            => 'lola',
         'password'            => 'lola'
-        // ,
-        // 'id_column_overrides' => array(
-        // 'view_articles' => 'IDARTICLE'
-        // )
+        ,
+        'id_column_overrides' => array(
+        'authors' => 'id_author',
+        'books'   => 'id_book',
+        'captures'=> 'id_pointer',
+        'categories'=> 'id_category',
+        'chats'    => 'id_chat',
+        'members' => 'id_member',
+        'pointers' => 'id_pointer'
+        )
     ),
 ));
 
