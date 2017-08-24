@@ -38,7 +38,7 @@ class  UserController
 
     // Contact
     public function contactAction(Application $app){
-        return $app['twig']->render('contact.html.twig');
+        return $app['twig']->render('user/contact.html.twig');
     }
 
 
@@ -55,6 +55,11 @@ class  UserController
         $app['session']->clear();
         # Redirect to Home
         return $app->redirect( $app['url_generator']->generate('livresVoyageurs_home') );
+    }
+
+    //Reset Password
+    public function resetPasswordAction(Application $app) {
+        return $app['twig']->render('user/resetPassword.html.twig');
     }
 
 

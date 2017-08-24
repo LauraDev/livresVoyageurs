@@ -2,10 +2,17 @@
 -- version 4.7.0
 -- https://www.phpmyadmin.net/
 --
+<<<<<<< HEAD
 -- Hôte : 127.0.0.1
 -- Généré le :  mer. 23 août 2017 à 23:14
 -- Version du serveur :  10.1.22-MariaDB
 -- Version de PHP :  7.1.4
+=======
+-- Host: localhost:8889
+-- Generation Time: Aug 24, 2017 at 12:13 AM
+-- Server version: 5.6.35
+-- PHP Version: 7.0.15
+>>>>>>> dev
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -34,6 +41,14 @@ CREATE TABLE `authors` (
   `lastname_author` varchar(80) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `authors`
+--
+
+INSERT INTO `authors` (`id_author`, `firstname_author`, `lastname_author`) VALUES
+(1, 'laura', 'traore'),
+(2, 'loic', 'gallay');
+
 -- --------------------------------------------------------
 
 --
@@ -50,8 +65,16 @@ CREATE TABLE `books` (
   `photo_book` varchar(255) NOT NULL,
   `ISBN_book` int(11) NOT NULL,
   `disponibility_book` tinyint(4) NOT NULL DEFAULT '0',
-  `language_book` varchar(60) NOT NULL DEFAULT 'Français'
+  `language_book` varchar(60) NOT NULL DEFAULT 'Français',
+  `date_book` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `books`
+--
+
+INSERT INTO `books` (`id_book`, `id_member`, `id_author`, `id_category`, `title_book`, `summary_book`, `photo_book`, `ISBN_book`, `disponibility_book`, `language_book`, `date_book`) VALUES
+(12345678, 1, 2, 1, 'La science fiction', 'La fiction bla als bla lorem ipsum', '', 123456, 0, 'Français', '2017-08-23 20:01:28');
 
 -- --------------------------------------------------------
 
@@ -60,11 +83,9 @@ CREATE TABLE `books` (
 --
 
 CREATE TABLE `captures` (
-  `id_capture` int(11) NOT NULL,
+  `id_pointer` int(11) NOT NULL,
   `id_member` int(11) NOT NULL,
-  `id_book` int(8) NOT NULL,
-  `comment_capture` varchar(500) NOT NULL,
-  `date_capture` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `comment_capture` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- --------------------------------------------------------
@@ -77,6 +98,14 @@ CREATE TABLE `categories` (
   `id_category` int(11) NOT NULL,
   `name_category` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id_category`, `name_category`) VALUES
+(1, 'fiction'),
+(2, 'comique');
 
 -- --------------------------------------------------------
 
@@ -102,7 +131,12 @@ CREATE TABLE `friends` (
   `id_member_1` int(11) NOT NULL,
   `id_member_2` int(11) NOT NULL,
   `action_friend` int(11) NOT NULL,
+<<<<<<< HEAD
   `status_friend` tinyint(4) NOT NULL COMMENT '0: pending, 1: accepted, 2: blocked, 3: rejected'
+=======
+  `status_friend` tinyint(4) NOT NULL,
+  `date_friend` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+>>>>>>> dev
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -120,8 +154,15 @@ CREATE TABLE `members` (
   `token_member` varchar(40) NOT NULL,
   `date_member` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `role_member` varchar(11) NOT NULL,
-  `active_member` tinyint(4) NOT NULL
+  `active_member` tinyint(4) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `members`
+--
+
+INSERT INTO `members` (`id_member`, `pseudo_member`, `mail_member`, `pass_member`, `avatar_member`, `token_member`, `date_member`, `role_member`, `active_member`) VALUES
+(1, 'loles34', 'loles34_4@hotmail.com', 'loles34', '', '', '2017-08-23 19:57:29', 'ROLE_ADMIN', 0);
 
 -- --------------------------------------------------------
 
@@ -134,7 +175,8 @@ CREATE TABLE `pointers` (
   `id_book` int(8) NOT NULL,
   `lat_pointer` float NOT NULL,
   `lng_pointer` float NOT NULL,
-  `city_pointer` int(11) NOT NULL
+  `city_pointer` int(11) NOT NULL,
+  `date_pointer` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -233,9 +275,8 @@ ALTER TABLE `books`
 -- Index pour la table `captures`
 --
 ALTER TABLE `captures`
-  ADD PRIMARY KEY (`id_capture`),
   ADD KEY `id_member` (`id_member`),
-  ADD KEY `id_book` (`id_book`);
+  ADD KEY `id_pointer` (`id_pointer`);
 
 --
 -- Index pour la table `categories`
@@ -278,28 +319,67 @@ ALTER TABLE `startpoints`
   ADD KEY `id_book` (`id_book`);
 
 --
+<<<<<<< HEAD
 -- Contraintes pour les tables déchargées
 --
 
 --
 -- Contraintes pour la table `authors`
+=======
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `authors`
+>>>>>>> dev
 --
 ALTER TABLE `authors`
-  ADD CONSTRAINT `authors_ibfk_1` FOREIGN KEY (`id_author`) REFERENCES `books` (`id_author`);
+  MODIFY `id_author` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `id_category` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `chats`
+--
+ALTER TABLE `chats`
+  MODIFY `id_chat` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `members`
+--
+ALTER TABLE `members`
+  MODIFY `id_member` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `pointers`
+--
+ALTER TABLE `pointers`
+  MODIFY `id_pointer` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- Constraints for dumped tables
+--
 
 --
 -- Contraintes pour la table `books`
 --
 ALTER TABLE `books`
-  ADD CONSTRAINT `books_ibfk_1` FOREIGN KEY (`id_book`) REFERENCES `startpoints` (`id_book`);
+  ADD CONSTRAINT `books_ibfk_1` FOREIGN KEY (`id_member`) REFERENCES `members` (`id_member`),
+  ADD CONSTRAINT `books_ibfk_2` FOREIGN KEY (`id_author`) REFERENCES `authors` (`id_author`),
+  ADD CONSTRAINT `books_ibfk_3` FOREIGN KEY (`id_category`) REFERENCES `categories` (`id_category`);
 
 --
+<<<<<<< HEAD
 -- Contraintes pour la table `categories`
+=======
+-- Constraints for table `captures`
+>>>>>>> dev
 --
-ALTER TABLE `categories`
-  ADD CONSTRAINT `categories_ibfk_1` FOREIGN KEY (`id_category`) REFERENCES `books` (`id_category`);
+ALTER TABLE `captures`
+  ADD CONSTRAINT `captures_ibfk_1` FOREIGN KEY (`id_member`) REFERENCES `members` (`id_member`),
+  ADD CONSTRAINT `captures_ibfk_2` FOREIGN KEY (`id_pointer`) REFERENCES `pointers` (`id_pointer`);
 
 --
+<<<<<<< HEAD
 -- Contraintes pour la table `members`
 --
 ALTER TABLE `members`
@@ -309,3 +389,29 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+=======
+-- Constraints for table `chats`
+--
+ALTER TABLE `chats`
+  ADD CONSTRAINT `chats_ibfk_1` FOREIGN KEY (`id_sender`) REFERENCES `members` (`id_member`),
+  ADD CONSTRAINT `chats_ibfk_2` FOREIGN KEY (`id_receiver`) REFERENCES `members` (`id_member`);
+
+--
+-- Constraints for table `friends`
+--
+ALTER TABLE `friends`
+  ADD CONSTRAINT `friends_ibfk_1` FOREIGN KEY (`id_member_1`) REFERENCES `members` (`id_member`),
+  ADD CONSTRAINT `friends_ibfk_2` FOREIGN KEY (`id_member_2`) REFERENCES `members` (`id_member`);
+
+--
+-- Constraints for table `pointers`
+--
+ALTER TABLE `pointers`
+  ADD CONSTRAINT `pointers_ibfk_1` FOREIGN KEY (`id_book`) REFERENCES `books` (`id_book`);
+
+--
+-- Constraints for table `startpoints`
+--
+ALTER TABLE `startpoints`
+  ADD CONSTRAINT `startpoints_ibfk_1` FOREIGN KEY (`id_book`) REFERENCES `books` (`id_book`);
+>>>>>>> dev

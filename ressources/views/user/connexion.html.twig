@@ -16,7 +16,44 @@
 
         <h1> Connexion </h1>
 
-    
+        <div class="col-md-offset-3 col-md-6">
+            <!-- Connexion Form -->
+            <form id="formMemberConnexion" action="" method="">
+
+                <!-- Pseudo -->
+                <div class="form-group">
+                    <label for="pseudo_member">Pseudo</label>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input type="text" name="pseudo_member" class="form-control" required>
+                    </div>
+                    <p class="error alert alert-danger">Vous n'avez pas indiqué votre Pseudo</p>
+                    <p class="error alert alert-danger">Ce pseudo n'existe pas</p>
+                </div>
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="pass_member">Mot de passe</label>
+                    <div class="input-group">
+                        <div class="input-group-addon"><span class="ion-android-lock"></span></div>
+                        <input type="password" name="pass_member" class="form-control" required>
+                    </div>
+                    <p class="error alert alert-danger">Vous n'avez pas indiqué votre Mot de passe</p>
+                    <p class="error alert alert-danger">Mot de passe incorrect</p>
+                </div>
+                <!-- Submission -->
+                <div class="form-group text-center">
+                    <input type="submit" name="btnSub" value="Entrer" id="btn_memberConnexion" class="btn btn-success">
+                </div>
+
+            </form>
+
+
+            <!-- Reset Password -->
+            <div>
+                <a href="{{ url('livresVoyageurs_resetPassword') }}" title="lien vers la réinitialisation du mot de passe">Mot de passe perdu?</a>
+            </div>
+            
+        </div> <!-- col-md -->
 
     </div> <!-- row -->
 
