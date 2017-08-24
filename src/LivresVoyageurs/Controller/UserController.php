@@ -122,7 +122,6 @@ class UserController
     // Contact
     public function contactAction(Application $app, Request $request)
     {
-<<<<<<< HEAD
         $form = $app['form.factory']->createBuilder(FormType::class)
         
             ->add('name', TextType::class, [            
@@ -173,13 +172,6 @@ class UserController
 			'form'  => $form->createView(),
 		));
 	}
-=======
-
-        return $app['twig']->render('user/contact.html.twig', [
-            'user' => $app['user']->getUsername('pseudo_member')
-        ]);
-    }
->>>>>>> b9ab65767f85bf2782e9aefb1dadfb1287a770bc
 
 
     //Display the menu
@@ -224,14 +216,14 @@ class UserController
         $mail = $form->getData();
         //check if email exist
         $checkMail = $app['idiorm.db']->for_table('members')
-                                      ->where('mail_member', $mail['mail_member'])
-                                      ->count();
+                                        ->where('mail_member', $mail['mail_member'])
+                                        ->count();
             // if ($checkMail) {
 
                 // Create the Transport
     $transport = (new Swift_SmtpTransport('smtp.orange.fr', 465, 'ssl'))
-      ->setUsername('lgallay@orange.fr')
-      ->setPassword('luciol16')
+        ->setUsername('lgallay@orange.fr')
+        ->setPassword('luciol16')
     ;
 
     // Create the Mailer using your created Transport
@@ -239,10 +231,10 @@ class UserController
 
     // Create a message
     $message = (new Swift_Message('Test'))
-      ->setFrom('lgallay@orange.fr')
-      ->setTo($mail['mail_member'])
-      ->setBody('Coucou')
-      ;
+        ->setFrom('lgallay@orange.fr')
+        ->setTo($mail['mail_member'])
+        ->setBody('Coucou')
+        ;
 
     // Send the message
     $result = $mailer->send($message);
