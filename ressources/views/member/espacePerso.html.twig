@@ -15,7 +15,7 @@
     <div class="row">
 
         <h1> Tableau de bord </h1>
-        {# <h2 class="text-center">Bonjour {{ app.user.pseudo_member }}</h2> #}
+        <h2 class="text-center">Bonjour {{ app.user.pseudo_member }}</h2>
 
             <div class="col-md-offset-3 col-md-6">
                 
@@ -24,7 +24,7 @@
                 <form id="formAddBook" action="" method="POST" enctype="multipart/form-data">
                     
                     <!-- Id Member -->
-                    <input type="hidden" name="id_member" value="{# {{ app.user.id_member }} #}">
+                    <input type="hidden" name="id_member" value="{{ app.user.id_member }}">
                     <!-- Id Author -->
                     <input type="hidden" name="id_author" value="{# xxxxxxxxx }} #}">
                     <!-- Id Category -->
@@ -110,15 +110,14 @@
 
                 <!-- Form: Personal data management -->
                 <h2> Compte </h2>
-                <!-- Inscription form -->
-            <form id="formMemberModification" action="" method="POST" enctype="multipart/form-data">
+                <form id="formMemberModification" action="" method="POST" enctype="multipart/form-data">
 
                 <!-- Pseudo -->
                 <div class="form-group">
                     <label for="pseudo_member">Pseudo *</label>
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <input type="text" name="pseudo_member" class="form-control" required>
+                        {{ form_row(formAccount.pseudo_member) }}
                     </div>
                     <!-- Help-text -->
                     <p id="pseudo-helptext">Votre Pseudo doit contenir au moins 6 caractères et un 1 chiffre</p>
@@ -132,7 +131,7 @@
                     <label for="mail_member">Email *</label>
                     <div class="input-group">
                         <div class="input-group-addon">@</div>
-                        <input type="email" name="mail_member" class="form-control" required>
+                        {{ form_row(formAccount.mail_member) }}
                     </div>
                     <p class="error alert alert-danger">Vous n'avez pas indiqué votre Email</p>
                     <p class="error alert alert-danger">Email Incorrect</p>
@@ -142,7 +141,7 @@
                     <label for="pass_member">Mot de passe *</label>
                     <div class="input-group">
                         <div class="input-group-addon"><span class="ion-android-lock"></span></div>
-                        <input type="password" name="pass_member" class="form-control" required>
+                        {{ form_row(formAccount.pass_member) }}
                     </div>
                     <!-- Help-text -->
                     <p id="pass-helptext">Votre mot de passe doit contenir au moins 8 caractères, une majuscule et un chiffre</p>
@@ -156,11 +155,13 @@
                 <div class="form-group">
                     <label for="avatar_member">Avatar</label>
                     <div class="input-group">
-                        <input type="text" name="avatar_member" class="form-control">
+                        {{ form_row(formAccount.avatar_member) }}
                     </div>
                     <p class="error alert alert-danger">L'image est trop lourde</p>
                     <p class="error alert alert-danger">L'image doit être au format: jpg, jpeg ou png</p>
                 </div>
+                    {{ form_row(formAccount.role_member) }}
+                    {{ form_row(formAccount._token) }}
                 <!-- Submission -->
                 <div class="form-group text-center">
                     <input type="submit" name="btnSub" value="Entrer" id="btn_memberInscription" class="btn btn-success">

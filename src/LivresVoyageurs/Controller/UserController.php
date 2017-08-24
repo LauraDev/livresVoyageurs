@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\HttpFoundation\Request;
 
+
 class UserController
 {
 
@@ -116,10 +117,58 @@ class UserController
     }
 
     // Contact
-    public function contactAction(Application $app)
+    public function contactAction(Application $app, Request $request)
     {
-        return $app['twig']->render('user/contact.html.twig');
-    }
+        $form = $app['form.factory']->createBuilder(FormType::class)
+        
+            ->add('name', TextType::class, [            
+                'required'      =>  true,
+                'label'         =>  false,
+                'constraints'   =>  array(new NotBlank()),
+                'attr'          =>  [
+                    'class'     => 'form-control',
+                ]
+            ])
+            ->add('mail', EmailType::class, [
+                'required'      =>  true,
+                'label'         =>  false,
+                'constraints'   =>  array(new NotBlank()),
+                'attr'          =>  [
+                    'class'     => 'form-control',
+                ]
+            ])
+		    ->add('message', TextType::class, [            
+                'required'      =>  true,
+                'label'         =>  false,
+                'constraints'   =>  array(new NotBlank()),
+                'attr'          =>  [
+                    'class'     => 'form-control',
+                ]
+            ])
+		    ->getForm();
+            
+            $form->handleRequest($request);
+
+			if ($form->isValid())
+			{
+				// $data = $form->getData();
+				//$contactEmail = 'enquiries@richardhutchinson.me.uk';
+				// $contactEmail = 'loles34_4@hotmail.com';
+				$message = \Swift_Message::newInstance()
+                ->setSubject('[Les livres Voyageurs] Contact')
+                ->setFrom(array('loles34@hotmail.com'))
+                ->setTo(array('loles34@hotmail.com'))
+                ->setBody($request->get('message'));
+        
+                $app['mailer']->send($message);
+
+				return ok;
+            }
+            
+		return $app['twig']->render('user/contact.html.twig', array(
+			'form'  => $form->createView(),
+		));
+	}
 
 
     //Display the menu

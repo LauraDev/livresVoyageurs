@@ -32,13 +32,16 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'translator.domains' => array(),
 ));
 
-#7 : Doctrine DBAL
+#7 : Email
+$app->register(new Silex\Provider\SwiftmailerServiceProvider());
+
+#8 : Idiorm
 require PATH_RESSOURCES . '/config/database.config.php';
 
-#8 : Security
+#9 : Security
 require PATH_RESSOURCES . '/config/security.php';
 
-#9 : Return $app
+#10 : Return $app
 return $app;
 
 

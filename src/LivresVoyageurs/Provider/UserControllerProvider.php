@@ -59,7 +59,8 @@ class UserControllerProvider implements ControllerProviderInterface
             #Contact
             $controllers
 
-                ->get('/contact', 'LivresVoyageurs\Controller\UserController::contactAction')
+                ->match('/contact', 'LivresVoyageurs\Controller\UserController::contactAction')
+                ->method('GET|POST')
                 ->bind('livresVoyageurs_contact');
 
             #Mentions

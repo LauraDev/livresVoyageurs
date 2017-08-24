@@ -20,7 +20,8 @@ class MemberControllerProvider implements ControllerProviderInterface
         $controllers
         
             # Associate a route with a controller and an action
-            ->get('/{pseudo}', 'LivresVoyageurs\Controller\MemberController::espacePersoAction')
+            ->match('/{pseudo}', 'LivresVoyageurs\Controller\MemberController::espacePersoAction')
+            ->method('GET|POST')
             # Specify the type of parameters / using Regex
             ->assert('pseudo' , '[^/]+')
             # Route name
