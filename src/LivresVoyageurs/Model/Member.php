@@ -38,15 +38,15 @@ class Member implements UserInterface
         $role_member,
         $active_member
     ) {
-        $this->id_member    = $id_member;
-        $this->pseudo_member = $pseudo_member;
-        $this->mail_member   = $mail_member;
-        $this->pass_member   = $pass_member;
-        $this->avatar_member = $avatar_member;
-        $this->token_member  = $token_member;
-        $this->date_member   = $date_member;
-        $this->role_member   = $role_member;
-        $this->active_member = $active_member;
+        $this->id_member       = $id_member;
+        $this->pseudo_member   = $pseudo_member;
+        $this->mail_member     = $mail_member;
+        $this->pass_member     = $pass_member;
+        $this->avatar_member   = $avatar_member;
+        $this->token_member    = $token_member;
+        $this->date_member     = $date_member;
+        $this->role_member[]   = $role_member;
+        $this->active_member   = $active_member;
     }
 
     /*getters*/
@@ -123,105 +123,105 @@ class Member implements UserInterface
         return $this->active_member;
     }
 
-    /*setters*/
-    /**
-     * @param mixed $id_member
-     *
-     * @return static
-     */
-    public function setId_member($id_member)
-    {
-        $this->id_member = $id_member;
-        return $this;
-    }
-
-    /**
-     * @param mixed $pseudo_member
-     *
-     * @return static
-     */
-    public function setPseudo_member($pseudo_member)
-    {
-        $this->pseudo_member = $pseudo_member;
-        return $this;
-    }
-
-    /**
-     * @param mixed $mail_member
-     *
-     * @return static
-     */
-    public function setMail_member($mail_member)
-    {
-        $this->mail_member = $mail_member;
-        return $this;
-    }
-
-    /**
-     * @param mixed $pass_member
-     *
-     * @return static
-     */
-    public function setPass_member($pass_member)
-    {
-        $this->pass_member = $pass_member;
-        return $this;
-    }
-
-    /**
-     * @param mixed $avatar_member
-     *
-     * @return static
-     */
-    public function setAvatar_member($avatar_member)
-    {
-        $this->avatar_member = $avatar_member;
-        return $this;
-    }
-
-    /**
-     * @param mixed $token_member
-     *
-     * @return static
-     */
-    public function setToken_member($token_member)
-    {
-        $this->token_member = $token_member;
-        return $this;
-    }
-
-    /**
-     * @param mixed $date_member
-     *
-     * @return static
-     */
-    public function setDate_member($date_member)
-    {
-        $this->date_member = $date_member;
-        return $this;
-    }
-
-    /**
-     * @param mixed $role_member
-     *
-     * @return static
-     */
-    public function setRole_member($role_member)
-    {
-        $this->role_member = $role_member;
-        return $this;
-    }
-
-    /**
-     * @param mixed $active_member
-     *
-     * @return static
-     */
-    public function setActive_member($active_member)
-    {
-        $this->active_member = $active_member;
-        return $this;
-    }
+    // /*setters*/
+    // /**
+    //  * @param mixed $id_member
+    //  *
+    //  * @return static
+    //  */
+    // public function setId_member($id_member)
+    // {
+    //     $this->id_member = $id_member;
+    //     return $this;
+    // }
+    //
+    // /**
+    //  * @param mixed $pseudo_member
+    //  *
+    //  * @return static
+    //  */
+    // public function setPseudo_member($pseudo_member)
+    // {
+    //     $this->pseudo_member = $pseudo_member;
+    //     return $this;
+    // }
+    //
+    // /**
+    //  * @param mixed $mail_member
+    //  *
+    //  * @return static
+    //  */
+    // public function setMail_member($mail_member)
+    // {
+    //     $this->mail_member = $mail_member;
+    //     return $this;
+    // }
+    //
+    // /**
+    //  * @param mixed $pass_member
+    //  *
+    //  * @return static
+    //  */
+    // public function setPass_member($pass_member)
+    // {
+    //     $this->pass_member = $pass_member;
+    //     return $this;
+    // }
+    //
+    // /**
+    //  * @param mixed $avatar_member
+    //  *
+    //  * @return static
+    //  */
+    // public function setAvatar_member($avatar_member)
+    // {
+    //     $this->avatar_member = $avatar_member;
+    //     return $this;
+    // }
+    //
+    // /**
+    //  * @param mixed $token_member
+    //  *
+    //  * @return static
+    //  */
+    // public function setToken_member($token_member)
+    // {
+    //     $this->token_member = $token_member;
+    //     return $this;
+    // }
+    //
+    // /**
+    //  * @param mixed $date_member
+    //  *
+    //  * @return static
+    //  */
+    // public function setDate_member($date_member)
+    // {
+    //     $this->date_member = $date_member;
+    //     return $this;
+    // }
+    //
+    // /**
+    //  * @param mixed $role_member
+    //  *
+    //  * @return static
+    //  */
+    // public function setRole_member($role_member)
+    // {
+    //     $this->role_member = $role_member;
+    //     return $this;
+    // }
+    //
+    // /**
+    //  * @param mixed $active_member
+    //  *
+    //  * @return static
+    //  */
+    // public function setActive_member($active_member)
+    // {
+    //     $this->active_member = $active_member;
+    //     return $this;
+    // }
 
     # -------- Inherited methods from Interface --------#
 

@@ -38,7 +38,7 @@ class UserController
                 'label'         =>  false,
                 'constraints'   =>  array(new NotBlank()),
                 'attr'          =>  [
-                    'class'         => 'form-control',
+                    'class'     => 'form-control',
                 ]
             ])
             ->add('mail_member', EmailType::class, [
@@ -47,7 +47,7 @@ class UserController
                 'label'         =>  false,
                 'constraints'   =>  array(new NotBlank()),
                 'attr'          =>  [
-                    'class'         => 'form-control',
+                    'class'     => 'form-control',
                 ]
             ])
             ->add('pass_member', RepeatedType::class, array(
@@ -55,7 +55,7 @@ class UserController
                 'first_options'  => array('label' => 'Password'),
                 'second_options' => array('label' => 'Repeat Password'),
                 'attr' => [
-                    'class' => 'form-control'
+                    'class'      => 'form-control'
                     ]
             ))
             ->add('role_member', HiddenType::class, [
@@ -68,7 +68,7 @@ class UserController
                 'required'      =>  false,
                 'label'         =>  false,
                 'attr'          =>  [
-                    'class'         => 'dropify'
+                    'class'     => 'dropify'
                 ]
             ])
             ->add('submit', SubmitType::class, ['label' => 'Publier'])
@@ -92,7 +92,7 @@ class UserController
             $memberDb->save();
 
             # Redirection
-            return $app->redirect( $app['url_generator']->generate('livresVoyageurs_connexion'));
+            return $app->redirect('connexion?inscription=success');
 
         endif;
 
