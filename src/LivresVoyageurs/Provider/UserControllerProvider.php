@@ -38,7 +38,8 @@ class UserControllerProvider implements ControllerProviderInterface
             $controllers
 
                 # Associate a route with a controller and an action
-                ->get('/connexion', 'LivresVoyageurs\Controller\UserController::connexionAction')
+                ->match('/connexion', 'LivresVoyageurs\Controller\UserController::connexionAction')
+                ->method('GET|POST')
                 # Route name
                 ->bind('livresVoyageurs_connexion');
 

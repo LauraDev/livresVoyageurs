@@ -27,7 +27,7 @@ class MemberProvider implements UserProviderInterface
     */
     public function supportsClass($class)
     {
-        return $class === 'LivresVoayageurs\Model\Member';
+        return $class === 'LivresVoyageurs\Model\Member';
     }
 
     /**
@@ -50,19 +50,19 @@ class MemberProvider implements UserProviderInterface
     * {@inheritDoc}
     * @see \Symfony\Component\Security\Core\User\UserProviderInterface::loadUserByUsername()
     */
-    public function loadUserByUsername($mail_member)
+    public function loadUserByUsername($pseudo_member)
     {
         $member = $this->_db->for_table('members')
-                            ->where('mail_member', $mail_member)
+                            ->where('pseudo_member', $pseudo_member)
                             ->find_one();
 
         if(empty($member)) {
             throw new UsernameNotFoundException(
-                sprintf('Cet utilisateur "%s" n\'existe pas.', $mail_member));
+                sprintf('Cet utilisateur "%s" n\'existe pas.', $pseudo_member));
         }
 
         return new Member($member->id_member, $member->pseudo_member,
             $member->mail_member, $member->pass_member, $member->avatar_member,
-            $member->token_member,$member->date_member,$member->role_member,$member->active_member);
+            $member->token_member, $member->date_member, $member->role_member, $member->active_member);
     }
 }
