@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\HttpFoundation\Request;
+use Twig\Token;
 
 
 class UserController
@@ -123,8 +124,8 @@ class UserController
     public function contactAction(Application $app, Request $request)
     {
         $form = $app['form.factory']->createBuilder(FormType::class)
-        
-            ->add('name', TextType::class, [            
+
+            ->add('name', TextType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
                 'constraints'   =>  array(new NotBlank()),
@@ -140,7 +141,7 @@ class UserController
                     'class'     => 'form-control',
                 ]
             ])
-		    ->add('message', TextType::class, [            
+		    ->add('message', TextType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
                 'constraints'   =>  array(new NotBlank()),
@@ -149,7 +150,7 @@ class UserController
                 ]
             ])
 		    ->getForm();
-            
+
             $form->handleRequest($request);
 
 			if ($form->isValid())
@@ -162,12 +163,12 @@ class UserController
                 ->setFrom(array('loles34@hotmail.com'))
                 ->setTo(array('loles34@hotmail.com'))
                 ->setBody($request->get('message'));
-        
+
                 $app['mailer']->send($message);
 
 				return ok;
             }
-            
+
 		return $app['twig']->render('user/contact.html.twig', array(
 			'form'  => $form->createView(),
 		));
@@ -214,34 +215,128 @@ class UserController
 
 
         $mail = $form->getData();
-        //check if email exist
-        $checkMail = $app['idiorm.db']->for_table('members')
-                                        ->where('mail_member', $mail['mail_member'])
-                                        ->count();
-            // if ($checkMail) {
+
+        if ($form->isValid()) {
+            //check if email exist
+            $checkMail = $app['idiorm.db']->for_table('members')
+                                          ->where('mail_member', $mail['mail_member'])
+                                          ->count();
+            if ($checkMail) {
 
                 // Create the Transport
-    $transport = (new Swift_SmtpTransport('smtp.orange.fr', 465, 'ssl'))
-        ->setUsername('lgallay@orange.fr')
-        ->setPassword('luciol16')
-    ;
+                $transport = (new Swift_SmtpTransport('smtp.orange.fr', 465, 'ssl'))
+                              ->setUsername('lgallay@orange.fr')
+                              ->setPassword('luciol16');
 
-    // Create the Mailer using your created Transport
-    $mailer = new Swift_Mailer($transport);
+                // Create the Mailer using your created Transport
+                $mailer = new Swift_Mailer($transport);
 
-    // Create a message
-    $message = (new Swift_Message('Test'))
-        ->setFrom('lgallay@orange.fr')
-        ->setTo($mail['mail_member'])
-        ->setBody('Coucou')
-        ;
+                $template = $app['twig']->loadTemplate('resetPasswordMail.html.twig');
+                // generate token
+                $token = md5($mail['mail_member'] . date('YmdHis'));
+                $tokenDb = $app['idiorm.db']->for_table('members')->where('mail_member', $mail['mail_member'])->find_one();
+                $tokenDb->token_member = $token;
+                $tokenDb->save();
+                // Url for password change
+                $urlReset = 'http://' . $_SERVER['SERVER_NAME'] . '/livresVoyageurs/public/mdpReset/'.$token;
+                // Array for renderBlock
+                $parameters  = [];
 
-    // Send the message
-    $result = $mailer->send($message);
+                // Create a message
+                $message = (new Swift_Message('Test'))
+                            ->setFrom('lgallay@orange.fr')
+                            ->setTo($mail['mail_member'])
+                            ->setSubject($template ->renderBlock('subject', $parameters))
+                            ->setBody($template    ->renderBlock('body_text', $parameters),'text/plain')
+                            ->addPart($template    ->renderBlock('body_html', array('url' => $urlReset)),'text/html');
 
-            // }
+
+                // Send the message
+                $result = $mailer->send($message);
+                if($result) {
+                    $reset = 'ok';
+                    return $app['twig']->render('user/resetPassword.html.twig',  [
+                        'form'=>$form->createView(),
+                        'reset' => $reset
+                    ]);
+                }
+
+                }
+
+        }
 
 
         return $app['twig']->render('user/resetPassword.html.twig',  ['form'=>$form->createView()]);
+    }
+
+
+    //Display Teset password page 2
+    public function resetPassword2Action(Application $app, Request $request, $token)
+    {
+        //Create form
+        $form = $app['form.factory']->createBuilder(FormType::class)
+
+            ->add('mail_member', EmailType::class, [
+
+                'required'      =>  true,
+                'label'         =>  false,
+                'constraints'   =>  array(new NotBlank()),
+                'attr'          =>  [
+                    'class'     => 'form-control',
+                ]
+            ])
+            ->add('pass_member', RepeatedType::class, array(
+                'type'          => PasswordType::class,
+                'first_options' => array(
+                    'label' => false,
+                    'attr'  => [
+                        'class'       => 'form-control',
+                        'placeholder' => 'Entrez votre mot de passe'
+                        ]
+                ),
+                'second_options' => array(
+                    'label' => false,
+                    'attr'  => [
+                        'class'       => 'form-control',
+                        'placeholder' => 'Confirmer votre mot de passe'
+                        ]
+                ),
+                'attr' => [
+                    'class'      => 'form-control'
+                    ]
+            ))
+            ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
+
+            ->getForm();
+
+        # Traitement des données POST
+        # use Symfony\Component\HttpFoundation\Request;
+        $form->handleRequest($request);
+
+        if ($form->isValid()) :
+            # Connect to DB : Register a new member
+            $member = $form->getData();
+
+            # Get mail_member from DB depending on Token
+            $mail = $app['idiorm.db']->for_table('members')
+                                    ->where('token_member', $token)
+                                    ->find_one();
+            # Compare address mail in Db and from form data
+            if($mail['mail_member'] == $member['mail_member'])
+            {
+                $memberDb = $app['idiorm.db']->for_table('members')->find_one($mail['id_member']);
+                $memberDb->token_member = "";
+                $memberDb->pass_member          = $app['security.encoder.digest']->encodePassword($member['pass_member'], '');
+                $memberDb->save();
+
+                # Redirection
+                return $app->redirect( $app['url_generator']->generate('livresVoyageurs_connexion') );
+            }
+
+        endif;
+
+        return $app['twig']->render('user/resetPassword2.html.twig', [
+            'form'=>$form->createView()
+        ]);
     }
 }
