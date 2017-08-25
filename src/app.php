@@ -11,7 +11,9 @@ require PATH_SRC . '/routes.php';
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => [
         PATH_VIEWS,
-        PATH_RESSOURCES .'/layout'
+        PATH_RESSOURCES .'/layout',
+        PATH_RESSOURCES .'/template'
+
     ],
 ));
 
