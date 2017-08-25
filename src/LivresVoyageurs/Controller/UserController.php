@@ -36,11 +36,8 @@ class UserController
     {
         //Create form
         $form = $app['form.factory']->createBuilder(FormType::class)
-
-            # use Symfony\Component\Form\Extension\Core\Type\TextType;
-            # use Symfony\Component\Validator\Constraints\NotBlank;
+        
             ->add('pseudo_member', TextType::class, [
-
                 'required'      =>  true,
                 'label'         =>  false,
                 'constraints'   =>  array(new NotBlank()),
@@ -49,7 +46,6 @@ class UserController
                 ]
             ])
             ->add('mail_member', EmailType::class, [
-
                 'required'      =>  true,
                 'label'         =>  false,
                 'constraints'   =>  array(new NotBlank()),
@@ -59,8 +55,20 @@ class UserController
             ])
             ->add('pass_member', RepeatedType::class, array(
                 'type' => PasswordType::class,
-                'first_options'  => array('label' => 'Password'),
-                'second_options' => array('label' => 'Repeat Password'),
+                'first_options'  => array(
+                    'label' => false,
+                    'attr' => [
+                        'placeholder' => 'Entrez votre mot de passe',
+                        'class'      => 'form-control'
+                    ]
+                ),
+                'second_options' => array(
+                    'label' => false,
+                    'attr' => [
+                        'placeholder' => 'Confirmez votre mot de passe',
+                        'class'      => 'form-control'
+                    ]
+                ),
                 'attr' => [
                     'class'      => 'form-control'
                     ]
@@ -71,19 +79,17 @@ class UserController
                 ]
             ])
             ->add('avatar_member', FileType::class, [
-
                 'required'      =>  false,
                 'label'         =>  false,
                 'attr'          =>  [
-                    'class'     => 'dropify'
+                    'class'     => 'form-control dropify'
                 ]
             ])
             ->add('submit', SubmitType::class, ['label' => 'Publier'])
 
             ->getForm();
 
-        # Traitement des données POST
-        # use Symfony\Component\HttpFoundation\Request;
+        # POST: handle data
         $form->handleRequest($request);
 
         if ($form->isValid()) :
@@ -251,7 +257,6 @@ class UserController
 
         //create an email input type
         ->add('mail_member', EmailType::class, [
-
             'required'      =>  true,
             'label'         =>  false,
             'constraints'   =>  array(new NotBlank()),
