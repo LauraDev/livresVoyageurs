@@ -2,6 +2,9 @@
 
 namespace LivresVoyageurs\Controller;
 
+use Swift_Mailer;
+use Swift_Message;
+use Swift_SmtpTransport;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -25,16 +28,16 @@ class UserController
     }
 
 
+
+
+
     //Display Inscription page
     public function inscriptionAction(Application $app, Request $request)
     {
         //Create form
         $form = $app['form.factory']->createBuilder(FormType::class)
-
-            # use Symfony\Component\Form\Extension\Core\Type\TextType;
-            # use Symfony\Component\Validator\Constraints\NotBlank;
+        
             ->add('pseudo_member', TextType::class, [
-
                 'required'      =>  true,
                 'label'         =>  false,
                 'constraints'   =>  array(new NotBlank()),
@@ -43,7 +46,6 @@ class UserController
                 ]
             ])
             ->add('mail_member', EmailType::class, [
-
                 'required'      =>  true,
                 'label'         =>  false,
                 'constraints'   =>  array(new NotBlank()),
@@ -53,8 +55,20 @@ class UserController
             ])
             ->add('pass_member', RepeatedType::class, array(
                 'type' => PasswordType::class,
-                'first_options'  => array('label' => 'Password'),
-                'second_options' => array('label' => 'Repeat Password'),
+                'first_options'  => array(
+                    'label' => false,
+                    'attr' => [
+                        'placeholder' => 'Entrez votre mot de passe',
+                        'class'      => 'form-control'
+                    ]
+                ),
+                'second_options' => array(
+                    'label' => false,
+                    'attr' => [
+                        'placeholder' => 'Confirmez votre mot de passe',
+                        'class'      => 'form-control'
+                    ]
+                ),
                 'attr' => [
                     'class'      => 'form-control'
                     ]
@@ -65,19 +79,17 @@ class UserController
                 ]
             ])
             ->add('avatar_member', FileType::class, [
-
                 'required'      =>  false,
                 'label'         =>  false,
                 'attr'          =>  [
-                    'class'     => 'dropify'
+                    'class'     => 'form-control dropify'
                 ]
             ])
             ->add('submit', SubmitType::class, ['label' => 'Publier'])
 
             ->getForm();
 
-        # Traitement des données POST
-        # use Symfony\Component\HttpFoundation\Request;
+        # POST: handle data
         $form->handleRequest($request);
 
         if ($form->isValid()) :
@@ -101,6 +113,13 @@ class UserController
     }
 
 
+
+
+
+
+
+
+
     //Display Connexion page
     public function connexionAction(Application $app, Request $request)
     {
@@ -110,11 +129,23 @@ class UserController
         ]);
     }
 
+
+
+
+
+
+
     // Display mentions page
     public function mentionsAction(Application $app)
     {
         return $app['twig']->render('user/mentions.html.twig');
     }
+
+
+
+
+
+
 
     // Contact
     public function contactAction(Application $app, Request $request)
@@ -151,18 +182,29 @@ class UserController
 
 			if ($form->isValid())
 			{
-				// $data = $form->getData();
-				//$contactEmail = 'enquiries@richardhutchinson.me.uk';
-				// $contactEmail = 'loles34_4@hotmail.com';
-				$message = \Swift_Message::newInstance()
-                ->setSubject('[Les livres Voyageurs] Contact')
-                ->setFrom(array('loles34@hotmail.com'))
-                ->setTo(array('loles34@hotmail.com'))
-                ->setBody($request->get('message'));
-        
-                $app['mailer']->send($message);
+				$data = $form->getData();
+				// Create the Transport
+                $transport = (new Swift_SmtpTransport('smtp.orange.fr', 465, 'ssl'))
+                ->setUsername('lgallay@orange.fr')
+                ->setPassword('luciol16');
 
-				return ok;
+                // Create the Mailer using your created Transport
+                $mailer = new Swift_Mailer($transport);
+
+                // Create a message
+                $message = (new Swift_Message('TestContact'))
+                    ->setFrom('lgallay@orange.fr')
+                    ->setTo('lgallay@orange.fr')
+                    ->setBody($data['name'].$data['mail'].$data['message'])
+                    ;
+
+                // Send the message
+                $result = $mailer->send($message);
+
+                return $app['twig']->render('user/contact.html.twig', array(
+                    'form'  => $form->createView(),
+                    'sendMessage' => true
+                ));
             }
             
 		return $app['twig']->render('user/contact.html.twig', array(
@@ -171,12 +213,26 @@ class UserController
 	}
 
 
+
+
+
+
+
+
+
     //Display the menu
     public function menu(Application $app, $active_page)
     {
         return $app['twig']->render('menu.html.twig', [
             'active_page' => $active_page ]);
     }
+
+
+
+
+
+
+
 
     //Disconnection
     public function deconnexionAction(Application $app)
@@ -187,11 +243,18 @@ class UserController
         return $app->redirect($app['url_generator']->generate('livresVoyageurs_home'));
     }
 
-    //Reset Password
+
+
+
+
+
+
+    
     //Reset Password
     public function resetPasswordAction(Application $app, Request $request)
     {
         $form = $app['form.factory']->createBuilder(FormType::class)
+
         //create an email input type
         ->add('mail_member', EmailType::class, [
             'required'      =>  true,
@@ -203,30 +266,41 @@ class UserController
         ])
         //create a submit
         ->add('submit', SubmitType::class, ['label' => 'Envoyer'])
+
         ->getForm();
+
         $form->handleRequest($request);
+
+
         $mail = $form->getData();
         //check if email exist
         $checkMail = $app['idiorm.db']->for_table('members')
                                         ->where('mail_member', $mail['mail_member'])
                                         ->count();
             // if ($checkMail) {
+
                 // Create the Transport
-    $transport = (new Swift_SmtpTransport('smtp.orange.fr', 465, 'ssl'))
-        ->setUsername('lgallay@orange.fr')
-        ->setPassword('luciol16')
-    ;
-    // Create the Mailer using your created Transport
-    $mailer = new Swift_Mailer($transport);
-    // Create a message
-    $message = (new Swift_Message('Test'))
-        ->setFrom('lgallay@orange.fr')
-        ->setTo($mail['mail_member'])
-        ->setBody('Coucou')
-        ;
-    // Send the message
-    $result = $mailer->send($message);
-            // }
+                $transport = (new Swift_SmtpTransport('smtp.orange.fr', 465, 'ssl'))
+                    ->setUsername('lgallay@orange.fr')
+                    ->setPassword('luciol16')
+                ;
+
+                // Create the Mailer using your created Transport
+                $mailer = new Swift_Mailer($transport);
+
+                // Create a message
+                $message = (new Swift_Message('Test'))
+                    ->setFrom('lgallay@orange.fr')
+                    ->setTo($mail['mail_member'])
+                    ->setBody('Coucou')
+                    ;
+
+                // Send the message
+                $result = $mailer->send($message);
+
+        // }
+
+
         return $app['twig']->render('user/resetPassword.html.twig',  ['form'=>$form->createView()]);
     }
 }
