@@ -17,12 +17,18 @@
             <div class="row" id="contactForm">
                 <div class="animation" id="myMap"></div>
                 <div class="col-md-offset-3 col-md-6" id="form"> 
+
+                    {% if sendMessage is defined %}
+                        <div class="alert alert-success">
+                            <p>Votre message a bien été envoyé</p>
+                        </div>
+                    {% else %}
                     <form id="sendMsg" method="post" action="">
 
                         <div class="form-group">
                             <label for="name">Nom *</label>
                             <div class="input-group">
-                                <div class="input-group-addon">@</div>
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 {{ form_row(form.name) }}
                             </div>    
                         </div>
@@ -36,7 +42,7 @@
                         <div class="form-group">
                             <label for="message">Message *</label>
                             <div class="input-group">
-                                <div class="input-group-addon">@</div>
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-align-left"></i></span>
                                 {{ form_row(form.message) }}
                             </div>
                         </div>
@@ -47,9 +53,11 @@
                         <div class="form-group">
                             <input type="submit" name="btnSub" Value="Envoyer" class="btn">
                         </div> 
+
+                        {{ form_row(form._token) }}
                     </form>
-                    
-                    <div id="sent"></div>
+
+                    {% endif %}
                 </div> <!-- col -->
             </div> <!-- row -->
 

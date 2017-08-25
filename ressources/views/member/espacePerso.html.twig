@@ -73,7 +73,7 @@
                         <label for="id_book">Numéro unique inscript sur l'étiquette du livre *</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
-                            <input type="text" name="id_book" class="form-control" required>
+                            {{ form_row(formCapture.id_book) }}
                         </div>
                         <p class="error alert alert-danger">Vous n'avez pas indiqué le numéro unique du livre</p>
                         <p class="error alert alert-danger">Numéro incorrect - Doit contenir 8 chiffres</p>
@@ -83,19 +83,17 @@
                         <label for="address">Adresse *</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                            <input type="text" name="address" class="form-control" required>
+                            {{ form_row(formCapture.address) }}
                         </div>
                         <p class="error alert alert-danger">Vous n'avez pas indiqué votre adresse</p>
                         <p class="error alert alert-danger">Adresse incorrecte</p>
                     </div>
-                    <!-- Id Member - Table Capture -->
-                    <input type="hidden" name="id_member" value="{# {{ app.user.id_member }} #}">
                     <!-- Commentaire - Table Capture -->
                     <div class="form-group">
                         <label for="comment_capture">Commentaire</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-align-left"></i></span>
-                            <input type="text" name="comment_capture" class="form-control">
+                            {{ form_row(formCapture.comment_capture) }}
                         </div>
                         <p class="error alert alert-danger">Vous n'avez pas indiqué votre adresse</p>
                         <p class="error alert alert-danger">Adresse incorrecte</p>
@@ -108,8 +106,14 @@
                 </form>
 
 
+                {%  if formCapture.address is defined %}
+                    {{ formCapture.address }}
+                {% endif %} 
+
                 <!-- Form: Personal data management -->
                 <h2> Compte </h2>
+
+                <img src="app.user.avatar_member">
                 <form id="formMemberModification" action="" method="POST" enctype="multipart/form-data">
 
                 <!-- Pseudo -->
@@ -174,11 +178,14 @@
                 <!-- List: Books I liberated -->
                 <h2> Livres </h2>
 
+                {{ dump(bookList) }}
+
 
                 <!-- List friends / demands -->
                 <h2> Amis </h2>
 
-
+                {{ dump(pendingList)}}
+                {{ dump(friendList) }}
 
     </div>
 
