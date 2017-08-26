@@ -9,6 +9,7 @@ define('PATH_SRC', PATH_ROOT . '/src');
 define('PATH_RESSOURCES', PATH_ROOT . '/ressources');
 define('PATH_VIEWS', PATH_RESSOURCES . '/views');
 define('PATH_VENDOR', PATH_ROOT . '/vendor');
+define('PATH_IMAGES', PATH_PUBLIC . '/assets/images');
 
 #2 : Autoload Import
 require_once PATH_VENDOR . '/autoload.php';

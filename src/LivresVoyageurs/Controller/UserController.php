@@ -2,6 +2,7 @@
 
 namespace LivresVoyageurs\Controller;
 
+use LivresVoyageurs\Traits\Shortcut;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_SmtpTransport;
@@ -9,18 +10,22 @@ use Silex\Application;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Token;
 
 
 class UserController
 {
+
+    use Shortcut;
 
     //Display Home page
     public function indexAction(Application $app)
@@ -37,7 +42,7 @@ class UserController
     {
         //Create form
         $form = $app['form.factory']->createBuilder(FormType::class)
-        
+
             ->add('pseudo_member', TextType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
@@ -57,35 +62,42 @@ class UserController
             ->add('pass_member', RepeatedType::class, array(
                 'type' => PasswordType::class,
                 'first_options'  => array(
-                    'label' => false,
-                    'attr' => [
+                    'label'      => false,
+                    'attr'       => [
                         'placeholder' => 'Entrez votre mot de passe',
-                        'class'      => 'form-control'
+                        'class'       => 'form-control'
                     ]
                 ),
                 'second_options' => array(
-                    'label' => false,
-                    'attr' => [
+                    'label'      => false,
+                    'attr'       => [
                         'placeholder' => 'Confirmez votre mot de passe',
-                        'class'      => 'form-control'
+                        'class'       => 'form-control'
                     ]
                 ),
                 'attr' => [
-                    'class'      => 'form-control'
+                    'class'           => 'form-control'
                     ]
             ))
             ->add('role_member', HiddenType::class, [
                 'attr' => [
-                    'value' => 'ROLE_MEMBER'
+                    'value'           => 'ROLE_MEMBER'
                 ]
             ])
             ->add('avatar_member', FileType::class, [
-                'required'      =>  false,
-                'label'         =>  false,
-                'attr'          =>  [
-                    'class'     => 'form-control dropify'
+                'required'            =>  false,
+                'label'               =>  false,
+                'attr'                =>  [
+                    'class'           => 'form-control dropify',
+                    'data-default-file'            => '/livresVoyageurs/public/assets/images/avatar/default.png',
+                    'data-allowed-file-extensions' => 'jpg jpeg png'
                 ]
             ])
+            ->add('termsAccepted', CheckboxType::class, array(
+                'label'               =>  'J\'ai lu et j\'accepte les termes et conditions',
+                'mapped'              =>  false,
+                'constraints'         =>  new IsTrue(),
+            ))
             ->add('submit', SubmitType::class, ['label' => 'Publier'])
 
             ->getForm();
@@ -94,19 +106,50 @@ class UserController
         $form->handleRequest($request);
 
         if ($form->isValid()) :
-
-            # Connect to DB : Register a new member
+            # Get Form Data
             $member = $form->getData();
-            $memberDb = $app['idiorm.db']->for_table('members')->create();
-            $memberDb->pseudo_member        = $member['pseudo_member'];
-            $memberDb->mail_member          = $member['mail_member'];
-            $memberDb->pass_member          = $app['security.encoder.digest']->encodePassword($member['pass_member'], '');
-            $memberDb->avatar_member        = $member['avatar_member'];
-            $memberDb->role_member          = $member['role_member'];
-            $memberDb->save();
 
-            # Redirection
-            return $app->redirect('connexion?inscription=success');
+            # Path Image
+            $image  = $member['avatar_member'];
+            if($image)
+            {
+                $chemin = PATH_PUBLIC.'/assets/images/avatar/';
+                $extension = $image->guessExtension();
+                if (!$extension) {
+                    // extension cannot be guessed
+                    $extension = 'jpg';
+                }
+                $image->move($chemin, $this->generateSlug($member['pseudo_member']).'.'.$extension);
+            }
+            # Connect to DB : Register a new member
+
+            # Check if user mail does not exist
+            $checkUser = $app['idiorm.db']->for_table('members')
+                                            ->where('pseudo_member', $member['pseudo_member'])
+                                            ->count();
+            # If the mail does not exist
+            if(!$checkUser){
+
+                # Create a new member entry in the database
+                $memberDb = $app['idiorm.db']->for_table('members')->create();
+                $memberDb->pseudo_member        = $member['pseudo_member'];
+                $memberDb->mail_member          = $member['mail_member'];
+                $memberDb->pass_member          = $app['security.encoder.digest']->encodePassword($member['pass_member'], '');
+                if($image)
+                {
+                    $memberDb->avatar_member    = $this->generateSlug($member['pseudo_member']) . '.' . $extension ;
+                }
+                $memberDb->role_member          = $member['role_member'];
+                $memberDb->save();
+
+
+                # Redirection
+                return $app->redirect('connexion?inscription=success');
+            }
+            else {
+                # If the mail is already in database render the inscription page (TODO error message)
+                return $app['twig']->render('user/inscription.html.twig', ['form'=>$form->createView()]);
+            }
 
         endif;
 
@@ -184,22 +227,33 @@ class UserController
 			if ($form->isValid())
 			{
 				$data = $form->getData();
-				// Create the Transport
+				# Create the Transport
                 $transport = (new Swift_SmtpTransport('smtp.orange.fr', 465, 'ssl'))
-                ->setUsername('lgallay@orange.fr')
-                ->setPassword('luciol16');
+                ->setUsername('livresvoyageurs@orange.fr')
+                ->setPassword('lola2017');
 
-                // Create the Mailer using your created Transport
+                # Create the Mailer using your created Transport
                 $mailer = new Swift_Mailer($transport);
 
-                // Create a message
-                $message = (new Swift_Message('TestContact'))
-                    ->setFrom('lgallay@orange.fr')
-                    ->setTo('lgallay@orange.fr')
-                    ->setBody($data['name'].$data['mail'].$data['message'])
+                # Load template
+                $template = $app['twig']->loadTemplate('contact.html.twig');
+
+                # Parameters for renderBlock
+                $parameters = array('name'    => $data['name'],
+                                    'message' => $data['message'],
+                                    'mail'    => $data['mail']
+                                );
+
+                # Create a message
+                $message = (new Swift_Message())
+                    ->setFrom($data['mail'])
+                    ->setTo('livresvoyageurs@orange.fr')
+                    ->setSubject($template->renderBlock('subject', $parameters))
+                    ->setBody($template   ->renderBlock('body_text', $parameters), 'text/plain')
+                    // ->addPart($template    ->renderBlock())
                     ;
 
-                // Send the message
+                # Send the message
                 $result = $mailer->send($message);
 
                 return $app['twig']->render('user/contact.html.twig', array(
@@ -250,7 +304,7 @@ class UserController
 
 
 
-    
+
     //Reset Password
     public function resetPasswordAction(Application $app, Request $request)
     {
@@ -282,32 +336,39 @@ class UserController
                                             ->count();
             if ($checkMail) {
 
-                // Create the Transport
-                $transport = (new Swift_SmtpTransport('smtp.orange.fr', 465, 'ssl'))
-                ->setUsername('lgallay@orange.fr')
-                ->setPassword('luciol16');
-
-                // Create the Mailer using your created Transport
-                $mailer = new Swift_Mailer($transport);
-
-                $template = $app['twig']->loadTemplate('resetPasswordMail.html.twig');
                 // generate token
                 $token = md5($mail['mail_member'] . date('YmdHis'));
-                $tokenDb = $app['idiorm.db']->for_table('members')->where('mail_member', $mail['mail_member'])->find_one();
+
+                // insert generated token in db
+                $tokenDb = $app['idiorm.db']->for_table('members')
+                                            ->where('mail_member', $mail['mail_member'])
+                                            ->find_one();
                 $tokenDb->token_member = $token;
                 $tokenDb->save();
+
                 // Url for password change
                 $urlReset = 'http://' . $_SERVER['SERVER_NAME'] . '/livresVoyageurs/public/mdpReset/'.$token;
+                // $urlReset = 'http://' . $app['url_generator']->generate('livresVoyageurs_home') . 'mdpReset/'.$token;  // localhost n'apparait pas dans le chemin
+
+                // Create the Transport
+                $transport = (new Swift_SmtpTransport('smtp.orange.fr', 465, 'ssl'))
+                ->setUsername('livresvoyageurs@orange.fr')
+                ->setPassword('lola2017');
+
+                // Create the Mailer using created Transport
+                $mailer = new Swift_Mailer($transport);
+                // load template for the message
+                $template = $app['twig']->loadTemplate('resetPasswordMail.html.twig');
                 // Array for renderBlock
-                $parameters  = [];
+                $parameters  = array('url' => $urlReset);
 
                 // Create a message
-                $message = (new Swift_Message('Test'))
-                            ->setFrom('lgallay@orange.fr')
+                $message = (new Swift_Message())
+                            ->setFrom('livresvoyageurs@orange.fr')
                             ->setTo($mail['mail_member'])
                             ->setSubject($template ->renderBlock('subject', $parameters))
                             ->setBody($template    ->renderBlock('body_text', $parameters),'text/plain')
-                            ->addPart($template    ->renderBlock('body_html', array('url' => $urlReset)),'text/html');
+                            ->addPart($template    ->renderBlock('body_html', $parameters),'text/html');
 
 
                 // Send the message
@@ -315,7 +376,7 @@ class UserController
                 if($result) {
                     $reset = 'ok';
                     return $app['twig']->render('user/resetPassword.html.twig',  [
-                        'form'=>$form->createView(),
+                        'form'  => $form->createView(),
                         'reset' => $reset
                     ]);
                 } // Result
@@ -323,15 +384,12 @@ class UserController
             } // CheckMail
 
         } // Form valid
-        
+
         return $app['twig']->render('user/resetPassword.html.twig',  ['form'=>$form->createView()]);
     }
 
 
-
-
-
-    //Display Teset password page 2
+    //Display Reset password page 2
     public function resetPassword2Action(Application $app, Request $request, $token)
     {
         //Create form
@@ -339,31 +397,31 @@ class UserController
 
             ->add('mail_member', EmailType::class, [
 
-                'required'      =>  true,
-                'label'         =>  false,
-                'constraints'   =>  array(new NotBlank()),
-                'attr'          =>  [
-                    'class'     => 'form-control',
+                'required'              =>  true,
+                'label'                 =>  false,
+                'constraints'           =>  array(new NotBlank()),
+                'attr'                  =>  [
+                    'class'             => 'form-control',
                 ]
             ])
             ->add('pass_member', RepeatedType::class, array(
-                'type'          => PasswordType::class,
-                'first_options' => array(
-                    'label' => false,
-                    'attr'  => [
-                        'class'       => 'form-control',
-                        'placeholder' => 'Entrez votre mot de passe'
+                'type'                  => PasswordType::class,
+                'first_options'         => array(
+                    'label'             => false,
+                    'attr'              => [
+                        'class'         => 'form-control',
+                        'placeholder'   => 'Entrez votre mot de passe'
                         ]
                 ),
                 'second_options' => array(
-                    'label' => false,
-                    'attr'  => [
-                        'class'       => 'form-control',
-                        'placeholder' => 'Confirmer votre mot de passe'
+                    'label'             => false,
+                    'attr'              => [
+                        'class'         => 'form-control',
+                        'placeholder'   => 'Confirmer votre mot de passe'
                         ]
                 ),
                 'attr' => [
-                    'class'      => 'form-control'
+                'class'                 => 'form-control'
                     ]
             ))
             ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
@@ -379,14 +437,14 @@ class UserController
 
             # Get mail_member from DB depending on Token
             $mail = $app['idiorm.db']->for_table('members')
-                                    ->where('token_member', $token)
-                                    ->find_one();
+                                        ->where('token_member', $token)
+                                        ->find_one();
             # Compare address mail in Db and from form data
             if($mail['mail_member'] == $member['mail_member'])
             {
                 $memberDb = $app['idiorm.db']->for_table('members')->find_one($mail['id_member']);
-                $memberDb->token_member = "";
-                $memberDb->pass_member          = $app['security.encoder.digest']->encodePassword($member['pass_member'], '');
+                $memberDb->token_member  = "";
+                $memberDb->pass_member   = $app['security.encoder.digest']->encodePassword($member['pass_member'], '');
                 $memberDb->save();
 
                 # Redirection
