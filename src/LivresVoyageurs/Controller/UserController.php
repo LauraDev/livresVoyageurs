@@ -223,27 +223,33 @@ class UserController
                                           ->count();
             if ($checkMail) {
 
+                // generate token
+                $token = md5($mail['mail_member'] . date('YmdHis'));
+
+                // insert generated token in db
+                $tokenDb = $app['idiorm.db']->for_table('members')
+                                            ->where('mail_member', $mail['mail_member'])
+                                            ->find_one();
+                $tokenDb->token_member = $token;
+                $tokenDb->save();
+
+                // Url for password change
+                $urlReset = 'http://' . $_SERVER['SERVER_NAME'] . '/livresVoyageurs/public/mdpReset/'.$token;
+
                 // Create the Transport
                 $transport = (new Swift_SmtpTransport('smtp.orange.fr', 465, 'ssl'))
                               ->setUsername('lgallay@orange.fr')
                               ->setPassword('luciol16');
 
-                // Create the Mailer using your created Transport
+                // Create the Mailer using created Transport
                 $mailer = new Swift_Mailer($transport);
-
+                // load template for the message
                 $template = $app['twig']->loadTemplate('resetPasswordMail.html.twig');
-                // generate token
-                $token = md5($mail['mail_member'] . date('YmdHis'));
-                $tokenDb = $app['idiorm.db']->for_table('members')->where('mail_member', $mail['mail_member'])->find_one();
-                $tokenDb->token_member = $token;
-                $tokenDb->save();
-                // Url for password change
-                $urlReset = 'http://' . $_SERVER['SERVER_NAME'] . '/livresVoyageurs/public/mdpReset/'.$token;
                 // Array for renderBlock
                 $parameters  = [];
 
                 // Create a message
-                $message = (new Swift_Message('Test'))
+                $message = (new Swift_Message())
                             ->setFrom('lgallay@orange.fr')
                             ->setTo($mail['mail_member'])
                             ->setSubject($template ->renderBlock('subject', $parameters))
@@ -270,7 +276,7 @@ class UserController
     }
 
 
-    //Display Teset password page 2
+    //Display Reset password page 2
     public function resetPassword2Action(Application $app, Request $request, $token)
     {
         //Create form
