@@ -135,7 +135,7 @@ $sender = 'Loic';
             $book = $formAddBook->getData(); 
 
             # Generate unique identifier for the book
-            $idBook = '98765432';
+            $idBook = '98765438';
             
             # Check if author exist
             
@@ -143,7 +143,7 @@ $sender = 'Loic';
 
             # if it exists: Get authors id from table authors
             # DB request
-            $idAuthor = '2';
+            $idAuthor = '1';
 
             # else: create author
             #get last inserted Id

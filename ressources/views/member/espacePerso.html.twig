@@ -39,6 +39,8 @@
                 {{ form_row(formAddBook.title_book) }}
                 <!-- Summary -->
                 {{ form_row(formAddBook.summary_book) }}
+                <!-- Photo -->
+                {{ form_row(formAddBook.photo_book) }}
                 <!-- Languge -->
                 {{ form_row(formAddBook.language_book) }}
                 <!-- ISBN -->
@@ -51,7 +53,7 @@
                     <p class="error alert alert-danger">Vous n'avez pas indiqué l'ISBN</p>
                     <p class="error alert alert-danger">ISBN incorrect</p>
                 </div>
-                <!-- Photo -->
+                <!-- Category -->
                 <div class="form-group">
                     <label for="id_category">Catégorie</label>
                     <div class="input-group">
@@ -59,7 +61,7 @@
                     </div>
                     <p class="error alert alert-danger">Vous n'avez pas indiqué la catégorie</p>
                 </div>
-                <!-- Photo -->
+                <!-- Disponibility -->
                 <div class="form-group">
                     <label for="disponibility_book">Mode de libération</label>
                     <div class="input-group">
