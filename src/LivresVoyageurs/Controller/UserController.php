@@ -2,7 +2,6 @@
 
 namespace LivresVoyageurs\Controller;
 
-use LivresVoyageurs\Traits\Shortcut;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_SmtpTransport;
@@ -19,7 +18,9 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\HttpFoundation\Request;
-use Twig\Token;
+use LivresVoyageurs\Traits\Shortcut;
+
+// use Twig\Token;
 
 class UserController
 {
@@ -87,7 +88,7 @@ class UserController
                 'required'            =>  false,
                 'label'               =>  false,
                 'attr'                =>  [
-                    'class'           => 'form-control',
+                    'class'           => 'form-control dropify',
                     'data-default-file'            => '/livresVoyageurs/public/assets/images/avatar/default.png',
                     'data-allowed-file-extensions' => 'jpg jpeg png'
                 ]
@@ -249,14 +250,13 @@ class UserController
                     ->setTo('livresvoyageurs@orange.fr')
                     ->setSubject($template->renderBlock('subject', $parameters))
                     ->setBody($template   ->renderBlock('body_text', $parameters), 'text/plain')
-                    // ->addPart($template    ->renderBlock())
-                    ;
+                    ->addPart($template    ->renderBlock('body_html', $parameters), 'text/html');
 
                 # Send the message
                 $result = $mailer->send($message);
 
                 return $app['twig']->render('user/contact.html.twig', array(
-                    'form'  => $form->createView(),
+                    'form'        => $form->createView(),
                     'sendMessage' => true
                 ));
             }

@@ -22,33 +22,33 @@ class  MemberController
     public function chatAction(Application $app, $receiver) {
 
         # Define messages sender
-        // $sender = $app['pseudo']; 
+        // $sender = $app['pseudo'];
 $sender = 'Loic';
-        
+
         return $app['twig']->render('member/chat.html.twig', [
             'receiver' => $receiver,
             'sender'   => $sender
         ]);
     }
-    
 
-    
+
+
 
     //Display Personal Space
-    public function espacePersoAction(Application $app, Request $request, $pseudo) {        
+    public function espacePersoAction(Application $app, Request $request, $pseudo) {
 
 
         # Get member infos
 
         # 1 : Get current member infos
         $currentMember = $app['idiorm.db']->for_table('members')
-        ->find_one($app['user']->getId_member());	
+        ->find_one($app['user']->getId_member());
 
 
 
         # 2: Add a book
         $formAddBook = $app['form.factory']->createBuilder(FormType::class)
-        
+
             # Form Fields
             ->add('id_member', HiddenType::class, [
                 'required'      =>  true,
@@ -71,7 +71,7 @@ $sender = 'Loic';
             ->add('language_book', HiddenType::class, [
                 'required'      =>  false
             ])
-            ->add('ISBN_book', TextType::class, [                
+            ->add('ISBN_book', TextType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
                 'constraints'   =>  array(new NotBlank()),
@@ -79,7 +79,7 @@ $sender = 'Loic';
                     'class'     => 'form-control'
                 ]
             ])
-            ->add('photo_book', FileType::class, [                
+            ->add('photo_book', FileType::class, [
                 'required'      =>  false,
                 'label'         =>  false,
                 'attr'          =>  [
@@ -90,16 +90,16 @@ $sender = 'Loic';
             ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
 
             ->getForm();
-        
-        
 
 
 
-        #3 : Capture         
+
+
+        #3 : Capture
         $formCapture = $app['form.factory']->createBuilder(FormType::class)
-        
+
             # Form Fields
-            ->add('id_book', TextType::class, [                
+            ->add('id_book', TextType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
                 'constraints'   =>  array(new NotBlank()),
@@ -107,7 +107,7 @@ $sender = 'Loic';
                     'class'     => 'form-control'
                 ]
             ])
-            ->add('address', TextType::class, [                
+            ->add('address', TextType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
                 'attr' => [
@@ -129,7 +129,7 @@ $sender = 'Loic';
 
 
         // if ($formCapture->isValid()) :
-            
+
         //     # Capture = FormCapture data
         //     $capture = $formCapture->getData();
 
@@ -159,15 +159,15 @@ $sender = 'Loic';
         //     return $app->redirect('?capture=success');
 
         // endif;
-        
-        
+
+
 
 
 
 
         # 4-a : Update Account Infos
         $formAccount = $app['form.factory']->createBuilder(FormType::class)
-        
+
             # Form Fields
             ->add('pseudo_member', TextType::class, [
                 'required'      =>  true,
@@ -207,10 +207,10 @@ $sender = 'Loic';
 
             # Get Form Data
             $member = $formAccount->getData();
-            
+
             # Path Image
             $image  = $member['avatar_member'];
-            if($image) 
+            if($image)
             {
                 $chemin = PATH_PUBLIC.'/assets/images/avatar/';
                 $extension = $image->guessExtension();
@@ -240,7 +240,7 @@ $sender = 'Loic';
 
         # 4-b : Update Account - Password
         $formAccountPass = $app['form.factory']->createBuilder(FormType::class)
-        
+
             # Form Fields
             ->add('pass_member', RepeatedType::class, array(
                 'type' => PasswordType::class,
@@ -287,29 +287,29 @@ $sender = 'Loic';
         # 5 : Books registered by the user
         $bookList = $app['idiorm.db']->for_table('view_books')
                                         ->where('id_member', $app['user']->getId_member())
-                                        ->find_result_set();	
+                                        ->find_result_set();
 
-            
+
         # 6 : user's pending friends
         $pendingList = $app['idiorm.db']->for_table('view_friends')
                                         ->where_any_is(array(
-                                                array('id_member_1'  =>  $id_member, 'status_friend' => 0 ),
-                                                array('id_member_2'  =>  $id_member, 'status_friend' => 0 )
+                                                array('id_member_1'  =>  $currentMember['id_member'], 'status_friend' => 0 ),
+                                                array('id_member_2'  =>  $currentMember['id_member'], 'status_friend' => 0 )
                                         ))
-                                        ->where_not_equal('action_friend', $id_member)
+                                        ->where_not_equal('action_friend', $currentMember['id_member'])
                                         ->order_by_desc('date_friend')
                                         ->find_result_set();
         # 7 : user's friends
         $friendList = $app['idiorm.db']->for_table('view_friends')
                                         ->where_any_is(array(
-                                                array('id_member_1'  =>  $id_member, 'status_friend' => 1 ),
-                                                array('id_member_2'  =>  $id_member, 'status_friend' => 1 )
+                                                array('id_member_1'  =>  $currentMember['id_member'], 'status_friend' => 1 ),
+                                                array('id_member_2'  =>  $currentMember['id_member'], 'status_friend' => 1 )
                                         ))
-                                        ->where_not_equal('action_friend', $id_member)
+                                        ->where_not_equal('action_friend', $currentMember['id_member'])
                                         ->order_by_desc('date_friend')
                                         ->find_result_set();
 
-        # 8 : Return all to the view                                
+        # 8 : Return all to the view
         return $app['twig']->render('member/espacePerso.html.twig', [
             'pseudo'           => $pseudo,
             'formAddBook'      => $formAddBook->createView(),

@@ -10,5 +10,18 @@ Message de {{ name }}
 {{ name }} vous a envoyé le message suivant:
 {{ message }}
 
-Vous pouvez lui répondre à l'addresse suivante : {{mail}}
+Vous pouvez lui répondre à l'adresse suivante : {{mail}}
 {% endautoescape %}{% endblock %}
+
+{# HTML message (optional) #}
+{% block body_html %}
+    <p>
+        <strong>{{ name }}</strong> vous a envoyé le message suivant:
+    </p>
+    <p>
+        {{ message }}
+    </p>
+    <p>
+        Vous pouvez lui répondre à l'adresse suivante : <a href="mailto:{{ mail }}">{{ mail }}</a>
+    </p>
+{% endblock %}
