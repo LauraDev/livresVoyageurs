@@ -278,14 +278,14 @@ class UserController
         if ($form->isValid()) {
             //check if email exist
             $checkMail = $app['idiorm.db']->for_table('members')
-                                          ->where('mail_member', $mail['mail_member'])
-                                          ->count();
+                                            ->where('mail_member', $mail['mail_member'])
+                                            ->count();
             if ($checkMail) {
 
                 // Create the Transport
                 $transport = (new Swift_SmtpTransport('smtp.orange.fr', 465, 'ssl'))
-                              ->setUsername('lgallay@orange.fr')
-                              ->setPassword('luciol16');
+                ->setUsername('lgallay@orange.fr')
+                ->setPassword('luciol16');
 
                 // Create the Mailer using your created Transport
                 $mailer = new Swift_Mailer($transport);
@@ -318,15 +318,17 @@ class UserController
                         'form'=>$form->createView(),
                         'reset' => $reset
                     ]);
-                }
+                } // Result
 
-                }
+            } // CheckMail
 
-        }
-
-
+        } // Form valid
+        
         return $app['twig']->render('user/resetPassword.html.twig',  ['form'=>$form->createView()]);
     }
+
+
+
 
 
     //Display Teset password page 2
@@ -368,8 +370,7 @@ class UserController
 
             ->getForm();
 
-        # Traitement des données POST
-        # use Symfony\Component\HttpFoundation\Request;
+        # Handle Post Data
         $form->handleRequest($request);
 
         if ($form->isValid()) :
