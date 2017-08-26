@@ -24,21 +24,23 @@
                 <form id="formAddBook" action="" method="POST" enctype="multipart/form-data">
 
                     <!-- Id Member -->
-                    <input type="hidden" name="id_member" value="{{ app.user.id_member }}">
+                    {{ form_row(formAddBook.id_member) }}
                     <!-- Id Author -->
-                    <input type="hidden" name="id_author" value="{# xxxxxxxxx }} #}">
+                    {{ form_row(formAddBook.id_author) }}
                     <!-- Id Category -->
-                    <input type="hidden" name="id_category" value="{# xxxxxxxxx }} #}">
+                    {{ form_row(formAddBook.id_category) }}
                     <!-- Title -->
-                    <input type="hidden" name="title_book" value="{# xxxxxxxxx }} #}">
+                    {{ form_row(formAddBook.title_book) }}
                     <!-- Summary -->
-                    <input type="hidden" name="summary_book" value="{# xxxxxxxxx }} #}">
+                    {{ form_row(formAddBook.summary_book) }}
+                    <!-- Languge -->
+                    {{ form_row(formAddBook.language_book) }}
                     <!-- ISBN -->
                     <div class="form-group">
                         <label for="ISBN_book">Numéro inscript sur le livre: Au-dessus du code barre *</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
-                            <input type="text" name="ISBN_book" class="form-control" required>
+                            {{ form_row(formAddBook.ISBN_book) }}
                         </div>
                         <p class="error alert alert-danger">Vous n'avez pas indiqué l'ISBN</p>
                         <p class="error alert alert-danger">ISBN incorrect</p>
@@ -47,7 +49,7 @@
                     <div class="form-group">
                         <label for="photo_book">Image</label>
                         <div class="input-group">
-                            <input type="text" name="photo_book" class="form-control">
+                            {{ form_row(formAddBook.photo_book) }}
                         </div>
                         <p class="error alert alert-danger">L'image est trop lourde</p>
                         <p class="error alert alert-danger">L'image doit être au format: jpg, jpeg ou png</p>
@@ -66,14 +68,14 @@
 
                 <!-- Form: Book I have captured -->
                 <h2> Déclarer une capture </h2>
-                <form id="formCapturedBook" action="" method="">
+                <form id="formCapturedBook" action="" method="POST">
 
                     <!-- Id Book - Table Pointers -->
                     <div class="form-group">
                         <label for="id_book">Numéro unique inscript sur l'étiquette du livre *</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
-                            <input type="text" name="id_book" class="form-control" required>
+                            {{ form_row(formCapture.id_book) }}
                         </div>
                         <p class="error alert alert-danger">Vous n'avez pas indiqué le numéro unique du livre</p>
                         <p class="error alert alert-danger">Numéro incorrect - Doit contenir 8 chiffres</p>
@@ -83,23 +85,23 @@
                         <label for="address">Adresse *</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                            <input type="text" name="address" class="form-control" required>
+                            {{ form_row(formCapture.address) }}
                         </div>
                         <p class="error alert alert-danger">Vous n'avez pas indiqué votre adresse</p>
                         <p class="error alert alert-danger">Adresse incorrecte</p>
                     </div>
-                    <!-- Id Member - Table Capture -->
-                    <input type="hidden" name="id_member" value="{# {{ app.user.id_member }} #}">
                     <!-- Commentaire - Table Capture -->
                     <div class="form-group">
                         <label for="comment_capture">Commentaire</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-align-left"></i></span>
-                            <input type="text" name="comment_capture" class="form-control">
+                            {{ form_row(formCapture.comment_capture) }}
                         </div>
                         <p class="error alert alert-danger">Vous n'avez pas indiqué votre adresse</p>
                         <p class="error alert alert-danger">Adresse incorrecte</p>
                     </div>
+
+                    {{ form_row(formCapture._token) }}
                     <!-- Submission -->
                     <div class="form-group text-center">
                         <input type="submit" name="btnSub" value="Entrer" id="btn_memberInscription" class="btn btn-success">
@@ -108,8 +110,14 @@
                 </form>
 
 
+                {# {%  if formCapture.address is defined %}
+                    {{ formCapture.address }}
+                {% endif %}  #}
+
                 <!-- Form: Personal data management -->
                 <h2> Compte </h2>
+
+                <img src="app.user.avatar_member">
                 <form id="formMemberModification" action="" method="POST" enctype="multipart/form-data">
 
                 <!-- Pseudo -->
@@ -174,12 +182,37 @@
                 <!-- List: Books I liberated -->
                 <h2> Livres </h2>
 
+                {{ dump(bookList) }}
+
 
                 <!-- List friends / demands -->
                 <h2> Amis </h2>
 
-
+                {{ dump(pendingList)}}
+                {{ dump(friendList) }}
 
     </div>
 
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css" integrity="sha256-AWdeVMUYtwLH09F6ZHxNgvJI37p+te8hJuSMo44NVm0=" crossorigin="anonymous" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js" integrity="sha256-SUaao5Q7ifr2twwET0iyXVy0OVnuFJhGVi5E/dqEiLU=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function() {
+            $('.dropify').dropify({
+                messages: {
+                    default: 'Glissez-d&eacute;posez un fichier ici ou cliquez',
+                    replace: 'Glissez-d&eacute;posez un fichier ou cliquez pour remplacer',
+                    remove:  'Supprimer',
+                    error:   'D&eacute;sol&eacute;, le fichier trop volumineux'
+                }	
+            });
+        })
+    </script>
 {% endblock %}
