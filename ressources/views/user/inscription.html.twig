@@ -70,6 +70,15 @@
                     <p class="error alert alert-danger">L'image doit être au format: jpg, jpeg ou png</p>
                 </div>
                     {{ form_row(form.role_member) }}
+                <!-- Terms and Conditions-->
+                <div class="form-group">
+                    <div class="input-group">
+                        {{ form_row(form.termsAccepted) }}
+                    </div>
+                    {# <label for="termsAccepted">J'ai lu et j'accepte les termes et conditions</label> #}
+                    <p class="error alert alert-danger">Champs obligatoire</p>
+                </div>
+                <!-- Token -->
                     {{ form_row(form._token) }}
                 <!-- Submission -->
                 <div class="form-group text-center">

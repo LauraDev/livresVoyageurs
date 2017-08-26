@@ -165,28 +165,83 @@ $sender = 'Loic';
 
 
 
-        # 4 : Update Account
+        # 4-a : Update Account Infos
         $formAccount = $app['form.factory']->createBuilder(FormType::class)
         
             # Form Fields
             ->add('pseudo_member', TextType::class, [
-
                 'required'      =>  true,
                 'label'         =>  false,
                 'constraints'   =>  array(new NotBlank()),
                 'attr'          =>  [
-                    'class'     => 'form-control'
+                    'class'     => 'form-control',
+                    'value'     => $currentMember['pseudo_member']
                 ]
             ])
             ->add('mail_member', EmailType::class, [
-
                 'required'      =>  true,
                 'label'         =>  false,
                 'constraints'   =>  array(new NotBlank()),
                 'attr'          =>  [
-                    'class'     => 'form-control'
+                    'class'     => 'form-control',
+                    'value'     => $currentMember['mail_member']
                 ]
             ])
+            ->add('avatar_member', FileType::class, [
+                'required'      =>  false,
+                'label'         =>  false,
+                'attr'          =>  [
+                    'class'     => 'form-control dropify',
+                    'data-default-file'            => '/livresVoyageurs/public/assets/images/avatar/' . $currentMember['avatar_member'], // /livresVoyageurs/public/assets/images/avatar/lolita.jpg
+                    'data-allowed-file-extensions' => 'jpg jpeg png'
+                ]
+            ])
+            ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
+
+            ->getForm();
+
+        # Update DB
+        $formAccount->handleRequest($request);
+
+        if ($formAccount->isValid()) :
+
+            # Get Form Data
+            $member = $formAccount->getData();
+            
+            # Path Image
+            $image  = $member['avatar_member'];
+            if($image) 
+            {
+                $chemin = PATH_PUBLIC.'/assets/images/avatar/';
+                $extension = $image->guessExtension();
+                if (!$extension) {
+                    // extension cannot be guessed
+                    $extension = 'jpg';
+                }
+                $image->move($chemin, $this->generateSlug($member['pseudo_member']).'.'.$extension);
+            };
+
+            # Connect to DB : Register a new member
+            $memberDb = $app['idiorm.db']->for_table('members')->find_one($app['user']->getId_member());
+            $memberDb->pseudo_member        = $member['pseudo_member'];
+            $memberDb->mail_member          = $member['mail_member'];
+            if($image)
+            {
+                $memberDb->avatar_member    = $this->generateSlug($member['pseudo_member']) . '.' . $extension ;
+            }
+            $memberDb->save();
+
+            # Redirection
+            return $app->redirect('?account=success');
+
+        endif;
+
+
+
+        # 4-b : Update Account - Password
+        $formAccountPass = $app['form.factory']->createBuilder(FormType::class)
+        
+            # Form Fields
             ->add('pass_member', RepeatedType::class, array(
                 'type' => PasswordType::class,
                 'first_options'  => array(
@@ -207,43 +262,26 @@ $sender = 'Loic';
                     'class'      => 'form-control'
                     ]
             ))
-            ->add('role_member', HiddenType::class, [
-                'attr' => [
-                    'value' => 'ROLE_MEMBER'
-                ]
-            ])
-            ->add('avatar_member', FileType::class, [
-
-                'required'      =>  false,
-                'label'         =>  false,
-                'attr'          =>  [
-                    'class'     => 'form-control dropify'
-                ]
-            ])
             ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
 
             ->getForm();
 
         # Update DB
-        // $formAccount->handleRequest($request);
+        $formAccountPass->handleRequest($request);
 
-        // if ($formAccount->isValid()) :
+        if ($formAccountPass->isValid()) :
 
-        //     # Connect to DB : Register a new member
-        //     $member = $formAccount->getData();
+            # Connect to DB : Register a new member
+            $memberPass = $formAccountPass->getData();
 
-        //     $memberDb = $app['idiorm.db']->for_table('members')->find_one($app['user']->getId_member());
-        //     $memberDb->pseudo_member        = $member['pseudo_member'];
-        //     $memberDb->mail_member          = $member['mail_member'];
-        //     $memberDb->pass_member          = $app['security.encoder.digest']->encodePassword($member['pass_member'], '');
-        //     $memberDb->avatar_member        = $member['avatar_member'];
-        //     $memberDb->role_member          = $member['role_member'];
-        //     $memberDb->save();
+            $memberPassDb = $app['idiorm.db']->for_table('members')->find_one($app['user']->getId_member());
+            $memberPassDb->pass_member          = $app['security.encoder.digest']->encodePassword($memberPass['pass_member'], '');
+            $memberPassDb->save();
 
-        //     # Redirection
-        //     return $app->redirect('?account=success');
+            # Redirection
+            return $app->redirect('pass=success');
 
-        // endif;
+        endif;
 
 
         # 5 : Books registered by the user
@@ -273,13 +311,14 @@ $sender = 'Loic';
 
         # 8 : Return all to the view                                
         return $app['twig']->render('member/espacePerso.html.twig', [
-            'pseudo'        => $pseudo,
-            'formAddBook'   => $formAddBook->createView(),
-            'formAccount'   => $formAccount->createView(),
-            'formCapture'   => $formCapture->createView(),
-            'bookList'      => $bookList,
-            'pendingList'   => $pendingList,
-            'friendList'    => $friendList
+            'pseudo'           => $pseudo,
+            'formAddBook'      => $formAddBook->createView(),
+            'formAccount'      => $formAccount->createView(),
+            'formAccountPass'  => $formAccountPass->createView(),
+            'formCapture'      => $formCapture->createView(),
+            'bookList'         => $bookList,
+            'pendingList'      => $pendingList,
+            'friendList'       => $friendList
         ]);
     }
 
