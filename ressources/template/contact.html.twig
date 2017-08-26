@@ -1,0 +1,14 @@
+{# Template for a contact mail #}
+
+{# Subject of the mail #}
+{% block subject %}{% autoescape false %}
+Message de {{ name }}
+{% endautoescape %}{% endblock %}
+
+{# Plain text message #}
+{% block body_text %}{% autoescape false %}
+{{ name }} vous a envoyé le message suivant:
+{{ message }}
+
+Vous pouvez lui répondre à l'addresse suivante : {{mail}}
+{% endautoescape %}{% endblock %}
