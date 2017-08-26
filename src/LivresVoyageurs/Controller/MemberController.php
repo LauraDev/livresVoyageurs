@@ -2,6 +2,7 @@
 
 namespace LivresVoyageurs\Controller;
 
+use LivresVoyageurs\Traits\Shortcut;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -18,6 +19,8 @@ use Symfony\Component\HttpFoundation\Request;
 class  MemberController
 {
 
+    use Shortcut;
+    
     //Display Chat Page
     public function chatAction(Application $app, $receiver) {
 
@@ -111,8 +114,17 @@ $sender = 'Loic';
                 'required'      =>  true,
                 'label'         =>  false,
                 'attr' => [
-                    'class'    => 'form-control loc_autocomplete'
+                    'class'    => 'form-control'
                 ]
+            ])
+            ->add('city_pointer', HiddenType::class, [
+                'required'      =>  false
+            ])
+            ->add('lat_pointer', HiddenType::class, [
+                'required'      =>  false
+            ])
+            ->add('lng_pointer', HiddenType::class, [
+                'required'      =>  false
             ])
             ->add('comment_capture', TextareaType::class, [
                 'required'      =>  false,
@@ -125,40 +137,41 @@ $sender = 'Loic';
 
             ->getForm();
         # Update DB
-        // $formCapture->handleRequest($request);
+        $formCapture->handleRequest($request);
 
 
-        // if ($formCapture->isValid()) :
+        if ($formCapture->isValid()) :
             
-        //     # Capture = FormCapture data
-        //     $capture = $formCapture->getData();
+            # Capture = FormCapture data
+            $capture = $formCapture->getData();
 
-        //     #Get address from Google autocomplete, save into a var: lat, lng, city
-        //     $lat = '';
-        //     $lng = '';
-        //     $city = '';
+            #Get address from Google autocomplete, save into a var: lat, lng, city
+            // $lat = '';
+            // $lng = '';
+            // $city = '';
 
-        //     # Connect to DB : Register a new pointer
-        //     $pointerDb = $app['idiorm.db']->for_table('pointers')->create();
-        //     $pointerDb->id_book           = $capture['id_book'];
-        //     $pointerDb->lat_pointer       = $lat;
-        //     $pointerDb->lng_pointer       = $lng;
-        //     $pointerDb->city_pointer      = $city;
-        //     $memberDb->save();
+            # Connect to DB : Register a new pointer
+            $pointerDb = $app['idiorm.db']->for_table('pointers')->create();
+            $pointerDb->id_book           = $capture['id_book'];
+            $pointerDb->lat_pointer       = $capture['lat_pointer'];
+            $pointerDb->lng_pointer       = $capture['lng_pointer'];
+            $pointerDb->city_pointer      = $capture['city_pointer']; //$city;
+            $pointerDb->save();
 
-        //     # Get last inserted Id
-        //     $pointerId = '';
+            # Get last inserted Id
+            $pointerId = $pointerDb->id();
 
-        //     #  Connect to DB : Register the capture member and comment
-        //     $captureDb = $app['idiorm.db']->for_table('captures')->create();
-        //     $captureDb->id_pointer           = $pointerId;
-        //     $captureDb->id_member            = $app['user']->getId_member();
-        //     $captureDb->comment_capture      = $capture['comment_capture'];
+            #  Connect to DB : Register the capture member and comment
+            $captureDb = $app['idiorm.db']->for_table('captures')->create();
+            $captureDb->id_pointer           = $pointerId;
+            $captureDb->id_member            = $currentMember['id_member'];
+            $captureDb->comment_capture      = $capture['comment_capture'];
+            $captureDb->save();
 
-        //     # Redirection
-        //     return $app->redirect('?capture=success');
+            # Redirection
+            return $app->redirect('?capture=success');
 
-        // endif;
+        endif;
         
         
 
@@ -293,19 +306,19 @@ $sender = 'Loic';
         # 6 : user's pending friends
         $pendingList = $app['idiorm.db']->for_table('view_friends')
                                         ->where_any_is(array(
-                                                array('id_member_1'  =>  $id_member, 'status_friend' => 0 ),
-                                                array('id_member_2'  =>  $id_member, 'status_friend' => 0 )
+                                                array('id_member_1'  =>  $currentMember['id_member'], 'status_friend' => 0 ),
+                                                array('id_member_2'  =>  $currentMember['id_member'], 'status_friend' => 0 )
                                         ))
-                                        ->where_not_equal('action_friend', $id_member)
+                                        ->where_not_equal('action_friend', $currentMember['id_member'])
                                         ->order_by_desc('date_friend')
                                         ->find_result_set();
         # 7 : user's friends
         $friendList = $app['idiorm.db']->for_table('view_friends')
                                         ->where_any_is(array(
-                                                array('id_member_1'  =>  $id_member, 'status_friend' => 1 ),
-                                                array('id_member_2'  =>  $id_member, 'status_friend' => 1 )
+                                                array('id_member_1'  =>  $currentMember['id_member'], 'status_friend' => 1 ),
+                                                array('id_member_2'  =>  $currentMember['id_member'], 'status_friend' => 1 )
                                         ))
-                                        ->where_not_equal('action_friend', $id_member)
+                                        ->where_not_equal('action_friend', $currentMember['id_member'])
                                         ->order_by_desc('date_friend')
                                         ->find_result_set();
 
