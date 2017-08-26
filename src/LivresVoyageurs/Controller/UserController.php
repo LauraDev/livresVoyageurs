@@ -21,7 +21,6 @@ use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Token;
 
-
 class UserController
 {
 
