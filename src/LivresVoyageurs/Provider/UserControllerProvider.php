@@ -77,6 +77,10 @@ class UserControllerProvider implements ControllerProviderInterface
                 ->get('/mentions', 'LivresVoyageurs\Controller\UserController::mentionsAction')
                 ->bind('livresVoyageurs_mentions');
 
+            #test dompdf
+            $controllers
+                ->get('/dom_pdf_test', 'LivresVoyageurs\Controller\UserController::pdfAction')
+                ->bind('livresVoyageurs_pdf');
 
 
         // Return the controllers (ControllerCollection)

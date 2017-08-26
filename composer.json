@@ -11,7 +11,8 @@
         "symfony/config": "^3.3",
         "symfony/security": "^3.3",
         "symfony/security-csrf": "^3.3",
-        "swiftmailer/swiftmailer": "^6.0"
+        "swiftmailer/swiftmailer": "^6.0",
+        "dompdf/dompdf": "^0.8.0"
     },
 
     "autoload": {

@@ -19,6 +19,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\HttpFoundation\Request;
 use LivresVoyageurs\Traits\Shortcut;
+use Dompdf\Dompdf;
+
 
 // use Twig\Token;
 
@@ -455,5 +457,13 @@ class UserController
         return $app['twig']->render('user/resetPassword2.html.twig', [
             'form'=>$form->createView()
         ]);
+    }
+    // test dom_pdf
+    public function pdfAction(Application $app){
+        $dompdf = new Dompdf();
+        $dompdf->set_base_path(PATH_ROOT . "/public/assets/");
+        $dompdf->load_html($app['twig']->render('sticker.html.twig'));
+        $dompdf->render();
+        $dompdf->stream('test.pdf');
     }
 }

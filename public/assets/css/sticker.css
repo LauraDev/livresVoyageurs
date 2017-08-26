@@ -1,0 +1,17 @@
+h1{
+    text-align: center;
+}
+
+#sticker{
+    border: 2px solid black;
+    border-radius: 15px;
+    position: relative;
+}
+
+img{
+    position:absolute;
+    top: 40px;
+    right: 2px;
+    width: 150px;
+    height: auto;
+}
