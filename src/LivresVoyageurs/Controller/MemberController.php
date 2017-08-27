@@ -155,9 +155,9 @@ class  MemberController
             $lastname = $name[1];
             # Check if author exist
             $checkAuthor = $app['idiorm.db']->for_table('authors')
-            ->where('firstname_author', $firstname)
-            ->where('lastname_author', $lastname)
-            ->find_one();
+                ->where('firstname_author', $firstname)
+                ->where('lastname_author', $lastname)
+                ->find_one();
             
             # if exists: Get authors id from table authors
             if ($checkAuthor) 
@@ -428,6 +428,18 @@ class  MemberController
                                         ->where_not_equal('action_friend', $currentMember['id_member'])
                                         ->order_by_desc('date_friend')
                                         ->find_result_set();
+
+
+        // Blocked
+        // # Connect to DB : Pending list
+        // $friends = $app['idiorm.db']->for_table(‘friends’)
+        //         ->where_any_is(array(
+        //                 array(‘id_member_1’  => $request->get(‘id_member’), ‘status_friend’ => 2 ),
+        //                 array(‘id_member_2’  => $request->get(‘id_member’), ‘status_friend’ => 2 )
+        //                 ))
+        //     ->where_not_equal(‘action_user_id’ => $request->get(‘id_member’))
+        // ->order_by_desc(‘date_friend’)
+        //         ->find_result_set();	
 
         # 8 : Return all to the view                                
         return $app['twig']->render('member/espacePerso.html.twig', [

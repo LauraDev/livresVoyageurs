@@ -332,8 +332,14 @@
         <!-- List friends / demands -->
         <h2> Amis </h2>
 
-        {{ dump(pendingList)}}
-        {{ dump(friendList) }}
+        {% if friendList is empty %}
+            <div>
+                <p> Vous n'avez pas encore de contact.</p>
+            </div>
+        {% endif %}
+
+        {# {{ dump(pendingList)}}
+        {{ dump(friendList) }} #}
 
     </div>
 

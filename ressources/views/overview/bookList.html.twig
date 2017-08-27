@@ -35,7 +35,11 @@
                                 <li class="list-group-item">Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</li>
                                 <li class="list-group-item">
                                     <p>Membre partageant ce livre: {{ book.pseudo_member }}</p>
-                                    <a href="#" alt="ajouter ce membre en ami" class="btn btn-primary"> Contacter </a>
+                                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                        <a href="#" alt="ajouter ce membre en ami" class="btn btn-primary"> Contacter </a> 
+                                    {% else %}
+                                        <a href="{{ path('livresVoyageurs_inscription') }}" alt="Liens vers l'inscription" class="btn btn-primary"> Inscrivez-vous pour capturer ce livre </a>
+                                    {% endif %}
                                 </li>
                                 <div class="card-footer text-muted">
                                     <li>Date de libération: {{ book.date_book | date("d/m/Y")  }}</li>
