@@ -62,9 +62,16 @@
                     <p class="error alert alert-danger">L'image est trop lourde</p>
                     <p class="error alert alert-danger">L'image doit être au format: jpg, jpeg ou png</p>
                 </div>
+                <div class="form-group">
+                  <label for="name_category">Sélectionnez une catégorie</label>
+                    {{form_row(formAddBook.name_category)}}
+                </div>
                 <!-- Submission -->
                 <div class="form-group text-center">
                     <input type="submit" name="btnSub" value="Ajouter" id="btn_memberInscription" class="btn btn-success">
+                </div>
+                <div class="form-group text-center">
+                    <a href="{{url('livresVoyageurs_pdf')}}" target="_blank" class="btn btn-success">Générer étiquette</a>
                 </div>
 
             </form>
@@ -171,7 +178,7 @@
 
 
 
-        
+
         <!-- Form: Password management -->
         <h2> Mot de Passe </h2>
 
@@ -235,7 +242,7 @@
                     replace: 'Glissez-d&eacute;posez un fichier ou cliquez pour remplacer',
                     remove:  'Supprimer',
                     error:   'D&eacute;sol&eacute;, le fichier trop volumineux'
-                }	
+                }
             });
         })
     </script>

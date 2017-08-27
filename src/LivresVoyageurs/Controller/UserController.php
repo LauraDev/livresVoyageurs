@@ -250,8 +250,8 @@ class UserController
                 $message = (new Swift_Message())
                     ->setFrom($data['mail'])
                     ->setTo('livresvoyageurs@orange.fr')
-                    ->setSubject($template->renderBlock('subject', $parameters))
-                    ->setBody($template   ->renderBlock('body_text', $parameters), 'text/plain')
+                    ->setSubject($template ->renderBlock('subject', $parameters))
+                    ->setBody($template    ->renderBlock('body_text', $parameters), 'text/plain')
                     ->addPart($template    ->renderBlock('body_html', $parameters), 'text/html');
 
                 # Send the message
@@ -464,6 +464,6 @@ class UserController
         $dompdf->set_base_path(PATH_ROOT . "/public/assets/");
         $dompdf->load_html($app['twig']->render('sticker.html.twig'));
         $dompdf->render();
-        $dompdf->stream('test.pdf');
+        $dompdf->stream('sticker.pdf',array('Attachment'=>0));
     }
 }

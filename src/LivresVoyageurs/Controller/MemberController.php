@@ -5,6 +5,7 @@ namespace LivresVoyageurs\Controller;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -37,6 +38,17 @@ $sender = 'Loic';
     //Display Personal Space
     public function espacePersoAction(Application $app, Request $request, $pseudo) {
 
+        # Get the categories list
+        $categories = function () use($app){
+        $categories = $app['idiorm.db']->for_table('categories')
+                                         ->find_result_set();
+        # Format display of the list
+        $array = [];
+        foreach ($categories as $categorie) {
+          $array[$categorie->name_category] = $categorie->id_categorie;
+        }
+        return $array;
+      };
 
         # Get member infos
 
@@ -77,6 +89,15 @@ $sender = 'Loic';
                 'constraints'   =>  array(new NotBlank()),
                 'attr'          =>  [
                     'class'     => 'form-control'
+                ]
+            ])
+            ->add('name_category', ChoiceType::class, [
+                'choices'     => $categories(),
+                'expanded'    => false,
+                'multiple'    => false,
+                'label'       => false,
+                'attr'        => [
+                    'class'   => 'form-control'
                 ]
             ])
             ->add('photo_book', FileType::class, [
