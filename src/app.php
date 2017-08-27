@@ -32,7 +32,7 @@ $app->register(new Silex\Provider\FormServiceProvider());
 $app->register(new Silex\Provider\LocaleServiceProvider());
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
-    'translator.domains' => array(),
+    'translator.domains' => array()
 ));
 
 #7 : Swiftmailer

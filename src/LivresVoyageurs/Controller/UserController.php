@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,7 +55,11 @@ class UserController
             ->add('mail_member', EmailType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
-                'constraints'   =>  array(new NotBlank()),
+                'constraints'   =>  array(new NotBlank(), new Email(
+                    array(
+                        'message' => 'Veuillez saisir une adresse mail valide'
+                    )
+                )),
                 'attr'          =>  [
                     'class'     => 'form-control',
                 ]

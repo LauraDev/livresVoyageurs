@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -183,7 +184,7 @@ $sender = 'Loic';
             ->add('mail_member', EmailType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
-                'constraints'   =>  array(new NotBlank()),
+                'constraints'   =>  array(new NotBlank(), new Email()),
                 'attr'          =>  [
                     'class'     => 'form-control',
                     'value'     => $currentMember['mail_member']
@@ -250,14 +251,14 @@ $sender = 'Loic';
                     'label' => false,
                     'attr' => [
                         'placeholder' => 'Entrez votre mot de passe',
-                        'class'      => 'form-control'
+                        'class'       => 'form-control'
                     ]
                 ),
                 'second_options' => array(
                     'label' => false,
                     'attr' => [
                         'placeholder' => 'Confirmez votre mot de passe',
-                        'class'      => 'form-control'
+                        'class'       => 'form-control'
                     ]
                 ),
                 'attr' => [
