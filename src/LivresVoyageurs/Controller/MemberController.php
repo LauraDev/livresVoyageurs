@@ -2,6 +2,8 @@
 
 namespace LivresVoyageurs\Controller;
 
+
+use Dompdf\Dompdf;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -322,4 +324,17 @@ $sender = 'Loic';
         ]);
     }
 
+    // Generate a pdf sticker
+    public function pdfAction(Application $app){
+        # Instanciate a new Dompdf object
+        $sticker = new Dompdf();
+        # Set path to assets folder
+        $sticker->setBasePath(PATH_PUBLIC . "/assets/");
+        # Load HTML file using Twig
+        $sticker->loadHtml($app['twig']->render('sticker.html.twig'));
+        # Render pdf
+        $sticker->render();
+        # Attach the file to the browser (Attachement: option to display the pdf)
+        $sticker->stream('sticker.pdf',array('Attachment'=>0));
+    }
 }

@@ -18,7 +18,7 @@ class MemberControllerProvider implements ControllerProviderInterface
 
         # Personal space
         $controllers
-        
+
             # Associate a route with a controller and an action
             ->match('/{pseudo}', 'LivresVoyageurs\Controller\MemberController::espacePersoAction')
             ->method('GET|POST')
@@ -26,11 +26,11 @@ class MemberControllerProvider implements ControllerProviderInterface
             ->assert('pseudo' , '[^/]+')
             # Route name
             ->bind('livresVoyageurs_espace');
-            
-        
+
+
         # Chat
         $controllers
-        
+
             # Associate a route with a controller and an action
             ->get('/chat/{receiver}', 'LivresVoyageurs\Controller\MemberController::chatAction')
             # Specify the type of parameters / using Regex
@@ -39,7 +39,12 @@ class MemberControllerProvider implements ControllerProviderInterface
             ->bind('livresVoyageurs_chat');
 
 
-
+        # Generate pdf sticker
+        $controllers
+            # Associate a route with a controller and an action
+            ->get('/sticker/pdf', 'LivresVoyageurs\Controller\MemberController::pdfAction')
+            # Route name
+            ->bind('livresVoyageurs_sticker');
 
         // Return the controllers (ControllerCollection)
         return $controllers;

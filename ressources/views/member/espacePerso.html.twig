@@ -66,6 +66,9 @@
                 <div class="form-group text-center">
                     <input type="submit" name="btnSub" value="Ajouter" id="btn_memberInscription" class="btn btn-success">
                 </div>
+                <div class="form-group text-center">
+                    <a href="{{ url('livresVoyageurs_sticker') }}" class="btn btn-success" target="_blank">Générer l'étiquette</a>
+                </div>
 
             </form>
 
@@ -171,7 +174,7 @@
 
 
 
-        
+
         <!-- Form: Password management -->
         <h2> Mot de Passe </h2>
 
@@ -235,7 +238,7 @@
                     replace: 'Glissez-d&eacute;posez un fichier ou cliquez pour remplacer',
                     remove:  'Supprimer',
                     error:   'D&eacute;sol&eacute;, le fichier trop volumineux'
-                }	
+                }
             });
         })
     </script>

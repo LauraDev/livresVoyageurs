@@ -78,7 +78,6 @@ class UserControllerProvider implements ControllerProviderInterface
                 ->bind('livresVoyageurs_mentions');
 
 
-
         // Return the controllers (ControllerCollection)
         return $controllers;
     }
