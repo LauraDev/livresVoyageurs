@@ -3,6 +3,7 @@
 namespace LivresVoyageurs\Controller;
 
 use LivresVoyageurs\Traits\Shortcut;
+use LivresVoyageurs\Traits\TestIdBook;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -21,56 +22,40 @@ class  MemberController
 {
 
     use Shortcut;
-    
-    //Display Chat Page
-    public function chatAction(Application $app, $receiver) {
-
-        # Define messages sender
-        // $sender = $app['pseudo']; 
-$sender = 'Loic';
-        
-        return $app['twig']->render('member/chat.html.twig', [
-            'receiver' => $receiver,
-            'sender'   => $sender
-        ]);
-    }
-    
-
+    use TestIdBook;
     
 
     //Display Personal Space
     public function espacePersoAction(Application $app, Request $request, $pseudo) {        
 
 
-        # Get member infos
+        # 1 : Get some infos
 
-        # 1 : Get current member infos
+        # 1-a Current member
         $currentMember = $app['idiorm.db']->for_table('members')
         ->find_one($app['user']->getId_member());	
 
-
-
-        # 2: Add a book
-
-        # Categories from DB
-        $categories = function() use($app) {
-            
-            # Récupération des auteurs dans la BDD
-            $categories = $app['idiorm.db']->for_table('categories')->find_result_set();
-        
-            # On formate l'affichage pour le champ select (ChoiceType)
+        # 1-b Book categories
+        $categories = function() use($app) {            
+            # Get cat from DB
+            $categories = $app['idiorm.db']->for_table('categories')->find_result_set();        
+            # Format (ChoiceType)
             $array = [];
             foreach ($categories as $categorie) :
                 $array[$categorie->name_category] = $categorie->id_category;
             endforeach;
-        
+            # Return
             return $array;
         
         };
 
+
+        # 2: Add a book
+
+        # Create the form
         $formAddBook = $app['form.factory']->createBuilder(FormType::class)
         
-            # Form Fields
+            # Field by Google book Api
             ->add('id_member', HiddenType::class, [
                 'required'      =>  true,
                 'attr'          => [
@@ -92,6 +77,7 @@ $sender = 'Loic';
             ->add('language_book', HiddenType::class, [
                 'required'      =>  false
             ])
+            # Field by the member
             ->add('ISBN_book', TextType::class, [                
                 'required'      =>  true,
                 'label'         =>  false,
@@ -110,7 +96,24 @@ $sender = 'Loic';
                     'class'     => 'form-control'
                 ]
             ])
-            # LIVRE DISPO POUR LA COMMUNAUTE
+            # Address
+            ->add('addressStart', TextType::class, [                
+                'required'      =>  true,
+                'label'         =>  false,
+                'attr' => [
+                    'class'    => 'form-control'
+                ]
+            ])
+            ->add('city_startpoint', HiddenType::class, [
+                'required'      =>  false
+            ])
+            ->add('lat_startpoint', HiddenType::class, [
+                'required'      =>  false
+            ])
+            ->add('lng_startpoint', HiddenType::class, [
+                'required'      =>  false
+            ])
+            # Is the book available for the community ?
             ->add('disponibility_book', ChoiceType::class , array(
                 'choices'                   =>  array(
                 'Libération dans la nature' =>  '0',
@@ -128,27 +131,50 @@ $sender = 'Loic';
         
         $formAddBook->handleRequest($request);
             
-            
+        # If form Valid   
         if ($formAddBook->isValid()) :
             
-            # book = FormAddBook data
+            # $book = form fields
             $book = $formAddBook->getData(); 
 
-            # Generate unique identifier for the book
-            $idBook = '98765438';
+            # A - Generate unique identifier for the book
+            # Loop: generate Id and return true while exist 
+            # Using the function: isUsed (Trait) to check if ID exist in db
+            $generateIdBook = rand(80000000, 89999999);
             
+            while( $this->isUsed( $app, $generateIdBook) ) {
+                $generateIdBook = $generateIdBook->rand(80000000, 89999999);
+            }
+            # if not in DB : create $idBook
+            $idBook = $generateIdBook; 
+            
+            # B- authors
+            # Separate firstname and lastname
+            $name = explode(" ", $book['authors']);
+            $firstname = $name[0];
+            $lastname = $name[1];
             # Check if author exist
+            $checkAuthor = $app['idiorm.db']->for_table('authors')
+            ->where('firstname_author', $firstname)
+            ->where('lastname_author', $lastname)
+            ->find_one();
             
-            // count
-
-            # if it exists: Get authors id from table authors
-            # DB request
-            $idAuthor = '1';
-
+            # if exists: Get authors id from table authors
+            if ($checkAuthor) 
+            {
+                $idAuthor = $checkAuthor->id();
+            } 
             # else: create author
-            #get last inserted Id
-            
-            # Connect to DB : Register a new book
+            else
+            {
+                $newAuthor = $app['idiorm.db']->for_table('authors')->create();
+                $newAuthor->firstname_author = $firstname;
+                $newAuthor->lastname_author = $lastname;
+                $newAuthor->save();
+                #get last inserted Id
+                $idAuthor = $newAuthor->id();
+            }
+            # C- Connect to DB : Register a new book
             $bookDb = $app['idiorm.db']->for_table('books')->create();
             $bookDb->id_book             = $idBook;
             $bookDb->id_member           = $currentMember['id_member'];
@@ -162,8 +188,16 @@ $sender = 'Loic';
             $bookDb->language_book       = $book['language_book'];
             $bookDb->save();
 
+            # D- Create Startpoint
+            $bookDb = $app['idiorm.db']->for_table('startpoints')->create();
+            $bookDb->id_book             = $idBook;
+            $bookDb->lat_startpoint      = $book['lat_startpoint'];
+            $bookDb->lng_startpoint      = $book['lng_startpoint'];
+            $bookDb->city_startpoint     = $book['city_startpoint'];
+            $bookDb->save();
+
             # Redirection
-            return $app->redirect('?addBook=success');
+            return $app->redirect('?addBook=success&idBook=' . $idBook );
 
         endif;
 
@@ -207,10 +241,10 @@ $sender = 'Loic';
             ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
 
             ->getForm();
-        # Update DB
+        # Handle Post Data
         $formCapture->handleRequest($request);
 
-
+        // Check if form is valid
         if ($formCapture->isValid()) :
             
             # Capture = FormCapture data
@@ -227,13 +261,14 @@ $sender = 'Loic';
             # Get last inserted Id
             $pointerId = $pointerDb->id();
 
-            #  Connect to DB : Register the capture member and comment
+            #  Connect to DB : Register the capture's member and comment
             $captureDb = $app['idiorm.db']->for_table('captures')->create();
             $captureDb->id_pointer           = $pointerId;
             $captureDb->id_member            = $currentMember['id_member'];
             $captureDb->comment_capture      = $capture['comment_capture'];
             $captureDb->save();
-
+            
+            # Connect to DB : Set the book as unavailable
             $bookDb =  $app['idiorm.db']->for_table('books')->find_one($capture['id_book']);
             $bookDb->disponibility_book      = 0;
             $bookDb->save();
@@ -283,9 +318,9 @@ $sender = 'Loic';
 
             ->getForm();
 
-        # Update DB
+        # Handle Post data
         $formAccount->handleRequest($request);
-
+        # If form is valid
         if ($formAccount->isValid()) :
 
             # Get Form Data
@@ -349,9 +384,9 @@ $sender = 'Loic';
 
             ->getForm();
 
-        # Update DB
+        # Handle request
         $formAccountPass->handleRequest($request);
-
+        # If form is valid
         if ($formAccountPass->isValid()) :
 
             # Connect to DB : Register a new member
@@ -367,12 +402,14 @@ $sender = 'Loic';
         endif;
 
 
+
         # 5 : Books registered by the user
         $bookList = $app['idiorm.db']->for_table('view_books')
                                         ->where('id_member', $app['user']->getId_member())
-                                        ->find_result_set();	
-
+                                        ->find_result_set();
             
+            
+
         # 6 : user's pending friends
         $pendingList = $app['idiorm.db']->for_table('view_friends')
                                         ->where_any_is(array(
@@ -404,5 +441,40 @@ $sender = 'Loic';
             'friendList'       => $friendList
         ]);
     }
+
+
+    # 9 : Change disponibility
+    public function espacePersoPost(Application $app, Request $request) {
+        
+        # Connect to DB : Register the book as unavailable
+        $bookDispoDb = $app['idiorm.db']->for_table('books')->find_one($request->get('id_book'));
+        $bookDispoDb->disponibility_book = $request->get('disponibility_book');
+        $bookDispoDb->save();
+
+        # Redirection
+        return $app->redirect( $app['url_generator']->generate('livresVoyageurs_espace', array('pseudo' => $app['user']->getPseudo_member() ) ) );
+    }
+
+    # 10 : Sticker creation
+    public function stickerAction(Application $app, Request $request) {
+        
+
+        return $app['twig']->render('member/sticker.html.twig', []);
+    }
+
+
+
+        //Display Chat Page
+        public function chatAction(Application $app, $receiver) {
+            
+            # Define messages sender
+            // $sender = $app['pseudo']; 
+    $sender = 'Loic';
+            
+            return $app['twig']->render('member/chat.html.twig', [
+                'receiver' => $receiver,
+                'sender'   => $sender
+            ]);
+        }
 
 }

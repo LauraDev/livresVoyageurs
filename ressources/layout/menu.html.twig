@@ -20,26 +20,16 @@
 					<li><a href="{{ path('livresVoyageurs_deconnexion') }}"> Déconnexion </a></li>
 				{% else %}
 					<li class="animation" {% if active_page == 'Accueil' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_home') }}"> Accueil </a></li>
-					<li class="animation" {% if active_page == 'Inscription' %} class="active"{% endif%}><a id="inscription" href="{{ path('livresVoyageurs_inscription') }}"> Inscription </a></li>
+					<li class="animation" {% if active_page == 'Inscription' %} class="active"{% endif%}><a class="blackBorder" href="{{ path('livresVoyageurs_inscription') }}"> Inscription </a></li>
 					<li class="animation" {% if active_page == 'Connexion' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_connexion') }}"> Connexion </a></li>
 				{% endif %}
 				{% if is_granted('ROLE_MEMBER') %}
-					<li><a href="{{ path('livresVoyageurs_espace', {pseudo: app.user.pseudo_member} ) }}"> Mon Espace </a></li>
+					<li><a href="{{ path('livresVoyageurs_espace', {pseudo: app.user.pseudo_member} ) }}" class="blackBorder"> Mon Espace </a></li>
 				{% endif %}
 				{% if is_granted('ROLE_ADMIN') %}
 					<li><a href="{{ path('livresVoyageurs_administrator', {pseudoAdmin: app.user.pseudo_member} ) }}"> Administration </a></li>
 				{% endif %}
 			</ul>
-
-			{# <div class="search-icon displayFlex">
-				<div class="search-icon-inner">
-					<i class="ion-ios-search-strong"></i>
-				</div>
-				<div class="search-box">
-					<input type="text" placeholder="Un livre..." />
-					<button>Rechercher</button>
-				</div>
-			</div> <!-- search-icon --> #}
 
 		</div> <!-- right-menu -->
 

@@ -95,7 +95,7 @@ h2 {
   text-decoration: none;
   color: darkgrey;
 }
-#inscription {
+.blackBorder {
   border: 1.2px solid #343f45;
   font-weight: 500;
   text-transform: uppercase;
@@ -104,7 +104,18 @@ h2 {
   letter-spacing: .21px;  
 }
 
+/* 
+* =======================================================
+*
+*   SECOND	MENU
+*
+* ======================================================= 
+*/
 
+.navigation {
+  position: relative;
+  top: -450px;
+}
 
 /* 
 * =======================================================

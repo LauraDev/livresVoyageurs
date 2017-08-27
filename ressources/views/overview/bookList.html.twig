@@ -1,0 +1,54 @@
+{# This page inherits from base.html #}
+{% extends 'layout.html.twig' %}
+
+{# Define Title #}
+{% block title %} Livres Disponibles {% endblock %}
+
+{#  Breadcrumb trail #}
+{% set active_page = 'Disponible' %}
+
+
+{# Define Content #}
+{% block content %}
+
+    <div class="row">
+
+        <h1> Livres disponibles </h1>
+
+        <!-- List: Books I liberated -->
+        <h2> Livres </h2>
+        <div class="row">
+            {% if bookList is empty %}
+                <div>
+                    <p> Vous n'avez pas encore libéré de livre.</p>
+                </div>
+            {% else %}
+                {% for book in bookList %}
+                    <div class="card col-md-12">
+                        <img class="card-img-top img img-responsive col-md-2" src="{{ book.photo_book }}" alt="Card image cap">
+                        <div class="card-block col-md-10">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <h4 class="card-title">{{ book.title_book }}</h4>
+                                    <p> {{ book.summary_book }} </p>
+                                </li>
+                                <li class="list-group-item">Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</li>
+                                <li class="list-group-item">
+                                    <p>Membre partageant ce livre: {{ book.pseudo_member }}</p>
+                                    <a href="#" alt="ajouter ce membre en ami" class="btn btn-primary"> Contacter </a>
+                                </li>
+                                <div class="card-footer text-muted">
+                                    <li>Date de libération: {{ book.date_book | date("d/m/Y")  }}</li>
+                                </div>
+                                <a href="#" class="btn btn-primary col-md-12">Suivre son chemin</a>
+                            </ul>
+                        </div> <!-- card block -->
+                    </div> <!-- card col-md -->
+                {% endfor %}
+            {% endif %} <!-- list empty -->
+        </div> <!-- row -->
+
+
+    </div>
+
+{% endblock %}

@@ -162,8 +162,6 @@ class UserController
 
 
 
-
-
     //Display Connexion page
     public function connexionAction(Application $app, Request $request)
     {
@@ -172,7 +170,6 @@ class UserController
             'last_username' => $app['session']->get('_security.last_username')
         ]);
     }
-
 
 
 
@@ -189,101 +186,17 @@ class UserController
 
 
 
-
-
-    // Contact
-    public function contactAction(Application $app, Request $request)
-    {
-        $form = $app['form.factory']->createBuilder(FormType::class)
-
-            ->add('name', TextType::class, [
-                'required'      =>  true,
-                'label'         =>  false,
-                'constraints'   =>  array(new NotBlank()),
-                'attr'          =>  [
-                    'class'     => 'form-control',
-                ]
-            ])
-            ->add('mail', EmailType::class, [
-                'required'      =>  true,
-                'label'         =>  false,
-                'constraints'   =>  array(new NotBlank()),
-                'attr'          =>  [
-                    'class'     => 'form-control',
-                ]
-            ])
-		    ->add('message', TextType::class, [
-                'required'      =>  true,
-                'label'         =>  false,
-                'constraints'   =>  array(new NotBlank()),
-                'attr'          =>  [
-                    'class'     => 'form-control',
-                ]
-            ])
-		    ->getForm();
-
-            $form->handleRequest($request);
-
-			if ($form->isValid())
-			{
-				$data = $form->getData();
-				# Create the Transport
-                $transport = (new Swift_SmtpTransport('smtp.orange.fr', 465, 'ssl'))
-                ->setUsername('livresvoyageurs@orange.fr')
-                ->setPassword('lola2017');
-
-                # Create the Mailer using your created Transport
-                $mailer = new Swift_Mailer($transport);
-
-                # Load template
-                $template = $app['twig']->loadTemplate('contact.html.twig');
-
-                # Parameters for renderBlock
-                $parameters = array('name'    => $data['name'],
-                                    'message' => $data['message'],
-                                    'mail'    => $data['mail']
-                                );
-
-                # Create a message
-                $message = (new Swift_Message())
-                    ->setFrom($data['mail'])
-                    ->setTo('livresvoyageurs@orange.fr')
-                    ->setSubject($template->renderBlock('subject', $parameters))
-                    ->setBody($template   ->renderBlock('body_text', $parameters), 'text/plain')
-                    // ->addPart($template    ->renderBlock())
-                    ;
-
-                # Send the message
-                $result = $mailer->send($message);
-
-                return $app['twig']->render('user/contact.html.twig', array(
-                    'form'  => $form->createView(),
-                    'sendMessage' => true
-                ));
-            }
-
-		return $app['twig']->render('user/contact.html.twig', array(
-			'form'  => $form->createView(),
-		));
-	}
-
-
-
-
-
-
-
-
-
     //Display the menu
     public function menu(Application $app, $active_page)
     {
         return $app['twig']->render('menu.html.twig', [
             'active_page' => $active_page ]);
     }
-
-
-
+    public function secondMenu(Application $app)
+    {
+        return $app['twig']->render('secondMenu.html.twig', [
+            'active_page' => $active_page ]);
+    }
 
 
 
@@ -297,8 +210,6 @@ class UserController
         # Redirect to Home
         return $app->redirect($app['url_generator']->generate('livresVoyageurs_home'));
     }
-
-
 
 
 
