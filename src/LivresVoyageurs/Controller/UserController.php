@@ -130,26 +130,26 @@ class UserController
 
             # Check if user mail does not exist
             $checkUser = $app['idiorm.db']->for_table('members')
-                                          ->where('pseudo_member', $member['pseudo_member'])
-                                          ->count();
+                                            ->where('pseudo_member', $member['pseudo_member'])
+                                            ->count();
             # If the mail does not exist
             if(!$checkUser){
 
-            # Create a new member entry in the database
-            $memberDb = $app['idiorm.db']->for_table('members')->create();
-            $memberDb->pseudo_member        = $member['pseudo_member'];
-            $memberDb->mail_member          = $member['mail_member'];
-            $memberDb->pass_member          = $app['security.encoder.digest']->encodePassword($member['pass_member'], '');
-            if($image)
-            {
-                $memberDb->avatar_member    = $this->generateSlug($member['pseudo_member']) . '.' . $extension ;
-            }
-            $memberDb->role_member          = $member['role_member'];
-            $memberDb->save();
+                # Create a new member entry in the database
+                $memberDb = $app['idiorm.db']->for_table('members')->create();
+                $memberDb->pseudo_member        = $member['pseudo_member'];
+                $memberDb->mail_member          = $member['mail_member'];
+                $memberDb->pass_member          = $app['security.encoder.digest']->encodePassword($member['pass_member'], '');
+                if($image)
+                {
+                    $memberDb->avatar_member    = $this->generateSlug($member['pseudo_member']) . '.' . $extension ;
+                }
+                $memberDb->role_member          = $member['role_member'];
+                $memberDb->save();
 
 
-            # Redirection
-            return $app->redirect('connexion?inscription=success');
+                # Redirection
+                return $app->redirect('connexion?inscription=success');
             }
             else {
                 # If the mail is already in database render the inscription page (TODO error message)

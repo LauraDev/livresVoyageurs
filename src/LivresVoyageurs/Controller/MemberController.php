@@ -2,12 +2,17 @@
 
 namespace LivresVoyageurs\Controller;
 
+<<<<<<< HEAD
 
 use Dompdf\Dompdf;
+=======
+use LivresVoyageurs\Traits\Shortcut;
+>>>>>>> b9461e549be21c2f33b715523083224aca52e560
 use Silex\Application;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -21,6 +26,8 @@ use Symfony\Component\HttpFoundation\Request;
 class  MemberController
 {
 
+    use Shortcut;
+    
     //Display Chat Page
     public function chatAction(Application $app, $receiver) {
 
@@ -50,6 +57,23 @@ $sender = 'Loic';
 
 
         # 2: Add a book
+
+        # Categories from DB
+        $categories = function() use($app) {
+            
+            # Récupération des auteurs dans la BDD
+            $categories = $app['idiorm.db']->for_table('categories')->find_result_set();
+        
+            # On formate l'affichage pour le champ select (ChoiceType)
+            $array = [];
+            foreach ($categories as $categorie) :
+                $array[$categorie->name_category] = $categorie->id_category;
+            endforeach;
+        
+            return $array;
+        
+        };
+
         $formAddBook = $app['form.factory']->createBuilder(FormType::class)
 
             # Form Fields
@@ -59,10 +83,10 @@ $sender = 'Loic';
                     'value'     => $currentMember['id_member']
                 ]
             ])
-            ->add('id_author', HiddenType::class, [
+            ->add('photo_book', HiddenType::class, [
                 'required'      =>  false
             ])
-            ->add('id_category', HiddenType::class, [
+            ->add('authors', HiddenType::class, [
                 'required'      =>  false
             ])
             ->add('title_book', HiddenType::class, [
@@ -79,20 +103,84 @@ $sender = 'Loic';
                 'label'         =>  false,
                 'constraints'   =>  array(new NotBlank()),
                 'attr'          =>  [
-                    'class'     => 'form-control'
+                    'class'     => 'form-control',
+                    'placeholder'=> '000-0-0000-0000-0'
                 ]
             ])
+<<<<<<< HEAD
             ->add('photo_book', FileType::class, [
                 'required'      =>  false,
                 'label'         =>  false,
+=======
+            ->add('id_category', ChoiceType::class, [                
+                'choices'       => $categories(),
+                'expanded'      => false,
+                'multiple'      => false,
+                'label'         => false,
+>>>>>>> b9461e549be21c2f33b715523083224aca52e560
                 'attr'          =>  [
-                    'class'     => 'form-control dropify'
+                    'class'     => 'form-control'
                 ]
             ])
             # LIVRE DISPO POUR LA COMMUNAUTE
+            ->add('disponibility_book', ChoiceType::class , array(
+                'choices'                   =>  array(
+                'Libération dans la nature' =>  '0',
+                'Libération controlée'      =>  '1'
+                ),
+                'multiple'      =>  false,
+                'expanded'      =>  true,
+                'required'      =>  true,
+                'label'        =>  false,
+                'data'         =>  '0'
+            ))
             ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
 
             ->getForm();
+<<<<<<< HEAD
+=======
+        
+        $formAddBook->handleRequest($request);
+            
+            
+        if ($formAddBook->isValid()) :
+            
+            # book = FormAddBook data
+            $book = $formAddBook->getData(); 
+
+            # Generate unique identifier for the book
+            $idBook = '98765438';
+            
+            # Check if author exist
+            
+            // count
+
+            # if it exists: Get authors id from table authors
+            # DB request
+            $idAuthor = '1';
+
+            # else: create author
+            #get last inserted Id
+            
+            # Connect to DB : Register a new book
+            $bookDb = $app['idiorm.db']->for_table('books')->create();
+            $bookDb->id_book             = $idBook;
+            $bookDb->id_member           = $currentMember['id_member'];
+            $bookDb->id_author           = $idAuthor;
+            $bookDb->id_category         = $book['id_category'];
+            $bookDb->title_book          = $book['title_book'];
+            $bookDb->summary_book        = $book['summary_book'];
+            $bookDb->photo_book          = $book['photo_book'];
+            $bookDb->ISBN_book           = $book['ISBN_book'];
+            $bookDb->disponibility_book  = $book['disponibility_book'];
+            $bookDb->language_book       = $book['language_book'];
+            $bookDb->save();
+
+            # Redirection
+            return $app->redirect('?addBook=success');
+
+        endif;
+>>>>>>> b9461e549be21c2f33b715523083224aca52e560
 
 
 
@@ -114,8 +202,17 @@ $sender = 'Loic';
                 'required'      =>  true,
                 'label'         =>  false,
                 'attr' => [
-                    'class'    => 'form-control loc_autocomplete'
+                    'class'    => 'form-control'
                 ]
+            ])
+            ->add('city_pointer', HiddenType::class, [
+                'required'      =>  false
+            ])
+            ->add('lat_pointer', HiddenType::class, [
+                'required'      =>  false
+            ])
+            ->add('lng_pointer', HiddenType::class, [
+                'required'      =>  false
             ])
             ->add('comment_capture', TextareaType::class, [
                 'required'      =>  false,
@@ -128,9 +225,10 @@ $sender = 'Loic';
 
             ->getForm();
         # Update DB
-        // $formCapture->handleRequest($request);
+        $formCapture->handleRequest($request);
 
 
+<<<<<<< HEAD
         // if ($formCapture->isValid()) :
 
         //     # Capture = FormCapture data
@@ -164,6 +262,41 @@ $sender = 'Loic';
         // endif;
 
 
+=======
+        if ($formCapture->isValid()) :
+            
+            # Capture = FormCapture data
+            $capture = $formCapture->getData();
+
+            # Connect to DB : Register a new pointer
+            $pointerDb = $app['idiorm.db']->for_table('pointers')->create();
+            $pointerDb->id_book           = $capture['id_book'];
+            $pointerDb->lat_pointer       = $capture['lat_pointer'];
+            $pointerDb->lng_pointer       = $capture['lng_pointer'];
+            $pointerDb->city_pointer      = $capture['city_pointer'];
+            $pointerDb->save();
+
+            # Get last inserted Id
+            $pointerId = $pointerDb->id();
+
+            #  Connect to DB : Register the capture member and comment
+            $captureDb = $app['idiorm.db']->for_table('captures')->create();
+            $captureDb->id_pointer           = $pointerId;
+            $captureDb->id_member            = $currentMember['id_member'];
+            $captureDb->comment_capture      = $capture['comment_capture'];
+            $captureDb->save();
+
+            $bookDb =  $app['idiorm.db']->for_table('books')->find_one($capture['id_book']);
+            $bookDb->disponibility_book      = 0;
+            $bookDb->save();
+
+            # Redirection
+            return $app->redirect('?capture=success');
+
+        endif;
+        
+        
+>>>>>>> b9461e549be21c2f33b715523083224aca52e560
 
 
 
