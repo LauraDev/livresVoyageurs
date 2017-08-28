@@ -41,11 +41,21 @@ class MemberControllerProvider implements ControllerProviderInterface
         $controllers
         
             # Associate a route with a controller and an action
-            ->match('/{pseudo}/sticker={uniqueId}', 'LivresVoyageurs\Controller\MemberController::stickerAction')
+            ->match('/{pseudo}/sticker={uniqueId}/title={title}', 'LivresVoyageurs\Controller\MemberController::stickerAction')
             ->method('GET|POST')
             # Route name
             ->bind('livresVoyageurs_espace_sticker');
         
+        # Chat
+        $controllers
+        
+                    # Associate a route with a controller and an action
+                    ->get('/histoire/livre={id_book}', 'LivresVoyageurs\Controller\MemberController::historyAction')
+                    # Specify the type of parameters / using Regex
+                    ->assert('receiver' , '[^/]+')
+                    # Route name
+                    ->bind('livresVoyageurs_history');
+
         # Chat
         $controllers
 
@@ -55,14 +65,6 @@ class MemberControllerProvider implements ControllerProviderInterface
             ->assert('receiver' , '[^/]+')
             # Route name
             ->bind('livresVoyageurs_chat');
-
-
-        # Generate pdf sticker
-        $controllers
-            # Associate a route with a controller and an action
-            ->get('/sticker/pdf', 'LivresVoyageurs\Controller\MemberController::pdfAction')
-            # Route name
-            ->bind('livresVoyageurs_sticker');
 
         // Return the controllers (ControllerCollection)
         return $controllers;

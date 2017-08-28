@@ -152,7 +152,7 @@ class  OverviewController
                     'class'     => 'form-control',
                 ]
             ])
-		    ->add('message', TextType::class, [
+		    ->add('message', TextareaType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
                 'constraints'   =>  array(new NotBlank()),

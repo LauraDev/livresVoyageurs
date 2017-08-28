@@ -142,10 +142,20 @@ class  MemberController
             # A - Generate unique identifier for the book
             # Loop: generate Id and return true while exist 
             # Using the function: isUsed (Trait) to check if ID exist in db
-            $generateIdBook = rand(80000000, 89999999);
+            function bcid($lenght) {
+                $number = '';
+                for($i = 0; $i<$lenght; $i++)
+                {
+                    $number.= rand(0,9);
+                }
+                return $number;
+            }
+
+
+            $generateIdBook = bcid(8);
             
             while( $this->isUsed( $app, $generateIdBook) ) {
-                $generateIdBook = $generateIdBook->rand(80000000, 89999999);
+                $generateIdBook = bcid(8);
             }
             # if not in DB : create $idBook
             $idBook = $generateIdBook; 
@@ -197,9 +207,10 @@ class  MemberController
             $bookDb->lng_startpoint      = $book['lng_startpoint'];
             $bookDb->city_startpoint     = $book['city_startpoint'];
             $bookDb->save();
+            
 
             # Redirection
-            return $app->redirect('?addBook=success&idBook=' . $idBook );
+            return $app->redirect('?addBook=success&idBook=' . $idBook . '&title=' . $book['title_book']);
 
         endif;
 
@@ -472,15 +483,17 @@ class  MemberController
     }
 
     # 10 : Sticker creation
-    public function stickerAction(Application $app, Request $request) {
-        
+    public function stickerAction(Application $app, Request $request, $uniqueId, $title) {       
 
         # Instanciate a new Dompdf object
         $sticker = new Dompdf();
         # Set path to assets folder
         $sticker->setBasePath(PATH_PUBLIC . "/assets/");
         # Load HTML file using Twig
-        $sticker->loadHtml($app['twig']->render('sticker.html.twig'));
+        $sticker->loadHtml($app['twig']->render('sticker.html.twig', [
+            'uniqueId' => $uniqueId,
+            'title'    => $title
+        ]));
         # Render pdf
         $sticker->render();
         # Attach the file to the browser (Attachement: option to display the pdf)
@@ -488,18 +501,31 @@ class  MemberController
     }
 
 
+    //Display a book history
+    public function historyAction(Application $app, $id_book) {
+        
+        $story = $app['idiorm.db']->for_table('view_story')
+                                    ->where('id_book', $id_book)
+                                    ->find_result_set();
 
-        //Display Chat Page
-        public function chatAction(Application $app, $receiver) {
-            
-            # Define messages sender
-            // $sender = $app['pseudo']; 
-    $sender = 'Loic';
-            
-            return $app['twig']->render('member/chat.html.twig', [
-                'receiver' => $receiver,
-                'sender'   => $sender
-            ]);
-        }
+        return $app['twig']->render('member/history.html.twig', [
+            'id_book' => $id_book,
+            'story'   => $story
+        ]);
+    }
+
+
+    //Display Chat Page
+    public function chatAction(Application $app, $receiver) {
+        
+        # Define messages sender
+        // $sender = $app['pseudo']; 
+$sender = 'Loic';
+        
+        return $app['twig']->render('member/chat.html.twig', [
+            'receiver' => $receiver,
+            'sender'   => $sender
+        ]);
+    }
 
 }

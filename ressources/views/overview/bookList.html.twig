@@ -15,12 +15,11 @@
 
         <h1> Livres disponibles </h1>
 
-        <!-- List: Books I liberated -->
-        <h2> Livres </h2>
+        <!-- List: liberated books -->
         <div class="row">
             {% if bookList is empty %}
                 <div>
-                    <p> Vous n'avez pas encore libéré de livre.</p>
+                    <p> Aucun livre n'a encore été libéré sur ce site.</p>
                 </div>
             {% else %}
                 {% for book in bookList %}

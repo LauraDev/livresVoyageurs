@@ -17,10 +17,13 @@
                         Si vous avez trouvez ce livre, merci de vous rendre sur le site livresVoyageurs afin de saisir le numéro unique figurant sur cette étiquette.
                     </p>
                     <p>
-                        Titre du livre
+                        Titre: {{ title }}
                     </p>
                     <p>
-                        Numéro unique : 12345678
+                        Numéro unique : {{ uniqueId }}
+                    </p>
+                    <p>
+                        Libéré le: {{ 'now' | date("d/m/Y") }}
                     </p>
                 </div>
 

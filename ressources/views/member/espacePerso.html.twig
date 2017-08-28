@@ -11,6 +11,8 @@
 {# Define Content #}
 {% block content %}
 
+
+
     <div class="row">
 
         <h1> Tableau de bord </h1>
@@ -36,7 +38,7 @@
                         <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
                         Félicitation, votre livre a été enregistré.
                     </p>
-                    <a href="{{ path('livresVoyageurs_espace_sticker', {pseudo: app.user.pseudo_member, uniqueId: global.request.get('idBook')  } ) }}" title="Lien vers l'étiquette du livre" target="_blank">Cliquez sur ce lien pour télécharger l'étiquette de votre livre</a>
+                    <a href="{{ path('livresVoyageurs_espace_sticker', {pseudo: app.user.pseudo_member, uniqueId: global.request.get('idBook'), title: global.request.get('title')  } ) }}" title="Lien vers l'étiquette du livre" target="_blank">Cliquez sur ce lien pour télécharger l'étiquette de votre livre</a>
                 </div>
             {% endif %}
 
@@ -293,7 +295,11 @@
                                     <li class="list-group-item">Numéro unique: {{ book.id_book }}</li>
                                     <div class="card-footer text-muted">
                                         <li class="list-group-item" style="background-color:#f7f7f9">Livre libéré</li>
-                                        <a href="#" class="btn btn-primary col-md-12">Suivre son chemin</a>
+                                        <a 
+                                            href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'étiquette du livre" 
+                                            class="btn btn-primary col-md-12">
+                                                Suivre son chemin
+                                        </a>
                                     </div>
                                 </ul>
                             </div> <!-- card block -->
@@ -319,7 +325,11 @@
                                             </div>
                                         </form>                        
                                     </div>
-                                    <a href="#" class="btn btn-primary col-md-12">Suivre son chemin</a>
+                                    <a 
+                                        href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'étiquette du livre" 
+                                        class="btn btn-primary col-md-12">
+                                            Suivre son chemin
+                                    </a>
                                 </ul>
                             </div> <!-- card block -->
                         </div> <!-- card col-md -->
@@ -327,6 +337,26 @@
                 {% endfor %}
             {% endif %} <!-- list empty -->
         </div> <!-- row -->
+
+
+        <h2> Etiquettes à imprimer </h2>
+        <div class="row">
+            {% if bookList is empty %}
+                <div>
+                    <p> Vous n'avez pas encore libéré de livre.</p>
+                </div>
+            {% else %}
+                {% for book in bookList | slice(0,10) %}
+                    <ul class="list-group list-group-flush">
+                        <li>
+                            <a href="{{ path('livresVoyageurs_espace_sticker', { pseudo: app.user.pseudo_member, uniqueId: book.id_book , title: book.title_book } ) }}" title="Lien vers l'étiquette du livre" target="_blank">
+                            Etiquette du livre: {{ book.title_book }}
+                            </a>
+                        </li>
+                    </ul>
+                {% endfor %}
+            {% endif %} <!-- list empty -->
+
 
         <!-- List friends / demands -->
         <h2> Amis </h2>
