@@ -21,7 +21,8 @@
             </div>
             <div class="col-md-offset-1 col-md-9">
                 <h2> Bonjour {{ app.user.pseudo_member }}</h2>
-                <p> {{ app.user.mail_member }} </p>
+                <p> Membre actif depuis le: {{ app.user.date_member | date("d/m/Y") }} </p>
+                <p> Email: {{ app.user.mail_member }} </p>
             </div>
         </div>
 
@@ -29,6 +30,17 @@
 
             <!-- Form: Add a book -->
             <h2> Ajouter un livre </h2>
+
+            {% if global.request.get('addBook') == 'success' %}
+                <div class="alert alert-success">
+                    <p>
+                        <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                        Félicitation, votre livre a été enregistré.
+                    </p>
+                    <a href="{{ path('livresVoyageurs_espace_sticker', {pseudo: app.user.pseudo_member, uniqueId: global.request.get('idBook')  } ) }}" alt="Lien vers l'étiquette du livre">Cliquez sur ce lien pour télécharger l'étiquette de votre livre</a>
+                </div>
+            {% endif %}
+
             <form id="formAddBook" action="" method="POST">
 
                 <!-- Id Member -->
@@ -51,7 +63,7 @@
                         {{ form_row(formAddBook.ISBN_book) }}
                     </div>
                     <p class="error alert alert-danger">Vous n'avez pas indiqué l'ISBN</p>
-                    <p class="error alert alert-danger">ISBN incorrect</p>
+                    <p class="error alert alert-danger" id="isbnInconnu">ISBN inconnu</p>
                 </div>
                 <!-- Category -->
                 <div class="form-group">
@@ -61,6 +73,22 @@
                     </div>
                     <p class="error alert alert-danger">Vous n'avez pas indiqué la catégorie</p>
                 </div>
+                <!-- address - Table Startpoints -->
+                <div class="form-group">
+                    <label for="address">Ville *</label>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                        {{ form_row(formAddBook.addressStart) }}
+                    </div>
+                    <p class="error alert alert-danger">Vous n'avez pas indiqué votre ville</p>
+                    <p class="error alert alert-danger">Le nom de la ville est incorrecte</p>
+                </div>
+                    <!-- city_starpoint - Table Startpoints -->
+                    {{ form_row(formAddBook.city_startpoint) }}
+                    <!-- lat_starpoint - Table Startpoints -->
+                    {{ form_row(formAddBook.lat_startpoint) }}
+                    <!-- lng_starpoint - Table Startpoints -->
+                    {{ form_row(formAddBook.lng_startpoint) }}
                 <!-- Disponibility -->
                 <div class="form-group">
                     <label for="disponibility_book">Mode de libération</label>
@@ -96,6 +124,16 @@
 
             <!-- Form: Book I have captured -->
             <h2> Déclarer une capture </h2>
+
+            {% if global.request.get('capture') == 'success' %}
+                <div class="alert alert-success">
+                    <p>
+                        <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                        Félicitation, votre capture a été enregistré.
+                    </p>
+                </div>
+            {% endif %}
+
             <form id="formCapturedBook" action="" method="POST">
 
                 <!-- Id Book - Table Pointers -->
@@ -110,13 +148,13 @@
                 </div>
                 <!-- address - Table Pointers -->
                 <div class="form-group">
-                    <label for="address">Adresse *</label>
+                    <label for="address">Ville *</label>
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
                         {{ form_row(formCapture.address) }}
                     </div>
-                    <p class="error alert alert-danger">Vous n'avez pas indiqué votre adresse</p>
-                    <p class="error alert alert-danger">Adresse incorrecte</p>
+                    <p class="error alert alert-danger">Vous n'avez pas indiqué votre ville</p>
+                    <p class="error alert alert-danger">Le nom de la ville est incorrecte</p>
                 </div>
                 <!-- city_pointer - Table Pointers -->
                 {{ form_row(formCapture.city_pointer) }}
@@ -144,6 +182,15 @@
 
             <!-- Form: Personal data management -->
             <h2> Compte </h2>
+
+            {% if global.request.get('account') == 'success' %}
+                <div class="alert alert-success">
+                    <p>
+                        <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                        Félicitation, votre compte a été modifié avec succès.
+                    </p>
+                </div>
+            {% endif %}
 
             <form id="formMemberModification" action="" method="POST" enctype="multipart/form-data">
 
@@ -195,6 +242,14 @@
         <!-- Form: Password management -->
         <h2> Mot de Passe </h2>
 
+        {% if global.request.get('pass') == 'success' %}
+            <div class="alert alert-success">
+                <p>
+                    <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                    Félicitation, votre mot de passe a été modifié avec succès.
+                </p>
+            </div>
+        {% endif %}
 
         <form id="formPassModification" action="" method="POST">
 
@@ -226,27 +281,68 @@
         <!-- List: Books I liberated -->
         <h2> Livres </h2>
         <div class="row">
-            {# {{ dump(bookList) }} #}
-            {% for book in bookList %}
-                <div class="card col-md-4">
-                    <img class="card-img-top img img-responsive" src="{{ asset('assets/images/' ~ book.photo_book) }}" alt="Card image cap">
-                    <div class="card-block">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><h4 class="card-title">{{ book.title_book }}</h4></li>
-                            <li class="list-group-item">Numéro unique: {{ book.ISBN_book }}</li>
-                            <li class="list-group-item">Catégorie: {{ book.name_category }}</li>
-                            <li class="list-group-item">Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</li>
-                        </ul>
-                    </div>
+            {% if bookList is empty %}
+                <div>
+                    <p> Vous n'avez pas encore libéré de livre.</p>
                 </div>
-            {% endfor %}
-        </div>
+            {% else %}
+                {% for book in bookList %}
+                    {% if book.disponibility_book == 0 %}
+                        <div class="card col-md-4">
+                                <img class="card-img-top img img-responsive" src="{{ book.photo_book }}" alt="Card image cap">
+                            <div class="card-block">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><h4 class="card-title">{{ book.title_book }}</h4></li>
+                                    <li class="list-group-item">Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</li>
+                                    <li class="list-group-item">Numéro unique: {{ book.id_book }}</li>
+                                    <div class="card-footer text-muted">
+                                        <li class="list-group-item" style="background-color:#f7f7f9">Livre libéré</li>
+                                        <a href="#" class="btn btn-primary col-md-12">Suivre son chemin</a>
+                                    </div>
+                                </ul>
+                            </div> <!-- card block -->
+                        </div> <!-- card col-md -->
+                    
+                    {% else %}
+                        <div class="card col-md-4" style="background-color:#e7ffe7">
+                            <img class="card-img-top img img-responsive" src="{{ book.photo_book }}" alt="Card image cap">
+                            <div class="card-block">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item" style="background-color:#e7ffe7"><h4 class="card-title">{{ book.title_book }}</h4></li>
+                                    <li class="list-group-item" style="background-color:#e7ffe7">Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</li>
+                                    <li class="list-group-item" style="background-color:#e7ffe7">Numéro unique: {{ book.id_book }}</li>
+                                    <div class="card-footer text-muted">
+                                        <form id="formChangeDispo" action="{{ path('livresVoyageurs_espace_post', {pseudo: app.user.pseudo_member} ) }}" method="post">
+                                            <!--  ID BOOK -->
+                                            <input type="hidden" value="{{book.id_book}}" id="id_book" name="id_book">
+                                            <!--  Disponibility -->
+                                            <input type="hidden" value="0" id="disponibility_book" name="disponibility_book">
+                                            <!-- Submission -->
+                                            <div class="form-group text-center">
+                                                <input type="submit" name="btnSub" value="Déclarer comme libéré" id="btn_memberInscription" class="btn btn-success">
+                                            </div>
+                                        </form>                        
+                                    </div>
+                                    <a href="#" class="btn btn-primary col-md-12">Suivre son chemin</a>
+                                </ul>
+                            </div> <!-- card block -->
+                        </div> <!-- card col-md -->
+                    {% endif %} <!-- disponibility -->
+                {% endfor %}
+            {% endif %} <!-- list empty -->
+        </div> <!-- row -->
 
         <!-- List friends / demands -->
         <h2> Amis </h2>
 
-        {{ dump(pendingList)}}
-        {{ dump(friendList) }}
+        {% if friendList is empty %}
+            <div>
+                <p> Vous n'avez pas encore de contact.</p>
+            </div>
+        {% endif %}
+
+        {# {{ dump(pendingList)}}
+        {{ dump(friendList) }} #}
 
     </div>
 
@@ -262,6 +358,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js" integrity="sha256-SUaao5Q7ifr2twwET0iyXVy0OVnuFJhGVi5E/dqEiLU=" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function() {
+
+            // Images
             $('.dropify').dropify({
                 messages: {
                     default: 'Glissez-d&eacute;posez un fichier ici ou cliquez',
@@ -271,7 +369,20 @@
                 }
             });
 
-            function initialize() {
+            // Google Auto-complete
+            function initializeAddBook() {
+                var input = document.getElementById('form_addressStart');
+                var autocomplete = new google.maps.places.Autocomplete(input);
+                google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                    var place = autocomplete.getPlace();
+                    document.getElementById('form_city_startpoint').value = place.name;
+                    document.getElementById('form_lat_startpoint').value = place.geometry.location.lat();
+                    document.getElementById('form_lng_startpoint').value = place.geometry.location.lng();
+                });
+            }
+            google.maps.event.addDomListener(window, 'load', initializeAddBook);
+            
+            function initializeCapture() {
                 var input = document.getElementById('form_address');
                 var autocomplete = new google.maps.places.Autocomplete(input);
                 google.maps.event.addListener(autocomplete, 'place_changed', function () {
@@ -281,13 +392,19 @@
                     document.getElementById('form_lng_pointer').value = place.geometry.location.lng();
                 });
             }
-            google.maps.event.addDomListener(window, 'load', initialize);
-            // When a user insert an ISBN
+            google.maps.event.addDomListener(window, 'load', initializeCapture); 
+
+
+            // ISBN - Book infos
+            document.getElementById("form_ISBN_book").addEventListener("focus", function() {
+                // Hide the error message
+                $("#isbnInconnu").hide();
+            });
             document.getElementById("form_ISBN_book").addEventListener("blur", function() {
                 // Set the ISBN
                 var myIsbn = document.getElementById("form_ISBN_book").value;
                 // Set the api variable
-                var googleAPI = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + myIsbn;
+                var googleAPI = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + myIsbn.replace(/-/g, '');
                 //alert(googleAPI);
 
                 // Make an ajax call to get the json data as response.
@@ -295,40 +412,47 @@
 
                     // Display Response objects
                     //console.log("JSON Data: " + response.items);
+                    if( typeof response.items == 'undefined')
+                    {
+                        $("#isbnInconnu").show();
+                    }
+                    else
+                    {
+                        // Loop through all the items one-by-one
+                        for (var i = 0; i < response.items.length; i++) {
 
-                    // Loop through all the items one-by-one
-                    for (var i = 0; i < response.items.length; i++) {
+                            // set the item from the response object
+                            var item = response.items[i];
 
-                        // set the item from the response object
-                        var item = response.items[i];
+                            // Set Language
+                            if(item.volumeInfo.language == 'en')
+                            {
+                                item.volumeInfo.language = 'Anglais'
+                            }
+                            else if(item.volumeInfo.language == 'fr')
+                            {
+                                item.volumeInfo.language = 'Français'
+                            }
+                            // Set the book infos in the div
+                            document.getElementById("bookImage").setAttribute('src', item.volumeInfo.imageLinks.smallThumbnail);
+                            document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Titre: " + item.volumeInfo.title + "</li>";
+                            document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Auteur: " + item.volumeInfo.authors + "</li>";
+                            document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Description: " + item.searchInfo.textSnippet + "</li>";
+                            document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Langue: " + item.volumeInfo.language + "</li>";
 
-                        // Set Language
-                        if(item.volumeInfo.language == 'en')
-                        {
-                            item.volumeInfo.language = 'Anglais'
+                            // Set the book infos in the hidden input
+                            document.getElementById("form_photo_book").value    = item.volumeInfo.imageLinks.smallThumbnail;
+                            document.getElementById("form_title_book").value    = item.volumeInfo.title;
+                            document.getElementById("form_authors").value       = item.volumeInfo.authors;
+                            document.getElementById("form_summary_book").value  = item.searchInfo.textSnippet;
+                            document.getElementById("form_language_book").value = item.volumeInfo.language;
                         }
-                        else if(item.volumeInfo.language == 'fr')
-                        {
-                            item.volumeInfo.language = 'Français'
-                        }
-                        // Set the book infos in the div
-                        document.getElementById("bookImage").setAttribute('src', item.volumeInfo.imageLinks.smallThumbnail);
-                        document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Titre: " + item.volumeInfo.title + "</li>";
-                        document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Auteur: " + item.volumeInfo.authors + "</li>";
-                        document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Description: " + item.searchInfo.textSnippet + "</li>";
-                        document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Langue: " + item.volumeInfo.language + "</li>";
-
-                        // Set the book infos in the hidden input
-                        document.getElementById("form_photo_book").value    = item.volumeInfo.imageLinks.smallThumbnail;
-                        document.getElementById("form_title_book").value    = item.volumeInfo.title;
-                        document.getElementById("form_authors").value       = item.volumeInfo.authors;
-                        document.getElementById("form_summary_book").value  = item.searchInfo.textSnippet;
-                        document.getElementById("form_language_book").value = item.volumeInfo.language;
                     }
                 });
             })
 
 
         }) // document ready
+        
     </script>
 {% endblock %}

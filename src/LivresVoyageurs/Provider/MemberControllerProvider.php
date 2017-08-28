@@ -26,8 +26,26 @@ class MemberControllerProvider implements ControllerProviderInterface
             ->assert('pseudo' , '[^/]+')
             # Route name
             ->bind('livresVoyageurs_espace');
+            
+        # Personal space - Change a book disponibility
+        $controllers
+        
+            # Associate a route with a controller and an action
+            ->match('/{pseudo}/dispo', 'LivresVoyageurs\Controller\MemberController::espacePersoPost')
+            ->method('GET|POST')
+            # Route name
+            ->bind('livresVoyageurs_espace_post');
 
 
+        # Personal space - Get new book sticker
+        $controllers
+        
+            # Associate a route with a controller and an action
+            ->match('/{pseudo}/sticker={uniqueId}', 'LivresVoyageurs\Controller\MemberController::stickerAction')
+            ->method('GET|POST')
+            # Route name
+            ->bind('livresVoyageurs_espace_sticker');
+        
         # Chat
         $controllers
 

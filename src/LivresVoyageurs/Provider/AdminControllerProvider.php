@@ -20,7 +20,8 @@ class AdminControllerProvider implements ControllerProviderInterface
             $controllers
 
                 # Associate a route with a controller and an action
-                ->get('/{pseudoAdmin}', 'LivresVoyageurs\Controller\AdminController::administrateurAction')
+                ->match('/{pseudoAdmin}', 'LivresVoyageurs\Controller\AdminController::administrateurAction')
+                ->method('GET|POST')
                 # Route name
                 ->bind('livresVoyageurs_administrator');
 
