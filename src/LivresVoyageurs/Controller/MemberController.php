@@ -89,9 +89,11 @@ class  MemberController
                     'placeholder'=> '000-0-0000-0000-0'
                 ]
             ])
-            ->add('photo_book', FileType::class, [
-                'required'      =>  false,
-                'label'         =>  false,
+            ->add('id_category', ChoiceType::class, [                
+                'choices'       => $categories(),
+                'expanded'      => false,
+                'multiple'      => false,
+                'label'         => false,
                 'attr'          =>  [
                     'class'     => 'form-control'
                 ]
