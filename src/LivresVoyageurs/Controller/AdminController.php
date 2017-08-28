@@ -22,9 +22,6 @@ class  AdminController
     //Display Administation Page
     public function administrateurAction(Application $app, Request $request, $pseudoAdmin) {
 
-
-        # Delete a member
-
             # Deal with categories
             // $categories = function() use($app) {            
                 # Get cat from DB
@@ -121,7 +118,6 @@ class  AdminController
                 endif;
 
             # B- Change Role by Id
-
                 $formRole = $app['form.factory']->createBuilder(FormType::class)
                 
                     ->add('id_member', TextType::class, [                
@@ -160,17 +156,16 @@ class  AdminController
                 endif;
 
                 # C- Change Role by Pseudo
-
                 $formRole2 = $app['form.factory']->createBuilder(FormType::class)
                 
-                    ->add('pseudo_member', TextType::class, [                
+                    ->add('pseudo_member2', TextType::class, [                
                         'required'              =>  true,
                         'label'                 =>  false,
                         'attr'                  => [
                             'class'             => 'form-control'
                         ]
                     ])
-                    ->add('role_member', ChoiceType::class , array(
+                    ->add('role_member2', ChoiceType::class , array(
                         'choices'               =>  array(
                         'Role Membre'           =>  'ROLE_MEMBER',
                         'Role Administrateur'   =>  'ROLE_ADMIN'
@@ -192,13 +187,68 @@ class  AdminController
                     $role = $formRole2->getData(); 
                     # Check in DB
                     $roleDb = $app['idiorm.db']->for_table('members')
-                        ->where('pseudo_member', $role['pseudo_member'])
+                        ->where('pseudo_member', $role['pseudo_member2'])
                         ->find_one();
-                    $roleDb->role_member = $role['role_member'];
+                    $roleDb->role_member = $role['role_member2'];
                     $roleDb->save();
                     # Redirection
                     return $app->redirect('?changeRole=success');            
                 endif;
+
+
+
+        # Delete a member
+            # A- Delete by Id
+            $formDel = $app['form.factory']->createBuilder(FormType::class)
+            
+                ->add('id_member3', TextType::class, [                
+                    'required'              =>  true,
+                    'label'                 =>  false,
+                    'attr'                  => [
+                        'class'             => 'form-control'
+                    ]
+                ])
+                ->add('submit', SubmitType::class, ['label' => 'Supprimer'])
+
+                ->getForm();
+            
+            $formDel->handleRequest($request);            
+            # If form Valid   
+            if ($formDel->isValid()) :   
+                $member = $formDel->getData();          
+                $delete = $app['idiorm.db']->for_table('members')->find_one($member['id_member3']);
+                $delete->delete();
+                # Redirection
+                return $app->redirect('?delete=success');            
+            endif;
+
+
+            # B- Delete by Pseudo
+            $formDel2 = $app['form.factory']->createBuilder(FormType::class)
+            
+                ->add('pseudo_member3', TextType::class, [                
+                    'required'              =>  true,
+                    'label'                 =>  false,
+                    'attr'                  => [
+                        'class'             => 'form-control'
+                    ]
+                ])
+                ->add('submit', SubmitType::class, ['label' => 'Supprimer'])
+                
+                ->getForm();
+            
+            $formDel2->handleRequest($request);            
+            # If form Valid   
+            if ($formDel2->isValid()) :   
+                $member = $formDel2->getData();          
+                $delete = $app['idiorm.db']->for_table('members')
+                                            ->where('pseudo_member', $member['pseudo_member3'])
+                                            ->find_one();
+                $delete->delete();
+                # Redirection
+                return $app->redirect('?delete=success');            
+            endif;
+
 
 
         # Stats
@@ -226,7 +276,9 @@ class  AdminController
             'formAddCat'        => $formAddCat->createView(),
             'formMember'        => $formMember->createView(),
             'formRole'          => $formRole->createView(),
-            'formRole2'          => $formRole2->createView(),
+            'formRole2'         => $formRole2->createView(),
+            'formDel'           => $formDel->createView(),
+            'formDel2'          => $formDel2->createView(),
             'categories'        => $categories
         ]);
     }
