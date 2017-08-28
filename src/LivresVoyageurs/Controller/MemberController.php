@@ -2,12 +2,8 @@
 
 namespace LivresVoyageurs\Controller;
 
-<<<<<<< HEAD
-
 use Dompdf\Dompdf;
-=======
 use LivresVoyageurs\Traits\Shortcut;
->>>>>>> b9461e549be21c2f33b715523083224aca52e560
 use Silex\Application;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -27,7 +23,7 @@ class  MemberController
 {
 
     use Shortcut;
-    
+
     //Display Chat Page
     public function chatAction(Application $app, $receiver) {
 
@@ -60,18 +56,18 @@ $sender = 'Loic';
 
         # Categories from DB
         $categories = function() use($app) {
-            
+
             # Récupération des auteurs dans la BDD
             $categories = $app['idiorm.db']->for_table('categories')->find_result_set();
-        
+
             # On formate l'affichage pour le champ select (ChoiceType)
             $array = [];
             foreach ($categories as $categorie) :
                 $array[$categorie->name_category] = $categorie->id_category;
             endforeach;
-        
+
             return $array;
-        
+
         };
 
         $formAddBook = $app['form.factory']->createBuilder(FormType::class)
@@ -107,17 +103,9 @@ $sender = 'Loic';
                     'placeholder'=> '000-0-0000-0000-0'
                 ]
             ])
-<<<<<<< HEAD
             ->add('photo_book', FileType::class, [
                 'required'      =>  false,
                 'label'         =>  false,
-=======
-            ->add('id_category', ChoiceType::class, [                
-                'choices'       => $categories(),
-                'expanded'      => false,
-                'multiple'      => false,
-                'label'         => false,
->>>>>>> b9461e549be21c2f33b715523083224aca52e560
                 'attr'          =>  [
                     'class'     => 'form-control'
                 ]
@@ -137,22 +125,20 @@ $sender = 'Loic';
             ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
 
             ->getForm();
-<<<<<<< HEAD
-=======
-        
+
         $formAddBook->handleRequest($request);
-            
-            
+
+
         if ($formAddBook->isValid()) :
-            
+
             # book = FormAddBook data
-            $book = $formAddBook->getData(); 
+            $book = $formAddBook->getData();
 
             # Generate unique identifier for the book
             $idBook = '98765438';
-            
+
             # Check if author exist
-            
+
             // count
 
             # if it exists: Get authors id from table authors
@@ -161,7 +147,7 @@ $sender = 'Loic';
 
             # else: create author
             #get last inserted Id
-            
+
             # Connect to DB : Register a new book
             $bookDb = $app['idiorm.db']->for_table('books')->create();
             $bookDb->id_book             = $idBook;
@@ -180,7 +166,6 @@ $sender = 'Loic';
             return $app->redirect('?addBook=success');
 
         endif;
->>>>>>> b9461e549be21c2f33b715523083224aca52e560
 
 
 
@@ -228,43 +213,8 @@ $sender = 'Loic';
         $formCapture->handleRequest($request);
 
 
-<<<<<<< HEAD
-        // if ($formCapture->isValid()) :
-
-        //     # Capture = FormCapture data
-        //     $capture = $formCapture->getData();
-
-        //     #Get address from Google autocomplete, save into a var: lat, lng, city
-        //     $lat = '';
-        //     $lng = '';
-        //     $city = '';
-
-        //     # Connect to DB : Register a new pointer
-        //     $pointerDb = $app['idiorm.db']->for_table('pointers')->create();
-        //     $pointerDb->id_book           = $capture['id_book'];
-        //     $pointerDb->lat_pointer       = $lat;
-        //     $pointerDb->lng_pointer       = $lng;
-        //     $pointerDb->city_pointer      = $city;
-        //     $memberDb->save();
-
-        //     # Get last inserted Id
-        //     $pointerId = '';
-
-        //     #  Connect to DB : Register the capture member and comment
-        //     $captureDb = $app['idiorm.db']->for_table('captures')->create();
-        //     $captureDb->id_pointer           = $pointerId;
-        //     $captureDb->id_member            = $app['user']->getId_member();
-        //     $captureDb->comment_capture      = $capture['comment_capture'];
-
-        //     # Redirection
-        //     return $app->redirect('?capture=success');
-
-        // endif;
-
-
-=======
         if ($formCapture->isValid()) :
-            
+
             # Capture = FormCapture data
             $capture = $formCapture->getData();
 
@@ -294,9 +244,8 @@ $sender = 'Loic';
             return $app->redirect('?capture=success');
 
         endif;
-        
-        
->>>>>>> b9461e549be21c2f33b715523083224aca52e560
+
+
 
 
 

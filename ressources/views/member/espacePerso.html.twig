@@ -270,7 +270,7 @@
                     error:   'D&eacute;sol&eacute;, le fichier trop volumineux'
                 }
             });
-    
+
             function initialize() {
                 var input = document.getElementById('form_address');
                 var autocomplete = new google.maps.places.Autocomplete(input);
@@ -281,7 +281,7 @@
                     document.getElementById('form_lng_pointer').value = place.geometry.location.lng();
                 });
             }
-            google.maps.event.addDomListener(window, 'load', initialize); 
+            google.maps.event.addDomListener(window, 'load', initialize);
             // When a user insert an ISBN
             document.getElementById("form_ISBN_book").addEventListener("blur", function() {
                 // Set the ISBN
@@ -326,15 +326,9 @@
                         document.getElementById("form_language_book").value = item.volumeInfo.language;
                     }
                 });
-            })    
-            
-            
+            })
+
+
         }) // document ready
     </script>
-<<<<<<< HEAD
 {% endblock %}
-=======
-
-
-{% endblock %}
->>>>>>> b9461e549be21c2f33b715523083224aca52e560
