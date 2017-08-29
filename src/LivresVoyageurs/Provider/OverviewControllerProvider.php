@@ -34,6 +34,14 @@ class OverviewControllerProvider implements ControllerProviderInterface
                 ->bind('livresVoyageurs_newCapture');
 
             $controllers
+            
+                # Associate a route with a controller and an action
+                ->match('/demande_contact/{pseudo}', 'LivresVoyageurs\Controller\OverviewController::addFriendAction')
+                ->method('GET|POST')
+                # Route name
+                ->bind('livresVoyageurs_addFriend');
+
+            $controllers
                 
                 # Associate a route with a controller and an action
                 ->get('/recherche', 'LivresVoyageurs\Controller\OverviewController::searchAction')

@@ -33,9 +33,27 @@
                                 </li>
                                 <li class="list-group-item">Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</li>
                                 <li class="list-group-item">
-                                    <p>Membre partageant ce livre: {{ book.pseudo_member }}</p>
+                                    <p>Membre partageant ce livre: {{ book.pseudo_capture }}</p>
+                                    {# If the user is connected (a member) #}
                                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                        <a href="#" alt="ajouter ce membre en ami" class="btn btn-primary"> Contacter </a> 
+                                        {# If the 2 members are not already in contact #}
+                                        {% if global.request.get('addFriend') == 'success' and global.request.get('friend') == book.pseudo_capture %}
+                                            <div class="alert alert-success">
+                                                <p><i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                                    Votre demande a bien été effectuée.
+                                                </p>
+                                            </div>
+                                        {% endif %}
+                                        {#  If one of the 2 member already ask for contact #}
+                                        {% if global.request.get('addFriend') == 'exist' and global.request.get('friend') == book.pseudo_capture %}
+                                            <div class="alert alert-danger">
+                                                <p><i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                                    Demande en attente.
+                                                </p>
+                                            </div>
+                                        {% endif %}
+                                        <a href="{{ path('livresVoyageurs_addFriend', {pseudo:  book.pseudo_capture} ) }}" alt="ajouter ce membre en ami" class="btn btn-primary"> Entrer en contact </a> 
+                                    {# If the user is not connected #}
                                     {% else %}
                                         <a href="{{ path('livresVoyageurs_inscription') }}" alt="Liens vers l'inscription" class="btn btn-primary"> Inscrivez-vous pour capturer ce livre </a>
                                     {% endif %}

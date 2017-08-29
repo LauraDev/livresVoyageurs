@@ -19,16 +19,18 @@
 
     </div>
     {% for stor in story %}
-    <div class="startpoint ">
-        <p class="lat_startpoint">{{ stor.lat_startpoint }}</p> 
-        <p class="lng_startpoint">{{ stor.lng_startpoint }}</p> 
-        <p class="city_startpoint">{{ stor.city_startpoint }}</p>
-    </div>
-    <div class="pointer">
-        <p class="lat_pointer">{{ stor.lat_pointer }}</p> 
-        <p class="lng_pointer">{{ stor.lng_pointer  }}</p> 
-        <p class="city_pointer">{{ stor.lat_pointer }}</p> 
-    </div>
+        <div class="startpoint ">
+            <p class="lat_startpoint">{{ stor.lat_startpoint }}</p> 
+            <p class="lng_startpoint">{{ stor.lng_startpoint }}</p> 
+            <p class="city_startpoint">{{ stor.city_startpoint }}</p>
+        </div>
+        {# {% if stor.lat.pointer is defined %} #}
+            <div class="pointer">
+                <p class="lat_pointer">{{ stor.lat_pointer }}</p> 
+                <p class="lng_pointer">{{ stor.lng_pointer  }}</p> 
+                <p class="city_pointer">{{ stor.lat_pointer }}</p> 
+            </div>
+        {# {% endif %} #}
     {% endfor %}
 {% endblock %}
 

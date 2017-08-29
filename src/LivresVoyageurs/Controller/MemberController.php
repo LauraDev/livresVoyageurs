@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\HttpFoundation\Request;
 
 class  MemberController
@@ -83,7 +84,7 @@ class  MemberController
             ->add('ISBN_book', TextType::class, [                
                 'required'      =>  true,
                 'label'         =>  false,
-                'constraints'   =>  array(new NotBlank()),
+                'constraints'   =>  array(new NotBlank(array('message'=>'Vous n\'avez pas indiqué l\'ISBN'))),
                 'attr'          =>  [
                     'class'     => 'form-control',
                     'placeholder'=> '000-0-0000-0000-0'
@@ -102,6 +103,7 @@ class  MemberController
             ->add('addressStart', TextType::class, [                
                 'required'      =>  true,
                 'label'         =>  false,
+                'constraints'   =>  array(new NotBlank(array('message'=>'Vous n\'avez pas indiqué votre ville'))),
                 'attr' => [
                     'class'    => 'form-control'
                 ]
@@ -198,6 +200,7 @@ class  MemberController
             $bookDb->ISBN_book           = $book['ISBN_book'];
             $bookDb->disponibility_book  = $book['disponibility_book'];
             $bookDb->language_book       = $book['language_book'];
+            $bookDb->pseudo_capture      = $currentMember['pseudo_member'];
             $bookDb->save();
 
             # D- Create Startpoint
@@ -215,9 +218,6 @@ class  MemberController
         endif;
 
 
-
-
-
         #3 : Capture
         $formCapture = $app['form.factory']->createBuilder(FormType::class)
 
@@ -225,13 +225,14 @@ class  MemberController
             ->add('id_book', TextType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
-                'constraints'   =>  array(new NotBlank()),
+                'constraints'   =>  array(new Regex(array('pattern'=>'/[0-9]/{8}', 'message'=>'Numéro incorrect - Doit contenir 8 chiffres'))),
                 'attr'          =>  [
                     'class'     => 'form-control'
                 ]
             ])
             ->add('address', TextType::class, [
                 'required'      =>  true,
+                'constraints'   =>  array(new NotBlank(array('message'=>'Vous n\'avez pas indiqué votre ville'))),
                 'label'         =>  false,
                 'attr' => [
                     'class'    => 'form-control'
@@ -286,6 +287,7 @@ class  MemberController
             # Connect to DB : Set the book as unavailable
             $bookDb =  $app['idiorm.db']->for_table('books')->find_one($capture['id_book']);
             $bookDb->disponibility_book      = 0;
+            $bookDb->pseudo_capture          = $currentMember['pseudo_member'];
             $bookDb->save();
 
             # Redirection
@@ -305,7 +307,7 @@ class  MemberController
             ->add('pseudo_member', TextType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
-                'constraints'   =>  array(new NotBlank()),
+                'constraints'   =>  array(new NotBlank(array('message' => 'Vous n\'avez pas indiqué votre Pseudo' ))),
                 'attr'          =>  [
                     'class'     => 'form-control',
                     'value'     => $currentMember['pseudo_member']
@@ -314,7 +316,13 @@ class  MemberController
             ->add('mail_member', EmailType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
-                'constraints'   =>  array(new NotBlank(), new Email()),
+                'constraints'   =>  array(new NotBlank(array('message' => 'Vous n\'avez pas indiqué votre Email')), new Email(
+                    array(
+                        'message' => 'Veuillez saisir une adresse mail valide',
+                        'strict'  => true,
+                        'checkMX' => true
+                    )
+                )),
                 'attr'          =>  [
                     'class'     => 'form-control',
                     'value'     => $currentMember['mail_member']
@@ -353,19 +361,38 @@ class  MemberController
                 }
                 $image->move($chemin, $this->generateSlug($member['pseudo_member']).'.'.$extension);
             };
-
-            # Connect to DB : Register a new member
-            $memberDb = $app['idiorm.db']->for_table('members')->find_one($app['user']->getId_member());
-            $memberDb->pseudo_member        = $member['pseudo_member'];
-            $memberDb->mail_member          = $member['mail_member'];
-            if($image)
+            
+            # Check if user mail does not exist
+            $checkUser = $app['idiorm.db']->for_table('members')
+            ->where('pseudo_member', $member['pseudo_member'])
+            ->count();
+            # If the mail does not exist
+            if(!$checkUser)
             {
-                $memberDb->avatar_member    = $this->generateSlug($member['pseudo_member']) . '.' . $extension ;
-            }
-            $memberDb->save();
+                # Connect to DB : Register a new member
+                $memberDb = $app['idiorm.db']->for_table('members')->find_one($app['user']->getId_member());
+                if($member['pseudo_member'] != $currentMember['pseudo_member'])
+                {
+                    $memberDb->pseudo_member        = $member['pseudo_member'];
+                }
+                if($member['mail_member'] != $currentMember['mail_member'])
+                {
+                    $memberDb->mail_member          = $member['mail_member'];
+                }
+                if($image)
+                {
+                    $memberDb->avatar_member    = $this->generateSlug($member['pseudo_member']) . '.' . $extension ;
+                }
+                $memberDb->save();
 
-            # Redirection
-            return $app->redirect('?account=success');
+                # Redirection
+                return $app->redirect('?account=success');
+            }
+            else
+            {
+                # Redirection
+                return $app->redirect('?account=exist');
+            }
 
         endif;
 

@@ -29,22 +29,25 @@
                             <label for="name">Nom *</label>
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                {{ form_row(form.name) }}
-                            </div>    
+                                {{ form_widget(form.name) }}
+                            </div>   
+                            {{ form_errors(form.name) }} 
                         </div>
                         <div class="form-group">
                             <label for="mail">Email *</label>
                             <div class="input-group">
                                 <div class="input-group-addon">@</div>
-                                {{ form_row(form.mail) }}
+                                {{ form_widget(form.mail) }}
                             </div>
+                            {{ form_errors(form.mail) }}
                         </div>
                         <div class="form-group">
                             <label for="message">Message *</label>
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-align-left"></i></span>
-                                {{ form_row(form.message) }}
+                                {{ form_widget(form.message) }}
                             </div>
+                            {{ form_errors(form.message) }}
                         </div>
                         <p>
                             <span class="required"></span>

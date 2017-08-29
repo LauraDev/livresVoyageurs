@@ -47,7 +47,7 @@ class UserController
             ->add('pseudo_member', TextType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
-                'constraints'   =>  array(new NotBlank()),
+                'constraints'   =>  array(new NotBlank(array('message' => 'Vous n\'avez pas indiqué votre Pseudo' ))),
                 'attr'          =>  [
                     'class'     => 'form-control',
                 ]
@@ -55,9 +55,11 @@ class UserController
             ->add('mail_member', EmailType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
-                'constraints'   =>  array(new NotBlank(), new Email(
+                'constraints'   =>  array(new NotBlank(array('message' => 'Vous n\'avez pas indiqué votre Email')), new Email(
                     array(
-                        'message' => 'Veuillez saisir une adresse mail valide'
+                        'message' => 'Veuillez saisir une adresse mail valide',
+                        'strict'  => true,
+                        'checkMX' => true
                     )
                 )),
                 'attr'          =>  [
@@ -101,7 +103,7 @@ class UserController
             ->add('termsAccepted', CheckboxType::class, array(
                 'label'               =>  'J\'ai lu et j\'accepte les termes et conditions',
                 'mapped'              =>  false,
-                'constraints'         =>  new IsTrue(),
+                'constraints'         =>  new IsTrue(array('message'=>'Champs obligatoire')),
             ))
             ->add('submit', SubmitType::class, ['label' => 'Publier'])
 
@@ -152,8 +154,8 @@ class UserController
                 return $app->redirect('connexion?inscription=success');
             }
             else {
-                # If the mail is already in database render the inscription page (TODO error message)
-                return $app['twig']->render('user/inscription.html.twig', ['form'=>$form->createView()]);
+                # Redirection
+                return $app->redirect('?inscription=exist');
             }
 
         endif;
@@ -230,7 +232,13 @@ class UserController
         ->add('mail_member', EmailType::class, [
             'required'      =>  true,
             'label'         =>  false,
-            'constraints'   =>  array(new NotBlank()),
+            'constraints'   =>  array(new NotBlank(array('message' => 'Vous n\'avez pas indiqué votre Email')), new Email(
+                array(
+                    'message' => 'Veuillez saisir une adresse mail valide',
+                    'strict'  => true,
+                    'checkMX' => true
+                )
+            )),
             'attr'          =>  [
                 'class'     => 'form-control',
             ]
@@ -269,7 +277,7 @@ class UserController
                 // Create the Transport
                 $transport = (new Swift_SmtpTransport('smtp.orange.fr', 465, 'ssl'))
                 ->setUsername('livresvoyageurs@orange.fr')
-                ->setPassword('lola2017');
+                ->setPassword('2017lola');
 
                 // Create the Mailer using created Transport
                 $mailer = new Swift_Mailer($transport);
@@ -315,7 +323,13 @@ class UserController
 
                 'required'              =>  true,
                 'label'                 =>  false,
-                'constraints'           =>  array(new NotBlank()),
+                'constraints'           =>  array(new NotBlank(array('message' => 'Vous n\'avez pas indiqué votre Email')), new Email(
+                    array(
+                        'message' => 'Veuillez saisir une adresse mail valide',
+                        'strict'  => true,
+                        'checkMX' => true
+                    )
+                )),
                 'attr'                  =>  [
                     'class'             => 'form-control',
                 ]
@@ -364,7 +378,7 @@ class UserController
                 $memberDb->save();
 
                 # Redirection
-                return $app->redirect( $app['url_generator']->generate('livresVoyageurs_connexion') );
+                return $app->redirect( $app['url_generator']->generate('livresVoyageurs_connexion', array( 'mdp' => 'success')));
             }
 
         endif;

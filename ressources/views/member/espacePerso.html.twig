@@ -61,9 +61,9 @@
                     <label for="ISBN_book">ISBN: Numéro à 13 chiffres, inscript au-dessus du code barre du livre *</label>
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
-                        {{ form_row(formAddBook.ISBN_book) }}
+                        {{ form_widget(formAddBook.ISBN_book) }}
                     </div>
-                    <p class="error alert alert-danger">Vous n'avez pas indiqué l'ISBN</p>
+                    <p class="error alert alert-danger">{{ form_errors(formAddBook.ISBN_book) }}</p>
                     <p class="error alert alert-danger" id="isbnInconnu">ISBN inconnu</p>
                 </div>
                 <!-- Category -->
@@ -79,9 +79,9 @@
                     <label for="address">Ville *</label>
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                        {{ form_row(formAddBook.addressStart) }}
+                        {{ form_widget(formAddBook.addressStart) }}
                     </div>
-                    <p class="error alert alert-danger">Vous n'avez pas indiqué votre ville</p>
+                    <p class="error alert alert-danger">{{ form_errors(formAddBook.addressStart) }}</p>
                     <p class="error alert alert-danger">Le nom de la ville est incorrecte</p>
                 </div>
                     <!-- city_starpoint - Table Startpoints -->
@@ -96,8 +96,6 @@
                     <div class="input-group">
                         {{ form_row(formAddBook.disponibility_book) }}
                     </div>
-                    <p class="error alert alert-danger">L'image est trop lourde</p>
-                    <p class="error alert alert-danger">L'image doit être au format: jpg, jpeg ou png</p>
                 </div>
                 <!-- Token -->
                 {{ form_row(formAddBook._token) }}
@@ -139,19 +137,18 @@
                     <label for="id_book">Numéro unique inscript sur l'étiquette du livre *</label>
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
-                        {{ form_row(formCapture.id_book) }}
+                        {{ form_widget(formCapture.id_book) }}
                     </div>
-                    <p class="error alert alert-danger">Vous n'avez pas indiqué le numéro unique du livre</p>
-                    <p class="error alert alert-danger">Numéro incorrect - Doit contenir 8 chiffres</p>
+                    <p class="error alert alert-danger">{{ form_errors(formCapture.id_book) }}</p>
                 </div>
                 <!-- address - Table Pointers -->
                 <div class="form-group">
                     <label for="address">Ville *</label>
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                        {{ form_row(formCapture.address) }}
+                        {{ form_widget(formCapture.address) }}
                     </div>
-                    <p class="error alert alert-danger">Vous n'avez pas indiqué votre ville</p>
+                    <p class="error alert alert-danger">{{ form_errors(formCapture.address) }}</p>
                     <p class="error alert alert-danger">Le nom de la ville est incorrecte</p>
                 </div>
                 <!-- city_pointer - Table Pointers -->
@@ -197,13 +194,10 @@
                 <label for="pseudo_member">Pseudo *</label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                    {{ form_row(formAccount.pseudo_member) }}
+                    {{ form_widget(formAccount.pseudo_member) }}
                 </div>
-                <!-- Help-text -->
-                <p id="pseudo-helptext">Votre Pseudo doit contenir au moins 6 caractères et un 1 chiffre</p>
                 <!-- Pseudo Errors -->
-                <p class="error alert alert-danger">Vous n'avez pas indiqué votre Pseudo</p>
-                <p class="error alert alert-danger">Votre Pseudo doit contenir au moins 6 caractères et un 1 chiffre</p>
+                <p class="error alert alert-danger">{{ form_errors(formAccount.pseudo_member) }}</p>
                 <p class="error alert alert-danger">Ce pseudo existe déjà</p>
             </div>
             <!-- Email -->
@@ -211,10 +205,9 @@
                 <label for="mail_member">Email *</label>
                 <div class="input-group">
                     <div class="input-group-addon">@</div>
-                    {{ form_row(formAccount.mail_member) }}
+                    {{ form_widget(formAccount.mail_member) }}
                 </div>
-                <p class="error alert alert-danger">Vous n'avez pas indiqué votre Email</p>
-                <p class="error alert alert-danger">Email Incorrect</p>
+                <p class="error alert alert-danger">{{ form_errors(formAccount.mail_member) }}</p>
             </div>
             <!-- Picture -->
             <div class="form-group">
@@ -222,8 +215,6 @@
                 <div class="input-group">
                     {{ form_row(formAccount.avatar_member) }}
                 </div>
-                <p class="error alert alert-danger">L'image est trop lourde</p>
-                <p class="error alert alert-danger">L'image doit être au format: jpg, jpeg ou png</p>
             </div>
             <!-- Token -->
             {{ form_row(formAccount._token) }}
@@ -361,14 +352,14 @@
         <!-- List friends / demands -->
         <h2> Amis </h2>
 
-        {% if friendList is empty %}
+        {% if friendList is empty and pendingList is empty %}
             <div>
                 <p> Vous n'avez pas encore de contact.</p>
             </div>
         {% endif %}
 
-        {# {{ dump(pendingList)}}
-        {{ dump(friendList) }} #}
+        {{ dump(pendingList)}}
+        {{ dump(friendList) }}
 
     </div>
 

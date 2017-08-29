@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -37,6 +38,55 @@ class  OverviewController
             'bookList'     => $bookList
         ]);
     }
+
+    # BookList
+    public function addFriendAction(Application $app, $pseudo) {
+
+                # Current member
+                $currentMember = $app['idiorm.db']->for_table('members')
+                ->find_one($app['user']->getId_member());
+        
+                # Look for friend's ID
+                $idFriend = $app['idiorm.db']->for_table('members')
+                ->where('pseudo_member', $pseudo)
+                ->find_one();
+                # Look for the smallest ID
+                if( $currentMember['id_member'] < $idFriend->id_member )
+                {
+                    $id1 = $currentMember['id_member'];
+                    $id2 = $idFriend->id_member;
+                }
+                else 
+                {
+                    $id1 = $idFriend->id_member;
+                    $id2 = $currentMember['id_member']; 
+                }
+
+                # Friend request
+                # Check if author exist
+                $checkFriend = $app['idiorm.db']->for_table('friends')
+                ->where_any_is(array(
+                    array('id_member_1'  =>  $id1 , 'id_member_2' => $id2 ),
+                    array('id_member_1'  =>  $id2, 'id_member_2' => $id1 ) ))
+                ->count();
+
+                if( $checkFriend )
+                {
+                    return $app->redirect( $app['url_generator']->generate('livresVoyageurs_bookList', array( 'addFriend' => 'exist', 'friend' => $idFriend->pseudo_member)));
+                } 
+                else
+                {
+                    $addFriendDb = $app['idiorm.db']->for_table('friends')->create();
+                    $addFriendDb->id_member_1 = $id1;
+                    $addFriendDb->id_member_2 = $id2;
+                    $addFriendDb->action_friend = $currentMember['id_member'];
+                    $addFriendDb->status_friend = 0;
+                    $addFriendDb->save();
+            
+                    # Redirection
+                    return $app->redirect( $app['url_generator']->generate('livresVoyageurs_bookList', array( 'addFriend' => 'success', 'friend' => $idFriend->pseudo_member)));
+                }
+            }
 
 
     # Capture         
@@ -102,12 +152,14 @@ class  OverviewController
             #  Connect to DB : Register the capture's member and comment
             $captureDb = $app['idiorm.db']->for_table('captures')->create();
             $captureDb->id_pointer           = $pointerId;
+            $captureDb->id_member            = 1;
             $captureDb->comment_capture      = $capture['comment_capture'];
             $captureDb->save();
             
             # Connect to DB : Set the book as unavailable
             $bookDb =  $app['idiorm.db']->for_table('books')->find_one($capture['id_book']);
             $bookDb->disponibility_book      = 0;
+            $bookDb->pseudo_capture          = 'anonyme';
             $bookDb->save();
 
             # Redirection
@@ -139,7 +191,7 @@ class  OverviewController
             ->add('name', TextType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
-                'constraints'   =>  array(new NotBlank()),
+                'constraints'   =>  array(new NotBlank(array('message'=>'Veuillez saisir votre nom'))),
                 'attr'          =>  [
                     'class'     => 'form-control',
                 ]
@@ -147,7 +199,13 @@ class  OverviewController
             ->add('mail', EmailType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
-                'constraints'   =>  array(new NotBlank()),
+                'constraints'   =>  array(new NotBlank(array('message' => 'Vous n\'avez pas indiqué votre Email')), new Email(
+                    array(
+                        'message' => 'Veuillez saisir une adresse mail valide',
+                        'strict'  => true,
+                        'checkMX' => true
+                    )
+                )),
                 'attr'          =>  [
                     'class'     => 'form-control',
                 ]
@@ -155,7 +213,7 @@ class  OverviewController
 		    ->add('message', TextareaType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
-                'constraints'   =>  array(new NotBlank()),
+                'constraints'   =>  array(new NotBlank(array('message'=>'Veuillez saisir votre message'))),
                 'attr'          =>  [
                     'class'     => 'form-control',
                 ]
@@ -170,7 +228,7 @@ class  OverviewController
 				# Create the Transport
                 $transport = (new Swift_SmtpTransport('smtp.orange.fr', 465, 'ssl'))
                 ->setUsername('livresvoyageurs@orange.fr')
-                ->setPassword('lola2017');
+                ->setPassword('2017lola');
 
                 # Create the Mailer using your created Transport
                 $mailer = new Swift_Mailer($transport);
