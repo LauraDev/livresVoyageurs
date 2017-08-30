@@ -23,14 +23,21 @@
             <p class="lat_startpoint">{{ stor.lat_startpoint }}</p> 
             <p class="lng_startpoint">{{ stor.lng_startpoint }}</p> 
             <p class="city_startpoint">{{ stor.city_startpoint }}</p>
+            <p class="pseudo_startpoint">{{ stor.pseudo_member }}</p> 
+            <p class="date_startpoint">{{ stor.date_book | date('d/m/Y') }}</p>
+            <p class="avatar_startpoint">{{ stor.avatar_member }}</p>
+
         </div>
-        {# {% if stor.lat.pointer is defined %} #}
+        {% if not stor.lat_pointer == 0 %}
             <div class="pointer">
                 <p class="lat_pointer">{{ stor.lat_pointer }}</p> 
                 <p class="lng_pointer">{{ stor.lng_pointer  }}</p> 
-                <p class="city_pointer">{{ stor.lat_pointer }}</p> 
+                <p class="city_pointer">{{ stor.city_pointer }}</p> 
+                <p class="pseudo_pointer">{{ stor.pseudo_captures }}</p> 
+                <p class="date_pointer">{{ stor.date_pointer | date('d/m/Y') }}</p> 
+                <p class="avatar_pointer">{{ stor.avatar_captures }}</p>
             </div>
-        {# {% endif %} #}
+        {% endif %}
     {% endfor %}
 {% endblock %}
 
@@ -61,54 +68,100 @@
             function init() {
                 
 
-                //latittude et longitude à afficher
-                var latlng = {lat: Number($('.lat_startpoint').html()), lng:Number($('.lng_startpoint').html()) };
-                // Definir la div devant recevoir la carte
+                // Define where to postion the map
                 var mapDiv = document.getElementById('map');
-                // creation de la carte
-                map = new google.maps.Map(mapDiv, {center: latlng, zoom:10, mapTypeId: 'satellite'})
-
-                // pour ajouter une  epingle: Marker
-                var marker =  new google.maps.Marker({
-                    //emplacement
-                    position: latlng,
-                    //carte
-                    map: map,
-                    //texte a afficher
-                    title: 'Départ du livre'
-                })
-
+                // Lat / lng startpoint 
+                var latStart =  Number($('.lat_startpoint').eq(0).html())
+                var lngStart = Number($('.lng_startpoint').eq(0).html())
+                var latlng = {lat: Number($('.lat_startpoint').html()), lng:Number($('.lng_startpoint').html()) };
+                // Get lat and lng for other markers (captures)
                 var pointer = document.getElementsByClassName('pointer')
-                
+
+                // Map creation
+                map = new google.maps.Map(mapDiv, {center: latlng, zoom:10, mapTypeId: 'hybrid'})
+
+                var contentStart = 
+                    '<h1>Point de départ</h1>' +	
+                    '<div class="row">' +
+                        '<img class="col-sm-7 img img-responsive" src="/livresVoyageurs/public/assets/images/avatar/' + $('.avatar_startpoint').html() +'" style="width:65px; height:auto" alt="Avatar membre" />' +
+                        '<div class="col-sm-4">'+
+                            '<h2>' + $('.city_startpoint').html() +'</h2>' +
+                            '<h2>' + $('.pseudo_startpoint').html() + '</h2>' +
+                        '</div>'+
+                    '</div>'
+                // Create startpoint marker
+                var marker =  new google.maps.Marker({
+                    position: latlng,
+                    map: map,
+                    //Tooltip
+                    title: 'Départ du livre',
+                    content: contentStart
+                })
+                var infowindow = new google.maps.InfoWindow({
+                    content: contentStart
+                });
+                // ajout de la boite d'info et du listener
+                marker.addListener('click', function() {
+                    infowindow.open(map, marker);
+                });
+                infowindow.open(map, marker);
+
+                var pos;
+                var posCapt= [];
+
+                // Create captures markers
                 for (var i = 0; i < pointer.length; i++) {
                 
-                    var lat = Number($('.lat_pointer').eq(i).html())
-                    var lng = Number($('.lng_pointer').eq(i).html())
+                var latPoint = Number($('.lat_pointer').eq(i).html())
+                var lngPoint = Number($('.lng_pointer').eq(i).html())
                     var markers = [];
-                    var pos = new google.maps.LatLng( lat , lng);
-                    
-                    var markerId = i+1
-                    var contentString = '<div id="content">'+
-                        '<div class="Capture">'+
-                        '</div>'+
-                        '<strong>'+ markerId +'</strong>'+
-                        '<p>'+ $('.city_pointer').eq(i).html() +'</p>'+
-                        '</div>';
-                    var infowindow = new google.maps.InfoWindow({
-                        content: contentString
-                    })
-
+                    var pos = new google.maps.LatLng( latPoint , lngPoint);
+                    var contentCapture =	
+                        '<h1>Capturé le:<br>'+ $('.date_pointer').eq(i).html() +'</h1>' +	
+						'<div class="row">' +
+                            '<img class="col-sm-7 img img-responsive" src="/livresVoyageurs/public/assets/images/avatar/' + $('.avatar_pointer').eq(i).html() + '" style="width:65px; height:auto" alt="Avatar Membre" />'+
+                            '<div class="col-sm-4">'+
+                                '<h2>' + $('.city_pointer').eq(i).html() +'</h2>' +
+                                '<h2>' + $('.pseudo_pointer').eq(i).html() + '</h2>' +
+                            '</div>'+
+                        '</div>'
+                    // Create captures marker
                     markers[i] = new google.maps.Marker({
                         position: pos,
                         map: map,
-                        id: i+1
+                        id: i+1,
+                        title: 'Voyage n:',
+                        content: contentCapture
                     });
-                    marker.addListener('click', function() {
-                        infowindow.open(map, marker);
+                    var infowindow = new google.maps.InfoWindow({
+                        content: contentCapture
                     });
-                }               
-                
-            }
+                    // add listener
+                    markers[i].addListener('click', function() {
+                        infowindow.open(map, markers[i]);
+                    });
+                    infowindow.open(map, markers[i]);
+                    
+                    posCapt[0] = {lat: latStart , lng: lngStart }
+                    posCapt[i] = {lat:latPoint , lng:lngPoint};
+
+                } // loop end  
+
+
+                alert(JSON.stringify(posCapt)) 
+                var flightPath = new google.maps.Polyline({
+                path: posCapt,
+                geodesic: true,
+                strokeColor: '#FF0000',
+                strokeOpacity: 1.0,
+                strokeWeight: 2
+                });
+
+                flightPath.setMap(map);
+            
+
+            } // init() end
+            // load map on window load
             google.maps.event.addDomListener(window, 'load', init);
 
         }) // document ready

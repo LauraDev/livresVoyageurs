@@ -271,8 +271,7 @@ class UserController
                 $tokenDb->save();
 
                 // Url for password change
-                $urlReset = 'http://' . $_SERVER['SERVER_NAME'] . '/livresVoyageurs/public/mdpReset/'.$token;
-                // $urlReset = 'http://' . $app['url_generator']->generate('livresVoyageurs_home') . 'mdpReset/'.$token;  // localhost n'apparait pas dans le chemin
+                $urlReset = $app['url_generator']->generate('livresVoyageurs_home' , array(), $app['url_generator']::ABSOLUTE_URL) . 'mdpReset/'.$token ;  // localhost n'apparait pas dans le chemin
 
                 // Create the Transport
                 $transport = (new Swift_SmtpTransport('smtp.orange.fr', 465, 'ssl'))

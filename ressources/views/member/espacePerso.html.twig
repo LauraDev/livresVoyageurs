@@ -317,7 +317,7 @@
                                         </form>                        
                                     </div>
                                     <a 
-                                        href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'étiquette du livre" 
+                                        href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'histoire du livre" 
                                         class="btn btn-primary col-md-12">
                                             Suivre son chemin
                                     </a>
@@ -372,7 +372,9 @@
 
 {% block javascripts %}
     {{ parent() }}
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js" integrity="sha256-SUaao5Q7ifr2twwET0iyXVy0OVnuFJhGVi5E/dqEiLU=" crossorigin="anonymous"></script>
+    <script src="{{ asset('assets/js/jquery.mask.js') }}"></script>
     <script>
         $(document).ready(function() {
             // Images
@@ -384,6 +386,9 @@
                     error:   'D&eacute;sol&eacute;, le fichier trop volumineux'
                 }	
             });
+            // MASK JS - Add (-) while customer is typing ISBN
+            // Set the ISBN
+            $('#form_ISBN_book').mask('000-0-0000-0000-0');
             // Google Auto-complete
             function initializeAddBook() {
                 var input = document.getElementById('form_addressStart');
@@ -402,6 +407,7 @@
                 var autocomplete = new google.maps.places.Autocomplete(input);
                 google.maps.event.addListener(autocomplete, 'place_changed', function () {
                     var place = autocomplete.getPlace();
+                    alert(JSON.stringify(place))
                     document.getElementById('form_city_pointer').value = place.name;
                     document.getElementById('form_lat_pointer').value = place.geometry.location.lat();
                     document.getElementById('form_lng_pointer').value = place.geometry.location.lng();

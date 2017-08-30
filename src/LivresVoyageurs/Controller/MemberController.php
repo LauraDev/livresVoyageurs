@@ -136,7 +136,7 @@ class  MemberController
         $formAddBook->handleRequest($request);
             
         # If form Valid   
-        if ($formAddBook->isValid()) :
+        if ($formAddBook->isValid() && $formAddBook->isSubmitted()) :
             
             # $book = form fields
             $book = $formAddBook->getData(); 
@@ -261,7 +261,7 @@ class  MemberController
         $formCapture->handleRequest($request);
 
         // Check if form is valid
-        if ($formCapture->isValid()) :
+        if ($formCapture->isValid() && $formCapture->isSubmitted()) :
 
             # Capture = FormCapture data
             $capture = $formCapture->getData();
@@ -344,7 +344,7 @@ class  MemberController
         # Handle Post data
         $formAccount->handleRequest($request);
         # If form is valid
-        if ($formAccount->isValid()) :
+        if ($formAccount->isValid() && $formAccount->isSubmitted()) :
 
             # Get Form Data
             $member = $formAccount->getData();
@@ -429,7 +429,7 @@ class  MemberController
         # Handle request
         $formAccountPass->handleRequest($request);
         # If form is valid
-        if ($formAccountPass->isValid()) :
+        if ($formAccountPass->isValid() && $formAccountPass->isSubmitted()) :
 
             # Connect to DB : Register a new member
             $memberPass = $formAccountPass->getData();

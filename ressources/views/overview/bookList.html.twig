@@ -33,26 +33,39 @@
                                 </li>
                                 <li class="list-group-item">Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</li>
                                 <li class="list-group-item">
-                                    <p>Membre partageant ce livre: {{ book.pseudo_capture }}</p>
-                                    {# If the user is connected (a member) #}
+
+                                    {# Display the pseudo of the member in possession of the book#}
+                                    {% if book.pseudo_capture == 'none' %}
+                                        <p>Membre partageant ce livre: {{ book.pseudo_member }}</p>
+                                    {% else %}
+                                        <p>Membre partageant ce livre: {{ book.pseudo_capture }}</p>
+                                    {% endif %}
+
+                                    {# If the user is connected (a member) allow him to contact the member who has the book #}
                                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                         {# If the 2 members are not already in contact #}
-                                        {% if global.request.get('addFriend') == 'success' and global.request.get('friend') == book.pseudo_capture %}
+                                        {% if global.request.get('addFriend') == 'success' and global.request.get('friend') == book.pseudo_capture or global.request.get('addFriend') == 'success' and global.request.get('friend') == book.pseudo_member %}
                                             <div class="alert alert-success">
                                                 <p><i class="fa fa-thumbs-up" aria-hidden="true"></i>
                                                     Votre demande a bien été effectuée.
                                                 </p>
                                             </div>
                                         {% endif %}
-                                        {#  If one of the 2 member already ask for contact #}
-                                        {% if global.request.get('addFriend') == 'exist' and global.request.get('friend') == book.pseudo_capture %}
+                                        {#  If one of the 2 members already asked for contact #}
+                                        {% if global.request.get('addFriend') == 'exist' and global.request.get('friend') == book.pseudo_capture or global.request.get('addFriend') == 'exist' and global.request.get('friend') == book.pseudo_member %}
                                             <div class="alert alert-danger">
                                                 <p><i class="fa fa-thumbs-up" aria-hidden="true"></i>
                                                     Demande en attente.
                                                 </p>
                                             </div>
                                         {% endif %}
-                                        <a href="{{ path('livresVoyageurs_addFriend', {pseudo:  book.pseudo_capture} ) }}" alt="ajouter ce membre en ami" class="btn btn-primary"> Entrer en contact </a> 
+                                        {# Create the path to contact the member who has the book #}
+                                        {% if book.pseudo_capture == 'none' %}
+                                            <a href="{{ path('livresVoyageurs_addFriend', {pseudo:  book.pseudo_member} ) }}" alt="ajouter ce membre en ami" class="btn btn-primary"> Entrer en contact </a> 
+                                        {% else %}
+                                            <a href="{{ path('livresVoyageurs_addFriend', {pseudo:  book.pseudo_capture} ) }}" alt="ajouter ce membre en ami" class="btn btn-primary"> Entrer en contact </a> 
+                                        {% endif %}
+
                                     {# If the user is not connected #}
                                     {% else %}
                                         <a href="{{ path('livresVoyageurs_inscription') }}" alt="Liens vers l'inscription" class="btn btn-primary"> Inscrivez-vous pour capturer ce livre </a>
@@ -61,7 +74,7 @@
                                 <div class="card-footer text-muted">
                                     <li>Date de libération: {{ book.date_book | date("d/m/Y")  }}</li>
                                 </div>
-                                <a href="#" class="btn btn-primary col-md-12">Suivre son chemin</a>
+                                <a href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'histoire du livre"  class="btn btn-primary col-md-12">Suivre son chemin</a>
                             </ul>
                         </div> <!-- card block -->
                     </div> <!-- card col-md -->
