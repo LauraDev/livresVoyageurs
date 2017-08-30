@@ -344,7 +344,7 @@ class  MemberController
                 'label'         =>  false,
                 'attr'          =>  [
                     'class'     => 'form-control dropify',
-                    'data-default-file'            => '/livresVoyageurs/public/assets/images/avatar/' . $currentMember['avatar_member'], // /livresVoyageurs/public/assets/images/avatar/lolita.jpg
+                    'data-default-file'            => '/livresVoyageurs/public/assets/images/avatar/' . $app['user']->getAvatar_member(), // /livresVoyageurs/public/assets/images/avatar/lolita.jpg
                     'data-allowed-file-extensions' => 'jpg jpeg png'
                 ]
             ])
@@ -364,17 +364,18 @@ class  MemberController
             $image  = $member['avatar_member'];
             if($image)
             {
-                $chemin = PATH_PUBLIC.'/assets/images/avatar/';
-                $extension = $image->guessExtension();
-
                 // Removing old image
                 #1. DB connection
                 $oldImage = $app['idiorm.db']->for_table('members')
-                                             ->where('pseudo_member', $currentMember['pseudo_member'] )
-                                             ->find_one();
+                ->where('pseudo_member', $currentMember['pseudo_member'] )
+                ->find_one();
                 #2. Removing the old avatar
                 $path = PATH_IMAGES . '/avatar/' . $oldImage->avatar_member;
                 unlink($path);
+                
+                $chemin = PATH_PUBLIC.'/assets/images/avatar/';
+                $extension = $image->guessExtension();
+
 
                 if (!$extension) {
                     // extension cannot be guessed
@@ -408,8 +409,6 @@ class  MemberController
                 $memberDb->save();
 
                 # Redirection
-                $avatar = $this->generateSlug($member['pseudo_member']) . '.' . $extension ;
-                $app['user.avatar_member']->setAvatar($avatar);
                 return $app->redirect('?account=success');
             }
             else

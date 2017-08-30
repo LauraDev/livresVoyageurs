@@ -100,7 +100,7 @@ class UserController
                 'label'               =>  false,
                 'attr'                =>  [
                     'class'           => 'form-control dropify',
-                    'data-default-file'            => '/livresVoyageurs/public/assets/images/avatar/default.png',
+                    // 'data-default-file'            => '/livresVoyageurs/public/assets/images/avatar/default.png',
                     'data-allowed-file-extensions' => 'jpg jpeg png'
                 ]
             ])
