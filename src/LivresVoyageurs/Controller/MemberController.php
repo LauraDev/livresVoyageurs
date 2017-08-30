@@ -366,10 +366,21 @@ class  MemberController
             {
                 $chemin = PATH_PUBLIC.'/assets/images/avatar/';
                 $extension = $image->guessExtension();
+
+                // Removing old image
+                #1. DB connection
+                $oldImage = $app['idiorm.db']->for_table('members')
+                                             ->where('pseudo_member', $currentMember['pseudo_member'] )
+                                             ->find_one();
+                #2. Removing the old avatar
+                $path = PATH_IMAGES . '/avatar/' . $oldImage->avatar_member;
+                unlink($path);
+
                 if (!$extension) {
                     // extension cannot be guessed
                     $extension = 'jpg';
                 }
+
                 $image->move($chemin, $this->generateSlug($member['pseudo_member']).'.'.$extension);
             };
 
@@ -397,6 +408,8 @@ class  MemberController
                 $memberDb->save();
 
                 # Redirection
+                $avatar = $this->generateSlug($member['pseudo_member']) . '.' . $extension ;
+                $app['user.avatar_member']->setAvatar($avatar);
                 return $app->redirect('?account=success');
             }
             else

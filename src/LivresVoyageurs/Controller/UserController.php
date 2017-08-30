@@ -5,6 +5,7 @@ namespace LivresVoyageurs\Controller;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_SmtpTransport;
+use LivresVoyageurs\Constraints\passConstraint;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -72,6 +73,7 @@ class UserController
                 'type' => PasswordType::class,
                 'first_options'  => array(
                     'label'      => false,
+                    'constraints'=> array(new passConstraint()),
                     'attr'       => [
                         'placeholder' => 'Entrez votre mot de passe',
                         'class'       => 'form-control'

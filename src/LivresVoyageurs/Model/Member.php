@@ -168,16 +168,16 @@ class Member implements UserInterface
     //     return $this;
     // }
     //
-    // /**
-    //  * @param mixed $avatar_member
-    //  *
-    //  * @return static
-    //  */
-    // public function setAvatar_member($avatar_member)
-    // {
-    //     $this->avatar_member = $avatar_member;
-    //     return $this;
-    // }
+    /**
+     * @param mixed $avatar_member
+     *
+     * @return static
+     */
+    public function setAvatar_member($avatar_member)
+    {
+        $this->avatar_member = $avatar_member;
+        return $this;
+    }
     //
     // /**
     //  * @param mixed $token_member
