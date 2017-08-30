@@ -9,7 +9,7 @@
 
 
 {# Define Content #}
-{% block content %}
+{% block content %} 
 
 
     <div class="row">
@@ -30,6 +30,14 @@
                 <div class="alert alert-success">
                     <p><i class="fa fa-thumbs-up" aria-hidden="true"></i>
                     Félicitation, votre inscription est effective.
+                        <br>Vous pouvez maintenant vous connecter.</p>
+                </div>
+            {% endif %}
+
+            {% if global.request.get('mdp') == 'success' %}
+                <div class="alert alert-success">
+                    <p><i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                    Félicitation, votre mot de passe a bien été changé.
                         <br>Vous pouvez maintenant vous connecter.</p>
                 </div>
             {% endif %}

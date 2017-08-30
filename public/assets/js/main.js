@@ -163,16 +163,5 @@ $(document).ready(function() {
 		window.location = linkLocation;
 	}
 
-	$(document).ready(function() {
-		if (typeof(google) != 'undefined') {
-			var options = {
-				types: ['(cities)']
-			};
-			$('input.loc_autocomplete').each(function(idx, el) {
-				new google.maps.places.Autocomplete(el, options);
-			});
-		}
-	});
-	
 	
 }); 

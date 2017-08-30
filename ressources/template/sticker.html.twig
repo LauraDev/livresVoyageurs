@@ -1,4 +1,5 @@
 {% block sticker %}
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
     <head>
@@ -30,4 +31,38 @@
 
     </body>
 </html>
+=======
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <meta charset="utf-8">
+            <title>Etiquette</title>
+            <link rel="stylesheet" href="css/sticker.css">
+        </head>
+        <body>
+            <h1>
+                Les livres voyageurs
+            </h1>
+            <div id="sticker">
+                <span><img src="images/logo.png" alt=""></span>
+                <div id="texte">
+                    <p>
+                        Si vous avez trouvez ce livre, merci de vous rendre sur le site livresVoyageurs afin de saisir le numéro unique figurant sur cette étiquette.
+                    </p>
+                    <p>
+                        Titre: {{ title }}
+                    </p>
+                    <p>
+                        Numéro unique : {{ uniqueId }}
+                    </p>
+                    <p>
+                        Libéré le: {{ 'now' | date("d/m/Y") }}
+                    </p>
+                </div>
+
+            </div>
+
+        </body>
+    </html>
+>>>>>>> 22e4593c73bd8f690cc4ca0de0319a5e40c8e985
 {% endblock %}

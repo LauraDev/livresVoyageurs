@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,7 +49,7 @@ class UserController
             ->add('pseudo_member', TextType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
-                'constraints'   =>  array(new NotBlank()),
+                'constraints'   =>  array(new NotBlank(array('message' => 'Vous n\'avez pas indiqué votre Pseudo' ))),
                 'attr'          =>  [
                     'class'     => 'form-control',
                 ]
@@ -56,7 +57,13 @@ class UserController
             ->add('mail_member', EmailType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
-                'constraints'   =>  array(new NotBlank()),
+                'constraints'   =>  array(new NotBlank(array('message' => 'Vous n\'avez pas indiqué votre Email')), new Email(
+                    array(
+                        'message' => 'Veuillez saisir une adresse mail valide',
+                        'strict'  => true,
+                        'checkMX' => true
+                    )
+                )),
                 'attr'          =>  [
                     'class'     => 'form-control',
                 ]
@@ -98,7 +105,7 @@ class UserController
             ->add('termsAccepted', CheckboxType::class, array(
                 'label'               =>  'J\'ai lu et j\'accepte les termes et conditions',
                 'mapped'              =>  false,
-                'constraints'         =>  new IsTrue(),
+                'constraints'         =>  new IsTrue(array('message'=>'Champs obligatoire')),
             ))
             ->add('submit', SubmitType::class, ['label' => 'Publier'])
 
@@ -127,38 +134,36 @@ class UserController
 
             # Check if user mail does not exist
             $checkUser = $app['idiorm.db']->for_table('members')
-                                          ->where('pseudo_member', $member['pseudo_member'])
-                                          ->count();
+                                            ->where('pseudo_member', $member['pseudo_member'])
+                                            ->count();
             # If the mail does not exist
             if(!$checkUser){
 
-            # Create a new member entry in the database
-            $memberDb = $app['idiorm.db']->for_table('members')->create();
-            $memberDb->pseudo_member        = $member['pseudo_member'];
-            $memberDb->mail_member          = $member['mail_member'];
-            $memberDb->pass_member          = $app['security.encoder.digest']->encodePassword($member['pass_member'], '');
-            if($image)
-            {
-                $memberDb->avatar_member    = $this->generateSlug($member['pseudo_member']) . '.' . $extension ;
-            }
-            $memberDb->role_member          = $member['role_member'];
-            $memberDb->save();
+                # Create a new member entry in the database
+                $memberDb = $app['idiorm.db']->for_table('members')->create();
+                $memberDb->pseudo_member        = $member['pseudo_member'];
+                $memberDb->mail_member          = $member['mail_member'];
+                $memberDb->pass_member          = $app['security.encoder.digest']->encodePassword($member['pass_member'], '');
+                if($image)
+                {
+                    $memberDb->avatar_member    = $this->generateSlug($member['pseudo_member']) . '.' . $extension ;
+                }
+                $memberDb->role_member          = $member['role_member'];
+                $memberDb->save();
 
 
-            # Redirection
-            return $app->redirect('connexion?inscription=success');
+                # Redirection
+                return $app->redirect('connexion?inscription=success');
             }
             else {
-                # If the mail is already in database render the inscription page (TODO error message)
-                return $app['twig']->render('user/inscription.html.twig', ['form'=>$form->createView()]);
+                # Redirection
+                return $app->redirect('?inscription=exist');
             }
 
         endif;
 
         return $app['twig']->render('user/inscription.html.twig', ['form'=>$form->createView()]);
     }
-
-
 
 
 
@@ -180,7 +185,6 @@ class UserController
 
 
 
-
     // Display mentions page
     public function mentionsAction(Application $app)
     {
@@ -191,6 +195,7 @@ class UserController
 
 
 
+<<<<<<< HEAD
 
 
     // Contact
@@ -276,15 +281,19 @@ class UserController
 
 
 
+=======
+>>>>>>> 22e4593c73bd8f690cc4ca0de0319a5e40c8e985
     //Display the menu
     public function menu(Application $app, $active_page)
     {
         return $app['twig']->render('menu.html.twig', [
             'active_page' => $active_page ]);
     }
-
-
-
+    public function secondMenu(Application $app, $active_page)
+    {
+        return $app['twig']->render('secondMenu.html.twig', [
+            'active_page' => $active_page ]);
+    }
 
 
 
@@ -304,8 +313,6 @@ class UserController
 
 
 
-
-
     //Reset Password
     public function resetPasswordAction(Application $app, Request $request)
     {
@@ -315,7 +322,13 @@ class UserController
         ->add('mail_member', EmailType::class, [
             'required'      =>  true,
             'label'         =>  false,
-            'constraints'   =>  array(new NotBlank()),
+            'constraints'   =>  array(new NotBlank(array('message' => 'Vous n\'avez pas indiqué votre Email')), new Email(
+                array(
+                    'message' => 'Veuillez saisir une adresse mail valide',
+                    'strict'  => true,
+                    'checkMX' => true
+                )
+            )),
             'attr'          =>  [
                 'class'     => 'form-control',
             ]
@@ -354,7 +367,7 @@ class UserController
                 // Create the Transport
                 $transport = (new Swift_SmtpTransport('smtp.orange.fr', 465, 'ssl'))
                 ->setUsername('livresvoyageurs@orange.fr')
-                ->setPassword('lola2017');
+                ->setPassword('2017lola');
 
                 // Create the Mailer using created Transport
                 $mailer = new Swift_Mailer($transport);
@@ -400,7 +413,13 @@ class UserController
 
                 'required'              =>  true,
                 'label'                 =>  false,
-                'constraints'           =>  array(new NotBlank()),
+                'constraints'           =>  array(new NotBlank(array('message' => 'Vous n\'avez pas indiqué votre Email')), new Email(
+                    array(
+                        'message' => 'Veuillez saisir une adresse mail valide',
+                        'strict'  => true,
+                        'checkMX' => true
+                    )
+                )),
                 'attr'                  =>  [
                     'class'             => 'form-control',
                 ]
@@ -449,7 +468,7 @@ class UserController
                 $memberDb->save();
 
                 # Redirection
-                return $app->redirect( $app['url_generator']->generate('livresVoyageurs_connexion') );
+                return $app->redirect( $app['url_generator']->generate('livresVoyageurs_connexion', array( 'mdp' => 'success')));
             }
 
         endif;
@@ -458,6 +477,7 @@ class UserController
             'form'=>$form->createView()
         ]);
     }
+<<<<<<< HEAD
     // test dom_pdf
     public function pdfAction(Application $app){
         $dompdf = new Dompdf();
@@ -466,4 +486,7 @@ class UserController
         $dompdf->render();
         $dompdf->stream('sticker.pdf',array('Attachment'=>0));
     }
+=======
+
+>>>>>>> 22e4593c73bd8f690cc4ca0de0319a5e40c8e985
 }

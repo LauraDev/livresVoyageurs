@@ -64,12 +64,6 @@ class UserControllerProvider implements ControllerProviderInterface
                 ->method('GET|POST')
                 ->bind('livresVoyageurs_newPass');
 
-            #Contact
-            $controllers
-
-                ->match('/contact', 'LivresVoyageurs\Controller\UserController::contactAction')
-                ->method('GET|POST')
-                ->bind('livresVoyageurs_contact');
 
             #Mentions
             $controllers
@@ -81,7 +75,6 @@ class UserControllerProvider implements ControllerProviderInterface
             $controllers
                 ->get('/dom_pdf_test', 'LivresVoyageurs\Controller\UserController::pdfAction')
                 ->bind('livresVoyageurs_pdf');
-
 
         // Return the controllers (ControllerCollection)
         return $controllers;

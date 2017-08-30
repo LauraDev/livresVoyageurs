@@ -38,6 +38,8 @@
 
 			<!-- Menu using HttpFragmentServiceProvider -->
 			{{ render(controller('LivresVoyageurs\\Controller\\UserController::menu', {'active_page' : active_page})) }}
+			<!-- 2nd Menu using HttpFragmentServiceProvider -->
+			{{ render(controller('LivresVoyageurs\\Controller\\UserController::secondMenu', {'active_page' : active_page})) }}
 
 			<div class="container">
 

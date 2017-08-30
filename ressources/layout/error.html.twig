@@ -1,0 +1,20 @@
+{% extends 'layout.html.twig' %}
+
+{# Block de title défini dans base.html.twig #}
+{% block title %} Erreur {% endblock %}
+
+{#  Fil d'Ariane #}
+{% set active = 'Error' %}
+
+{# Block de Contenu défini dans base.html.twig #}
+{% block contenu %}
+
+    <div class="page-404">
+        <p>
+            <img src="http://www.blog-astuces.com/wp-content/uploads/2013/03/erreur404.jpg" alt="">
+            <pre>{{ message }}</pre>
+        </p>
+        <a href="{{ url('livresVoyageurs_home') }}" class="my-btn btn-go-home">RETOURNER VERS L'ACCUEIL</a>
+    </div>
+
+{% endblock %}

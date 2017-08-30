@@ -1,4 +1,3 @@
-
 {# This page inherits from base.html #}
 {% extends 'layout.html.twig' %}
 
@@ -12,6 +11,8 @@
 {# Define Content #}
 {% block content %}
 
+
+
     <div class="row">
 
         <h1> Tableau de bord </h1>
@@ -21,7 +22,8 @@
             </div>
             <div class="col-md-offset-1 col-md-9">
                 <h2> Bonjour {{ app.user.pseudo_member }}</h2>
-                <p> {{ app.user.mail_member }} </p>
+                <p> Membre actif depuis le: {{ app.user.date_member | date("d/m/Y") }} </p>
+                <p> Email: {{ app.user.mail_member }} </p>
             </div>
         </div>
 
@@ -29,43 +31,81 @@
 
             <!-- Form: Add a book -->
             <h2> Ajouter un livre </h2>
-            <form id="formAddBook" action="" method="POST" enctype="multipart/form-data">
+
+            {% if global.request.get('addBook') == 'success' %}
+                <div class="alert alert-success">
+                    <p>
+                        <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                        Félicitation, votre livre a été enregistré.
+                    </p>
+                    <a href="{{ path('livresVoyageurs_espace_sticker', {pseudo: app.user.pseudo_member, uniqueId: global.request.get('idBook'), title: global.request.get('title')  } ) }}" title="Lien vers l'étiquette du livre" target="_blank">Cliquez sur ce lien pour télécharger l'étiquette de votre livre</a>
+                </div>
+            {% endif %}
+
+            <form id="formAddBook" action="" method="POST">
 
                 <!-- Id Member -->
                 {{ form_row(formAddBook.id_member) }}
                 <!-- Id Author -->
-                {{ form_row(formAddBook.id_author) }}
-                <!-- Id Category -->
-                {{ form_row(formAddBook.id_category) }}
+                {{ form_row(formAddBook.authors) }}
                 <!-- Title -->
                 {{ form_row(formAddBook.title_book) }}
                 <!-- Summary -->
                 {{ form_row(formAddBook.summary_book) }}
+                <!-- Photo -->
+                {{ form_row(formAddBook.photo_book) }}
                 <!-- Languge -->
                 {{ form_row(formAddBook.language_book) }}
                 <!-- ISBN -->
                 <div class="form-group">
-                    <label for="ISBN_book">Numéro inscript sur le livre: Au-dessus du code barre *</label>
+                    <label for="ISBN_book">ISBN: Numéro à 13 chiffres, inscript au-dessus du code barre du livre *</label>
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
-                        {{ form_row(formAddBook.ISBN_book) }}
+                        {{ form_widget(formAddBook.ISBN_book) }}
                     </div>
-                    <p class="error alert alert-danger">Vous n'avez pas indiqué l'ISBN</p>
-                    <p class="error alert alert-danger">ISBN incorrect</p>
+                    <p class="error alert alert-danger">{{ form_errors(formAddBook.ISBN_book) }}</p>
+                    <p class="error alert alert-danger" id="isbnInconnu">ISBN inconnu</p>
                 </div>
-                <!-- Photo -->
+                <!-- Category -->
                 <div class="form-group">
-                    <label for="photo_book">Image</label>
+                    <label for="id_category">Catégorie</label>
                     <div class="input-group">
-                        {{ form_row(formAddBook.photo_book) }}
+                        {{ form_row(formAddBook.id_category) }}
                     </div>
-                    <p class="error alert alert-danger">L'image est trop lourde</p>
-                    <p class="error alert alert-danger">L'image doit être au format: jpg, jpeg ou png</p>
+                    <p class="error alert alert-danger">Vous n'avez pas indiqué la catégorie</p>
                 </div>
+<<<<<<< HEAD
                 <div class="form-group">
                   <label for="name_category">Sélectionnez une catégorie</label>
                     {{form_row(formAddBook.name_category)}}
                 </div>
+=======
+                <!-- address - Table Startpoints -->
+                <div class="form-group">
+                    <label for="address">Ville *</label>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                        {{ form_widget(formAddBook.addressStart) }}
+                    </div>
+                    <p class="error alert alert-danger">{{ form_errors(formAddBook.addressStart) }}</p>
+                    <p class="error alert alert-danger">Le nom de la ville est incorrecte</p>
+                </div>
+                    <!-- city_starpoint - Table Startpoints -->
+                    {{ form_row(formAddBook.city_startpoint) }}
+                    <!-- lat_starpoint - Table Startpoints -->
+                    {{ form_row(formAddBook.lat_startpoint) }}
+                    <!-- lng_starpoint - Table Startpoints -->
+                    {{ form_row(formAddBook.lng_startpoint) }}
+                <!-- Disponibility -->
+                <div class="form-group">
+                    <label for="disponibility_book">Mode de libération</label>
+                    <div class="input-group">
+                        {{ form_row(formAddBook.disponibility_book) }}
+                    </div>
+                </div>
+                <!-- Token -->
+                {{ form_row(formAddBook._token) }}
+>>>>>>> 22e4593c73bd8f690cc4ca0de0319a5e40c8e985
                 <!-- Submission -->
                 <div class="form-group text-center">
                     <input type="submit" name="btnSub" value="Ajouter" id="btn_memberInscription" class="btn btn-success">
@@ -78,11 +118,28 @@
 
 
             <!-- Display ISBN API return -->
-            <div id="bookInfos"></div>
+            <div class="card">
+                <div class="col-md-3">
+                    <img class="card-img-top img img-responsive" id="bookImage" src="" alt="">
+                </div>
+                <div class="card-block col-md-9">
+                    <ul class="list-group list-group-flush" id="bookInfos"></ul>
+                </div>
+            </div>
 
 
             <!-- Form: Book I have captured -->
             <h2> Déclarer une capture </h2>
+
+            {% if global.request.get('capture') == 'success' %}
+                <div class="alert alert-success">
+                    <p>
+                        <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                        Félicitation, votre capture a été enregistré.
+                    </p>
+                </div>
+            {% endif %}
+
             <form id="formCapturedBook" action="" method="POST">
 
                 <!-- Id Book - Table Pointers -->
@@ -90,21 +147,26 @@
                     <label for="id_book">Numéro unique inscript sur l'étiquette du livre *</label>
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
-                        {{ form_row(formCapture.id_book) }}
+                        {{ form_widget(formCapture.id_book) }}
                     </div>
-                    <p class="error alert alert-danger">Vous n'avez pas indiqué le numéro unique du livre</p>
-                    <p class="error alert alert-danger">Numéro incorrect - Doit contenir 8 chiffres</p>
+                    <p class="error alert alert-danger">{{ form_errors(formCapture.id_book) }}</p>
                 </div>
-                <!-- Address - Table Pointers -->
+                <!-- address - Table Pointers -->
                 <div class="form-group">
-                    <label for="address">Adresse *</label>
+                    <label for="address">Ville *</label>
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                        {{ form_row(formCapture.address) }}
+                        {{ form_widget(formCapture.address) }}
                     </div>
-                    <p class="error alert alert-danger">Vous n'avez pas indiqué votre adresse</p>
-                    <p class="error alert alert-danger">Adresse incorrecte</p>
+                    <p class="error alert alert-danger">{{ form_errors(formCapture.address) }}</p>
+                    <p class="error alert alert-danger">Le nom de la ville est incorrecte</p>
                 </div>
+                <!-- city_pointer - Table Pointers -->
+                {{ form_row(formCapture.city_pointer) }}
+                <!-- lat_pointer - Table Pointers -->
+                {{ form_row(formCapture.lat_pointer) }}
+                <!-- lng_pointer - Table Pointers -->
+                {{ form_row(formCapture.lng_pointer) }}
                 <!-- Commentaire - Table Capture -->
                 <div class="form-group">
                     <label for="comment_capture">Commentaire</label>
@@ -112,8 +174,6 @@
                         <span class="input-group-addon"><i class="glyphicon glyphicon-align-left"></i></span>
                         {{ form_row(formCapture.comment_capture) }}
                     </div>
-                    <p class="error alert alert-danger">Vous n'avez pas indiqué votre adresse</p>
-                    <p class="error alert alert-danger">Adresse incorrecte</p>
                 </div>
 
                 {{ form_row(formCapture._token) }}
@@ -125,12 +185,17 @@
             </form>
 
 
-            {# {%  if formCapture.address is defined %}
-                {{ formCapture.address }}
-            {% endif %}  #}
-
             <!-- Form: Personal data management -->
             <h2> Compte </h2>
+
+            {% if global.request.get('account') == 'success' %}
+                <div class="alert alert-success">
+                    <p>
+                        <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                        Félicitation, votre compte a été modifié avec succès.
+                    </p>
+                </div>
+            {% endif %}
 
             <form id="formMemberModification" action="" method="POST" enctype="multipart/form-data">
 
@@ -139,13 +204,10 @@
                 <label for="pseudo_member">Pseudo *</label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                    {{ form_row(formAccount.pseudo_member) }}
+                    {{ form_widget(formAccount.pseudo_member) }}
                 </div>
-                <!-- Help-text -->
-                <p id="pseudo-helptext">Votre Pseudo doit contenir au moins 6 caractères et un 1 chiffre</p>
                 <!-- Pseudo Errors -->
-                <p class="error alert alert-danger">Vous n'avez pas indiqué votre Pseudo</p>
-                <p class="error alert alert-danger">Votre Pseudo doit contenir au moins 6 caractères et un 1 chiffre</p>
+                <p class="error alert alert-danger">{{ form_errors(formAccount.pseudo_member) }}</p>
                 <p class="error alert alert-danger">Ce pseudo existe déjà</p>
             </div>
             <!-- Email -->
@@ -153,10 +215,9 @@
                 <label for="mail_member">Email *</label>
                 <div class="input-group">
                     <div class="input-group-addon">@</div>
-                    {{ form_row(formAccount.mail_member) }}
+                    {{ form_widget(formAccount.mail_member) }}
                 </div>
-                <p class="error alert alert-danger">Vous n'avez pas indiqué votre Email</p>
-                <p class="error alert alert-danger">Email Incorrect</p>
+                <p class="error alert alert-danger">{{ form_errors(formAccount.mail_member) }}</p>
             </div>
             <!-- Picture -->
             <div class="form-group">
@@ -164,8 +225,6 @@
                 <div class="input-group">
                     {{ form_row(formAccount.avatar_member) }}
                 </div>
-                <p class="error alert alert-danger">L'image est trop lourde</p>
-                <p class="error alert alert-danger">L'image doit être au format: jpg, jpeg ou png</p>
             </div>
             <!-- Token -->
             {{ form_row(formAccount._token) }}
@@ -182,6 +241,14 @@
         <!-- Form: Password management -->
         <h2> Mot de Passe </h2>
 
+        {% if global.request.get('pass') == 'success' %}
+            <div class="alert alert-success">
+                <p>
+                    <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                    Félicitation, votre mot de passe a été modifié avec succès.
+                </p>
+            </div>
+        {% endif %}
 
         <form id="formPassModification" action="" method="POST">
 
@@ -212,12 +279,94 @@
 
         <!-- List: Books I liberated -->
         <h2> Livres </h2>
+        <div class="row">
+            {% if bookList is empty %}
+                <div>
+                    <p> Vous n'avez pas encore libéré de livre.</p>
+                </div>
+            {% else %}
+                {% for book in bookList %}
+                    {% if book.disponibility_book == 0 %}
+                        <div class="card col-md-4">
+                                <img class="card-img-top img img-responsive" src="{{ book.photo_book }}" alt="Card image cap">
+                            <div class="card-block">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><h4 class="card-title">{{ book.title_book }}</h4></li>
+                                    <li class="list-group-item">Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</li>
+                                    <li class="list-group-item">Numéro unique: {{ book.id_book }}</li>
+                                    <div class="card-footer text-muted">
+                                        <li class="list-group-item" style="background-color:#f7f7f9">Livre libéré</li>
+                                        <a 
+                                            href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'étiquette du livre" 
+                                            class="btn btn-primary col-md-12">
+                                                Suivre son chemin
+                                        </a>
+                                    </div>
+                                </ul>
+                            </div> <!-- card block -->
+                        </div> <!-- card col-md -->
+                    
+                    {% else %}
+                        <div class="card col-md-4" style="background-color:#e7ffe7">
+                            <img class="card-img-top img img-responsive" src="{{ book.photo_book }}" alt="Card image cap">
+                            <div class="card-block">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item" style="background-color:#e7ffe7"><h4 class="card-title">{{ book.title_book }}</h4></li>
+                                    <li class="list-group-item" style="background-color:#e7ffe7">Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</li>
+                                    <li class="list-group-item" style="background-color:#e7ffe7">Numéro unique: {{ book.id_book }}</li>
+                                    <div class="card-footer text-muted">
+                                        <form id="formChangeDispo" action="{{ path('livresVoyageurs_espace_post', {pseudo: app.user.pseudo_member} ) }}" method="post">
+                                            <!--  ID BOOK -->
+                                            <input type="hidden" value="{{book.id_book}}" id="id_book" name="id_book">
+                                            <!--  Disponibility -->
+                                            <input type="hidden" value="0" id="disponibility_book" name="disponibility_book">
+                                            <!-- Submission -->
+                                            <div class="form-group text-center">
+                                                <input type="submit" name="btnSub" value="Déclarer comme libéré" id="btn_memberInscription" class="btn btn-success">
+                                            </div>
+                                        </form>                        
+                                    </div>
+                                    <a 
+                                        href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'étiquette du livre" 
+                                        class="btn btn-primary col-md-12">
+                                            Suivre son chemin
+                                    </a>
+                                </ul>
+                            </div> <!-- card block -->
+                        </div> <!-- card col-md -->
+                    {% endif %} <!-- disponibility -->
+                {% endfor %}
+            {% endif %} <!-- list empty -->
+        </div> <!-- row -->
 
-        {{ dump(bookList) }}
+
+        <h2> Etiquettes à imprimer </h2>
+        <div class="row">
+            {% if bookList is empty %}
+                <div>
+                    <p> Vous n'avez pas encore libéré de livre.</p>
+                </div>
+            {% else %}
+                {% for book in bookList | slice(0,10) %}
+                    <ul class="list-group list-group-flush">
+                        <li>
+                            <a href="{{ path('livresVoyageurs_espace_sticker', { pseudo: app.user.pseudo_member, uniqueId: book.id_book , title: book.title_book } ) }}" title="Lien vers l'étiquette du livre" target="_blank">
+                            Etiquette du livre: {{ book.title_book }}
+                            </a>
+                        </li>
+                    </ul>
+                {% endfor %}
+            {% endif %} <!-- list empty -->
 
 
         <!-- List friends / demands -->
         <h2> Amis </h2>
+
+        {% if friendList is empty and pendingList is empty %}
+            <div>
+                <p> Vous n'avez pas encore de contact.</p>
+            </div>
+        {% endif %}
 
         {{ dump(pendingList)}}
         {{ dump(friendList) }}
@@ -236,6 +385,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js" integrity="sha256-SUaao5Q7ifr2twwET0iyXVy0OVnuFJhGVi5E/dqEiLU=" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function() {
+            // Images
             $('.dropify').dropify({
                 messages: {
                     default: 'Glissez-d&eacute;posez un fichier ici ou cliquez',
@@ -244,6 +394,87 @@
                     error:   'D&eacute;sol&eacute;, le fichier trop volumineux'
                 }
             });
-        })
+            // Google Auto-complete
+            function initializeAddBook() {
+                var input = document.getElementById('form_addressStart');
+                var autocomplete = new google.maps.places.Autocomplete(input);
+                google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                    var place = autocomplete.getPlace();
+                    document.getElementById('form_city_startpoint').value = place.name;
+                    document.getElementById('form_lat_startpoint').value = place.geometry.location.lat();
+                    document.getElementById('form_lng_startpoint').value = place.geometry.location.lng();
+                });
+            }
+            google.maps.event.addDomListener(window, 'load', initializeAddBook);
+            
+            function initializeCapture() {
+                var input = document.getElementById('form_address');
+                var autocomplete = new google.maps.places.Autocomplete(input);
+                google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                    var place = autocomplete.getPlace();
+                    document.getElementById('form_city_pointer').value = place.name;
+                    document.getElementById('form_lat_pointer').value = place.geometry.location.lat();
+                    document.getElementById('form_lng_pointer').value = place.geometry.location.lng();
+                });
+            }
+            google.maps.event.addDomListener(window, 'load', initializeCapture); 
+            // ISBN - Book infos
+            document.getElementById("form_ISBN_book").addEventListener("focus", function() {
+                // Hide the error message
+                $("#isbnInconnu").hide();
+            });
+            document.getElementById("form_ISBN_book").addEventListener("blur", function() {
+                // Set the ISBN
+                var myIsbn = document.getElementById("form_ISBN_book").value;
+                // Set the api variable
+                var googleAPI = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + myIsbn.replace(/-/g, '');
+                //alert(googleAPI);
+                // Make an ajax call to get the json data as response.
+                $.getJSON(googleAPI, function (response) {
+                    // Display Response objects
+                    //console.log("JSON Data: " + response.items);
+                    if( typeof response.items == 'undefined')
+                    {
+                        $("#isbnInconnu").show();
+                    }
+                    else
+                    {
+                        // Loop through all the items one-by-one
+                        for (var i = 0; i < response.items.length; i++) {
+                            // set the item from the response object
+                            var item = response.items[i];
+                            // Set Language
+                            if(item.volumeInfo.language == 'en')
+                            {
+                                item.volumeInfo.language = 'Anglais'
+                            }
+                            else if(item.volumeInfo.language == 'fr')
+                            {
+                                item.volumeInfo.language = 'Français'
+                            }
+                            // Set the book infos in the div
+                            document.getElementById("bookImage").setAttribute('src', item.volumeInfo.imageLinks.smallThumbnail);
+                            document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Titre: " + item.volumeInfo.title + "</li>";
+                            document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Auteur: " + item.volumeInfo.authors + "</li>";
+                            document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Description: " + item.searchInfo.textSnippet + "</li>";
+                            document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Langue: " + item.volumeInfo.language + "</li>";
+                            // Set the book infos in the hidden input
+                            document.getElementById("form_photo_book").value    = item.volumeInfo.imageLinks.smallThumbnail;
+                            document.getElementById("form_title_book").value    = item.volumeInfo.title;
+                            document.getElementById("form_authors").value       = item.volumeInfo.authors;
+                            document.getElementById("form_summary_book").value  = item.searchInfo.textSnippet;
+                            document.getElementById("form_language_book").value = item.volumeInfo.language;
+                        }
+                    }
+                });
+            })
+                        
+        }) // document ready
     </script>
+<<<<<<< HEAD
 {% endblock %}
+=======
+
+
+{% endblock %}
+>>>>>>> 22e4593c73bd8f690cc4ca0de0319a5e40c8e985

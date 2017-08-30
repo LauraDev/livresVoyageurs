@@ -1,0 +1,118 @@
+{# This page inherits from base.html #}
+{% extends 'layout.html.twig' %}
+
+{# Define Title #}
+{% block title %} Histoire de votre livre {% endblock %}
+
+{#  Breadcrumb trail #}
+{% set active_page = 'Espace' %}
+
+
+{# Define Content #}
+{% block content %}
+
+    <div class="row">
+
+        <h1> Histoire de votre livre </h1>
+
+        <div id="map"></div>
+
+    </div>
+    {% for stor in story %}
+        <div class="startpoint ">
+            <p class="lat_startpoint">{{ stor.lat_startpoint }}</p> 
+            <p class="lng_startpoint">{{ stor.lng_startpoint }}</p> 
+            <p class="city_startpoint">{{ stor.city_startpoint }}</p>
+        </div>
+        {# {% if stor.lat.pointer is defined %} #}
+            <div class="pointer">
+                <p class="lat_pointer">{{ stor.lat_pointer }}</p> 
+                <p class="lng_pointer">{{ stor.lng_pointer  }}</p> 
+                <p class="city_pointer">{{ stor.lat_pointer }}</p> 
+            </div>
+        {# {% endif %} #}
+    {% endfor %}
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        #map{height: 600px;}
+        .logo{width: 200px;}
+    </style>
+    
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(document).ready(function() {
+    
+            // variable pour la carte
+            var map;
+            // Hide pointers data
+            $('.startpoint').hide()
+            $('.pointer').hide()
+
+            //fonction init pour executer l'API par google
+            function init() {
+                
+
+                //latittude et longitude à afficher
+                var latlng = {lat: Number($('.lat_startpoint').html()), lng:Number($('.lng_startpoint').html()) };
+                // Definir la div devant recevoir la carte
+                var mapDiv = document.getElementById('map');
+                // creation de la carte
+                map = new google.maps.Map(mapDiv, {center: latlng, zoom:10, mapTypeId: 'satellite'})
+
+                // pour ajouter une  epingle: Marker
+                var marker =  new google.maps.Marker({
+                    //emplacement
+                    position: latlng,
+                    //carte
+                    map: map,
+                    //texte a afficher
+                    title: 'Départ du livre'
+                })
+
+                var pointer = document.getElementsByClassName('pointer')
+                
+                for (var i = 0; i < pointer.length; i++) {
+                
+                    var lat = Number($('.lat_pointer').eq(i).html())
+                    var lng = Number($('.lng_pointer').eq(i).html())
+                    var markers = [];
+                    var pos = new google.maps.LatLng( lat , lng);
+                    
+                    var markerId = i+1
+                    var contentString = '<div id="content">'+
+                        '<div class="Capture">'+
+                        '</div>'+
+                        '<strong>'+ markerId +'</strong>'+
+                        '<p>'+ $('.city_pointer').eq(i).html() +'</p>'+
+                        '</div>';
+                    var infowindow = new google.maps.InfoWindow({
+                        content: contentString
+                    })
+
+                    markers[i] = new google.maps.Marker({
+                        position: pos,
+                        map: map,
+                        id: i+1
+                    });
+                    marker.addListener('click', function() {
+                        infowindow.open(map, marker);
+                    });
+                }               
+                
+            }
+            google.maps.event.addDomListener(window, 'load', init);
+
+        }) // document ready
+    </script>
+
+
+{% endblock %}

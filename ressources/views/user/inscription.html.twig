@@ -18,6 +18,13 @@
         <h1> Inscription </h1>
 
         <div class="col-md-offset-3 col-md-6">
+
+            {% if global.request.get('inscription') == 'exist' %}
+                <div class="alert alert-danger">
+                    <p><i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                    Ce pseudo existe déja.</p>
+                </div>
+            {% endif %}
             <!-- Inscription form -->
             <form id="formMemberInscription" action="" method="POST" enctype="multipart/form-data">
 
@@ -26,13 +33,9 @@
                     <label for="pseudo_member">Pseudo *</label>
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        {{ form_row(form.pseudo_member) }}
+                        {{ form_widget(form.pseudo_member) }}
                     </div>
-                    <!-- Help-text -->
-                    <p id="pseudo-helptext">Votre Pseudo doit contenir au moins 6 caractères et un 1 chiffre</p>
-                    <!-- Pseudo Errors -->
-                    <p class="error alert alert-danger">Vous n'avez pas indiqué votre Pseudo</p>
-                    <p class="error alert alert-danger">Votre Pseudo doit contenir au moins 6 caractères et un 1 chiffre</p>
+                    {{ form_errors(form.pseudo_member) }}
                     <p class="error alert alert-danger">Ce pseudo existe déjà</p>
                 </div>
                 <!-- Email -->
@@ -40,10 +43,9 @@
                     <label for="mail_member">Email *</label>
                     <div class="input-group">
                         <div class="input-group-addon">@</div>
-                        {{ form_row(form.mail_member) }}
+                        {{ form_widget(form.mail_member) }}
                     </div>
-                    <p class="error alert alert-danger">Vous n'avez pas indiqué votre Email</p>
-                    <p class="error alert alert-danger">Email Incorrect</p>
+                    {{ form_errors(form.mail_member) }}
                 </div>
                 <!-- Password -->
                 <div class="form-group">
@@ -52,13 +54,6 @@
                         <div class="input-group-addon"><span class="ion-android-lock"></span></div>
                         {{ form_row(form.pass_member) }}
                     </div>
-                    <!-- Help-text -->
-                    <p id="pass-helptext">Votre mot de passe doit contenir au moins 8 caractères, une majuscule et un chiffre</p>
-                    <!-- Password Errors -->
-                    <p class="error alert alert-danger">Vous n'avez pas indiqué votre Mot de passe</p>
-                    <p class="error alert alert-danger">Mot de passe doit contenir au moins 8 caractères</p>
-                    <p class="error alert alert-danger">Le mot de passe doit contenir au moins une majuscule</p>
-                    <p class="error alert alert-danger">Le mot de passe doit contenir au moins un chiffre</p>
                 </div>
                 <!-- Picture -->
                 <div class="form-group">
@@ -66,17 +61,15 @@
                     <div class="input-group">
                         {{ form_row(form.avatar_member) }}
                     </div>
-                    <p class="error alert alert-danger">L'image est trop lourde</p>
-                    <p class="error alert alert-danger">L'image doit être au format: jpg, jpeg ou png</p>
                 </div>
                     {{ form_row(form.role_member) }}
                 <!-- Terms and Conditions-->
                 <div class="form-group">
                     <div class="input-group">
-                        {{ form_row(form.termsAccepted) }}
+                        {{ form_label(form.termsAccepted) }}
+                        {{ form_widget(form.termsAccepted) }}
                     </div>
-                    {# <label for="termsAccepted">J'ai lu et j'accepte les termes et conditions</label> #}
-                    <p class="error alert alert-danger">Champs obligatoire</p>
+                    {{ form_errors(form.termsAccepted) }}
                 </div>
                 <!-- Token -->
                     {{ form_row(form._token) }}
@@ -113,7 +106,7 @@
                     replace: 'Glissez-d&eacute;posez un fichier ou cliquez pour remplacer',
                     remove:  'Supprimer',
                     error:   'D&eacute;sol&eacute;, le fichier trop volumineux'
-                }	
+                }
             });
         })
     </script>

@@ -32,7 +32,7 @@ $app->register(new Silex\Provider\FormServiceProvider());
 $app->register(new Silex\Provider\LocaleServiceProvider());
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
-    'translator.domains' => array(),
+    'translator.domains' => array()
 ));
 
 #7 : Swiftmailer
@@ -43,6 +43,16 @@ require PATH_RESSOURCES . '/config/database.config.php';
 
 #9 : Security
 require PATH_RESSOURCES . '/config/security.php';
+
+#10 : Errors Management
+#  : https://gist.github.com/tournasdim/171b443065936bbb5ef3
+$app->error(function (\Exception $e) use ($app) {
+    if ($e instanceof NotFoundHttpException) {
+        return $app['twig']->render('error.html.twig', [
+            'message' => $e->getMessage()
+        ]);
+    };
+});
 
 #10 : Return $app
 return $app;
