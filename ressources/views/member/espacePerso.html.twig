@@ -35,7 +35,7 @@
             {% if global.request.get('addBook') == 'success' %}
                 <div class="alert alert-success">
                     <p>
-                        <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                         Félicitation, votre livre a été enregistré.
                     </p>
                     <a href="{{ path('livresVoyageurs_espace_sticker', {pseudo: app.user.pseudo_member, uniqueId: global.request.get('idBook'), title: global.request.get('title')  } ) }}" title="Lien vers l'étiquette du livre" target="_blank">Cliquez sur ce lien pour télécharger l'étiquette de votre livre</a>
@@ -74,12 +74,6 @@
                     </div>
                     <p class="error alert alert-danger">Vous n'avez pas indiqué la catégorie</p>
                 </div>
-<<<<<<< HEAD
-                <div class="form-group">
-                  <label for="name_category">Sélectionnez une catégorie</label>
-                    {{form_row(formAddBook.name_category)}}
-                </div>
-=======
                 <!-- address - Table Startpoints -->
                 <div class="form-group">
                     <label for="address">Ville *</label>
@@ -105,7 +99,6 @@
                 </div>
                 <!-- Token -->
                 {{ form_row(formAddBook._token) }}
->>>>>>> 22e4593c73bd8f690cc4ca0de0319a5e40c8e985
                 <!-- Submission -->
                 <div class="form-group text-center">
                     <input type="submit" name="btnSub" value="Ajouter" id="btn_memberInscription" class="btn btn-success">
@@ -134,7 +127,7 @@
             {% if global.request.get('capture') == 'success' %}
                 <div class="alert alert-success">
                     <p>
-                        <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                         Félicitation, votre capture a été enregistré.
                     </p>
                 </div>
@@ -191,7 +184,7 @@
             {% if global.request.get('account') == 'success' %}
                 <div class="alert alert-success">
                     <p>
-                        <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                         Félicitation, votre compte a été modifié avec succès.
                     </p>
                 </div>
@@ -244,7 +237,7 @@
         {% if global.request.get('pass') == 'success' %}
             <div class="alert alert-success">
                 <p>
-                    <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                    <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                     Félicitation, votre mot de passe a été modifié avec succès.
                 </p>
             </div>
@@ -296,8 +289,8 @@
                                     <li class="list-group-item">Numéro unique: {{ book.id_book }}</li>
                                     <div class="card-footer text-muted">
                                         <li class="list-group-item" style="background-color:#f7f7f9">Livre libéré</li>
-                                        <a 
-                                            href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'étiquette du livre" 
+                                        <a
+                                            href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'étiquette du livre"
                                             class="btn btn-primary col-md-12">
                                                 Suivre son chemin
                                         </a>
@@ -305,7 +298,7 @@
                                 </ul>
                             </div> <!-- card block -->
                         </div> <!-- card col-md -->
-                    
+
                     {% else %}
                         <div class="card col-md-4" style="background-color:#e7ffe7">
                             <img class="card-img-top img img-responsive" src="{{ book.photo_book }}" alt="Card image cap">
@@ -324,10 +317,10 @@
                                             <div class="form-group text-center">
                                                 <input type="submit" name="btnSub" value="Déclarer comme libéré" id="btn_memberInscription" class="btn btn-success">
                                             </div>
-                                        </form>                        
+                                        </form>
                                     </div>
-                                    <a 
-                                        href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'étiquette du livre" 
+                                    <a
+                                        href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'étiquette du livre"
                                         class="btn btn-primary col-md-12">
                                             Suivre son chemin
                                     </a>
@@ -406,7 +399,7 @@
                 });
             }
             google.maps.event.addDomListener(window, 'load', initializeAddBook);
-            
+
             function initializeCapture() {
                 var input = document.getElementById('form_address');
                 var autocomplete = new google.maps.places.Autocomplete(input);
@@ -417,7 +410,7 @@
                     document.getElementById('form_lng_pointer').value = place.geometry.location.lng();
                 });
             }
-            google.maps.event.addDomListener(window, 'load', initializeCapture); 
+            google.maps.event.addDomListener(window, 'load', initializeCapture);
             // ISBN - Book infos
             document.getElementById("form_ISBN_book").addEventListener("focus", function() {
                 // Hide the error message
@@ -468,13 +461,7 @@
                     }
                 });
             })
-                        
+
         }) // document ready
     </script>
-<<<<<<< HEAD
 {% endblock %}
-=======
-
-
-{% endblock %}
->>>>>>> 22e4593c73bd8f690cc4ca0de0319a5e40c8e985

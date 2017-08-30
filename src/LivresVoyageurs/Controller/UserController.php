@@ -195,94 +195,6 @@ class UserController
 
 
 
-<<<<<<< HEAD
-
-
-    // Contact
-    public function contactAction(Application $app, Request $request)
-    {
-        $form = $app['form.factory']->createBuilder(FormType::class)
-
-            ->add('name', TextType::class, [
-                'required'      =>  true,
-                'label'         =>  false,
-                'constraints'   =>  array(new NotBlank()),
-                'attr'          =>  [
-                    'class'     => 'form-control',
-                ]
-            ])
-            ->add('mail', EmailType::class, [
-                'required'      =>  true,
-                'label'         =>  false,
-                'constraints'   =>  array(new NotBlank()),
-                'attr'          =>  [
-                    'class'     => 'form-control',
-                ]
-            ])
-		    ->add('message', TextType::class, [
-                'required'      =>  true,
-                'label'         =>  false,
-                'constraints'   =>  array(new NotBlank()),
-                'attr'          =>  [
-                    'class'     => 'form-control',
-                ]
-            ])
-		    ->getForm();
-
-            $form->handleRequest($request);
-
-			if ($form->isValid())
-			{
-				$data = $form->getData();
-				# Create the Transport
-                $transport = (new Swift_SmtpTransport('smtp.orange.fr', 465, 'ssl'))
-                ->setUsername('livresvoyageurs@orange.fr')
-                ->setPassword('lola2017');
-
-                # Create the Mailer using your created Transport
-                $mailer = new Swift_Mailer($transport);
-
-                # Load template
-                $template = $app['twig']->loadTemplate('contact.html.twig');
-
-                # Parameters for renderBlock
-                $parameters = array('name'    => $data['name'],
-                                    'message' => $data['message'],
-                                    'mail'    => $data['mail']
-                                );
-
-                # Create a message
-                $message = (new Swift_Message())
-                    ->setFrom($data['mail'])
-                    ->setTo('livresvoyageurs@orange.fr')
-                    ->setSubject($template ->renderBlock('subject', $parameters))
-                    ->setBody($template    ->renderBlock('body_text', $parameters), 'text/plain')
-                    ->addPart($template    ->renderBlock('body_html', $parameters), 'text/html');
-
-                # Send the message
-                $result = $mailer->send($message);
-
-                return $app['twig']->render('user/contact.html.twig', array(
-                    'form'        => $form->createView(),
-                    'sendMessage' => true
-                ));
-            }
-
-		return $app['twig']->render('user/contact.html.twig', array(
-			'form'  => $form->createView(),
-		));
-	}
-
-
-
-
-
-
-
-
-
-=======
->>>>>>> 22e4593c73bd8f690cc4ca0de0319a5e40c8e985
     //Display the menu
     public function menu(Application $app, $active_page)
     {
@@ -477,16 +389,5 @@ class UserController
             'form'=>$form->createView()
         ]);
     }
-<<<<<<< HEAD
-    // test dom_pdf
-    public function pdfAction(Application $app){
-        $dompdf = new Dompdf();
-        $dompdf->set_base_path(PATH_ROOT . "/public/assets/");
-        $dompdf->load_html($app['twig']->render('sticker.html.twig'));
-        $dompdf->render();
-        $dompdf->stream('sticker.pdf',array('Attachment'=>0));
-    }
-=======
 
->>>>>>> 22e4593c73bd8f690cc4ca0de0319a5e40c8e985
 }
