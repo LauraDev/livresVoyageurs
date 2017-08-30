@@ -17,14 +17,17 @@ class OverviewControllerProvider implements ControllerProviderInterface
 
 
             # OverviewPage
+
+            # Book list
             $controllers
-            
+
                 # Associate a route with a controller and an action
                 ->get('/liste_des_livres_disponibles', 'LivresVoyageurs\Controller\OverviewController::bookListAction')
                 # Route name
                 ->bind('livresVoyageurs_bookList');
 
 
+            # Anonyme Capture
             $controllers
 
                 # Associate a route with a controller and an action
@@ -33,20 +36,26 @@ class OverviewControllerProvider implements ControllerProviderInterface
                 # Route name
                 ->bind('livresVoyageurs_newCapture');
 
-            $controllers
-            
-                # Associate a route with a controller and an action
-                ->match('/demande_contact/{pseudo}', 'LivresVoyageurs\Controller\OverviewController::addFriendAction')
-                ->method('GET|POST')
-                # Route name
-                ->bind('livresVoyageurs_addFriend');
 
+            # Book History
+            $controllers
+        
+                # Associate a route with a controller and an action
+                ->get('/histoire/livre={id_book}', 'LivresVoyageurs\Controller\OverviewController::historyAction')
+                # Specify the type of parameters / using Regex
+                ->assert('receiver' , '[^/]+')
+                # Route name
+                ->bind('livresVoyageurs_history');
+
+
+            # Search
             $controllers
                 
                 # Associate a route with a controller and an action
                 ->get('/recherche', 'LivresVoyageurs\Controller\OverviewController::searchAction')
                 # Route name
                 ->bind('livresVoyageurs_search');
+                
 
             #Contact
             $controllers
@@ -58,7 +67,7 @@ class OverviewControllerProvider implements ControllerProviderInterface
                 ->bind('livresVoyageurs_contact');
 
         // Return the controllers (ControllerCollection)
-        return $controllers;
+        return $controllers; 
     }
 
 

@@ -67,7 +67,8 @@
             //fonction init pour executer l'API par google
             function init() {
                 
-
+                var bounds  = new google.maps.LatLngBounds();
+                var loc;
                 // Define where to postion the map
                 var mapDiv = document.getElementById('map');
                 // Lat / lng startpoint 
@@ -78,7 +79,16 @@
                 var pointer = document.getElementsByClassName('pointer')
 
                 // Map creation
-                map = new google.maps.Map(mapDiv, {center: latlng, zoom:10, mapTypeId: 'hybrid'})
+                map = new google.maps.Map(mapDiv, {
+                    styles: [
+                        {"featureType": "landscape.natural", "elementType": "geometry.fill", "stylers": [{"visibility": "on"},{"color": "#e0efef"}]},
+                        {"featureType": "poi", "elementType": "geometry.fill", "stylers": [{"visibility": "on"},{"hue": "#1900ff"},{"color": "#c0e8e8"}]},
+                        {"featureType": "road", "elementType": "geometry", "stylers": [{"lightness": 100},{"visibility": "simplified"}]},
+                        {"featureType": "road", "elementType": "labels", "stylers": [{"visibility": "off"}]},
+                        {"featureType": "transit.line", "elementType": "geometry", "stylers": [{"visibility": "on"}, {"lightness": 700}]},
+                        {"featureType": "water", "elementType": "all", "stylers": [{"color": "#7dcdcd"}]}
+                    ]
+                })
 
                 var contentStart = 
                     '<h1>Point de départ</h1>' +	
@@ -97,6 +107,8 @@
                     title: 'Départ du livre',
                     content: contentStart
                 })
+                    loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
+                    bounds.extend(loc);
                 var infowindow = new google.maps.InfoWindow({
                     content: contentStart
                 });
@@ -133,6 +145,7 @@
                         title: 'Voyage n:',
                         content: contentCapture
                     });
+                    // Define markers infos
                     var infowindow = new google.maps.InfoWindow({
                         content: contentCapture
                     });
@@ -142,13 +155,20 @@
                     });
                     infowindow.open(map, markers[i]);
                     
+                    // Marker position
                     posCapt[0] = {lat: latStart , lng: lngStart }
                     posCapt[i] = {lat:latPoint , lng:lngPoint};
+
+                    // Extend bounds
+                    loc[i] = {lat:latPoint , lng:lngPoint};
+                    bounds.extend(loc[i]);
 
                 } // loop end  
 
 
-                alert(JSON.stringify(posCapt)) 
+                // alert(JSON.stringify(loc)) 
+
+                // Lines between marker: Follow the path
                 var flightPath = new google.maps.Polyline({
                 path: posCapt,
                 geodesic: true,
@@ -156,8 +176,11 @@
                 strokeOpacity: 1.0,
                 strokeWeight: 2
                 });
-
                 flightPath.setMap(map);
+
+                // Automatically zoom and center the map (include all markers inside the map)
+                map.fitBounds(bounds);       // auto-zoom
+                map.panToBounds(bounds);     // auto-center
             
 
             } // init() end

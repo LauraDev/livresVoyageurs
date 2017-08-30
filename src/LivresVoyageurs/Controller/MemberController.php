@@ -448,6 +448,7 @@ class  MemberController
         # 5 : Books registered by the user
         $bookList = $app['idiorm.db']->for_table('view_books')
                                         ->where('id_member', $app['user']->getId_member())
+                                        ->order_by_desc('date_book')
                                         ->find_result_set();
             
             
@@ -497,7 +498,7 @@ class  MemberController
     }
 
 
-    # 9 : Change disponibility
+    # Change disponibility
     public function espacePersoPost(Application $app, Request $request) {
         
         # Connect to DB : Register the book as unavailable
@@ -509,7 +510,7 @@ class  MemberController
         return $app->redirect( $app['url_generator']->generate('livresVoyageurs_espace', array('pseudo' => $app['user']->getPseudo_member() ) ) );
     }
 
-    # 10 : Sticker creation
+    # Sticker creation
     public function stickerAction(Application $app, Request $request, $uniqueId, $title) {       
 
         # Instanciate a new Dompdf object
@@ -528,21 +529,8 @@ class  MemberController
     }
 
 
-    //Display a book history
-    public function historyAction(Application $app, $id_book) {
-        
-        $story = $app['idiorm.db']->for_table('view_story')
-                                    ->where('id_book', $id_book)
-                                    ->find_result_set();
 
-        return $app['twig']->render('member/history.html.twig', [
-            'id_book' => $id_book,
-            'story'   => $story
-        ]);
-    }
-
-
-    //Display Chat Page
+    # Display Chat Page
     public function chatAction(Application $app, $receiver) {
         
         # Define messages sender

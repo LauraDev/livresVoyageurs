@@ -39,54 +39,7 @@ class  OverviewController
         ]);
     }
 
-    # BookList
-    public function addFriendAction(Application $app, $pseudo) {
-
-                # Current member
-                $currentMember = $app['idiorm.db']->for_table('members')
-                ->find_one($app['user']->getId_member());
-        
-                # Look for friend's ID
-                $idFriend = $app['idiorm.db']->for_table('members')
-                ->where('pseudo_member', $pseudo)
-                ->find_one();
-                # Look for the smallest ID
-                if( $currentMember['id_member'] < $idFriend->id_member )
-                {
-                    $id1 = $currentMember['id_member'];
-                    $id2 = $idFriend->id_member;
-                }
-                else 
-                {
-                    $id1 = $idFriend->id_member;
-                    $id2 = $currentMember['id_member']; 
-                }
-
-                # Friend request
-                # Check if author exist
-                $checkFriend = $app['idiorm.db']->for_table('friends')
-                ->where_any_is(array(
-                    array('id_member_1'  =>  $id1 , 'id_member_2' => $id2 ),
-                    array('id_member_1'  =>  $id2, 'id_member_2' => $id1 ) ))
-                ->count();
-
-                if( $checkFriend )
-                {
-                    return $app->redirect( $app['url_generator']->generate('livresVoyageurs_bookList', array( 'addFriend' => 'exist', 'friend' => $idFriend->pseudo_member)));
-                } 
-                else
-                {
-                    $addFriendDb = $app['idiorm.db']->for_table('friends')->create();
-                    $addFriendDb->id_member_1 = $id1;
-                    $addFriendDb->id_member_2 = $id2;
-                    $addFriendDb->action_friend = $currentMember['id_member'];
-                    $addFriendDb->status_friend = 0;
-                    $addFriendDb->save();
-            
-                    # Redirection
-                    return $app->redirect( $app['url_generator']->generate('livresVoyageurs_bookList', array( 'addFriend' => 'success', 'friend' => $idFriend->pseudo_member)));
-                }
-            }
+    
 
 
     # Capture         
@@ -264,7 +217,19 @@ class  OverviewController
 			'form'  => $form->createView(),
 		));
     }
-    
 
+    //Display a book history
+    public function historyAction(Application $app, $id_book) {
+        
+        $story = $app['idiorm.db']->for_table('view_story')
+                                    ->where('id_book', $id_book)
+                                    ->find_result_set();
+
+        return $app['twig']->render('overview/history.html.twig', [
+            'id_book' => $id_book,
+            'story'   => $story
+        ]);
+    }
+    
 
 }

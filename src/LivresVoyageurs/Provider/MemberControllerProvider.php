@@ -27,6 +27,7 @@ class MemberControllerProvider implements ControllerProviderInterface
             # Route name
             ->bind('livresVoyageurs_espace');
             
+            
         # Personal space - Change a book disponibility
         $controllers
         
@@ -46,15 +47,6 @@ class MemberControllerProvider implements ControllerProviderInterface
             # Route name
             ->bind('livresVoyageurs_espace_sticker');
         
-        # Chat
-        $controllers
-        
-                    # Associate a route with a controller and an action
-                    ->get('/histoire/livre={id_book}', 'LivresVoyageurs\Controller\MemberController::historyAction')
-                    # Specify the type of parameters / using Regex
-                    ->assert('receiver' , '[^/]+')
-                    # Route name
-                    ->bind('livresVoyageurs_history');
 
         # Chat
         $controllers

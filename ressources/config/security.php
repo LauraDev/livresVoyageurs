@@ -29,6 +29,7 @@ $app->register(new SecurityServiceProvider(), array(
     ),
     'security.access_rules' => array(
         array('^/espace', 'ROLE_MEMBER', 'http'),
+        array('^/contacts', 'ROLE_MEMBER', 'http'),
         array('^/private', 'ROLE_ADMIN', 'http')
     ),
     'security.role_hierarchy' => array(
