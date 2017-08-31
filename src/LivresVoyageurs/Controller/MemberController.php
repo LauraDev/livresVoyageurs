@@ -372,7 +372,7 @@ class  MemberController
                 #2. Removing the old avatar
                 $path = PATH_IMAGES . '/avatar/' . $oldImage->avatar_member;
                 unlink($path);
-                
+
                 $chemin = PATH_PUBLIC.'/assets/images/avatar/';
                 $extension = $image->guessExtension();
 
@@ -457,9 +457,12 @@ class  MemberController
             # Connect to DB : Register a new member
             $memberPass = $formAccountPass->getData();
 
-            $memberPassDb = $app['idiorm.db']->for_table('members')->find_one($app['user']->getId_member());
-            $memberPassDb->pass_member          = $app['security.encoder.digest']->encodePassword($memberPass['pass_member'], '');
-            $memberPassDb->save();
+            $app['idiorm.db']->for_table('members')->raw_query("SET foreign_key_checks = 0");
+            $app['idiorm.db']->for_table('members')
+                             ->where('id_member', $currentMember['id_member'])
+                             ->find_one()
+                             ->delete();
+            $app['idiorm.db']->for_table('members')->raw_query("SET foreign_key_checks = 1");
 
             # Redirection
             return $app->redirect('pass=success');
