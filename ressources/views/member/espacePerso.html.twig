@@ -145,7 +145,7 @@
                     </div>
                 {% endif %}
 
-                <form id="formCapturedBook" action="{{ path('livresVoyageurs_espace_capture', {pseudo: app.user.pseudo_member} ) }}"  method="POST">
+                <form id="formCapturedBook" action="" method="POST">
 
                     <!-- Id Book - Table Pointers -->
                     <div class="form-group">
@@ -184,7 +184,7 @@
                     {{ form_row(formCapture._token) }}
                     <!-- Submission -->
                     <div class="form-group text-center">
-                        <input type="submit" name="btnSub" value="Entrer" id="btn_memberInscription" class="btn btn-success">
+                        {{ form_row(formCapture.submit) }}
                     </div>
                 </form>
 
@@ -382,7 +382,7 @@
                     </div>
                 {% endif %}
 
-                <form id="formMemberModification" action="{{ path('livresVoyageurs_espace_account', {pseudo: app.user.pseudo_member} ) }}"  method="POST" enctype="multipart/form-data">
+                <form id="formMemberModification" action="" method="POST" enctype="multipart/form-data">
 
                     <!-- Pseudo -->
                     {# <div class="form-group">
@@ -433,7 +433,7 @@
                     </div>
                 {% endif %}
 
-                <form id="formPassModification" action="{{ path('livresVoyageurs_espace_pass', {pseudo: app.user.pseudo_member} ) }}"  method="POST">
+                <form id="formPassModification" action="" method="POST">
 
                     <!-- Password -->
                     <div class="form-group">
@@ -462,8 +462,10 @@
 
                 <!-- Form: Password management -->
                 <h2> Supprimer mon compte </h2>
+
                 <a href="{{ path('livresVoyageurs_espace_delete', {pseudo:  app.user.pseudo_member} )  }}"> Supprimer </a>
 
+                </form>
             </div> <!-- Account -->
         
         </div> <!-- col-md-6 -->

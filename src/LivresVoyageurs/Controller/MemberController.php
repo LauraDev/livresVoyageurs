@@ -133,123 +133,6 @@ class  MemberController
 
             ->getForm();
 
-
-        # Capture
-        $app['formCapture'] = $app['form.factory']->createBuilder(FormType::class)
-            
-            # Form Fields
-            ->add('id_book', TextType::class, [
-                'required'      =>  true,
-                'label'         =>  false,
-                'constraints'   =>  array(new Regex(array('pattern'=>'/[0-9]/{8}', 'message'=>'Numéro incorrect - Doit contenir 8 chiffres'))),
-                'attr'          =>  [
-                    'class'     => 'form-control'
-                ]
-            ])
-            ->add('address', TextType::class, [
-                'required'      =>  true,
-                'constraints'   =>  array(new NotBlank(array('message'=>'Vous n\'avez pas indiqué votre ville'))),
-                'label'         =>  false,
-                'attr' => [
-                    'class'    => 'form-control'
-                ]
-            ])
-            ->add('city_pointer', HiddenType::class, [
-                'required'      =>  false
-            ])
-            ->add('lat_pointer', HiddenType::class, [
-                'required'      =>  false
-            ])
-            ->add('lng_pointer', HiddenType::class, [
-                'required'      =>  false
-            ])
-            ->add('comment_capture', TextareaType::class, [
-                'required'      =>  false,
-                'label'         =>  false,
-                'attr'          =>  [
-                    'class'     => 'form-control'
-                ]
-            ])
-            ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
-
-            ->getForm();
-
-
-
-
-
-        # Form : Update Account Infos
-        $formAccount = $app['form.factory']->createBuilder(FormType::class)
-
-            # Form Fields
-            // ->add('pseudo_member', TextType::class, [
-            //     'required'      =>  true,
-            //     'label'         =>  false,
-            //     'constraints'   =>  array(new NotBlank(array('message' => 'Vous n\'avez pas indiqué votre Pseudo' ))),
-            //     'attr'          =>  [
-            //         'class'     => 'form-control',
-            //         'value'     => $currentMember['pseudo_member']
-            //     ]
-            // ])
-            ->add('mail_member', EmailType::class, [
-                'required'      =>  true,
-                'label'         =>  false,
-                'constraints'   =>  array(new NotBlank(array('message' => 'Vous n\'avez pas indiqué votre Email')), new Email(
-                    array(
-                        'message' => 'Veuillez saisir une adresse mail valide',
-                        'strict'  => true,
-                        'checkMX' => true
-                    )
-                )),
-                'attr'          =>  [
-                    'class'     => 'form-control',
-                    'value'     => $currentMember['mail_member']
-                ]
-            ])
-            ->add('avatar_member', FileType::class, [
-                'required'      =>  false,
-                'label'         =>  false,
-                'attr'          =>  [
-                    'class'     => 'form-control dropify',
-                    // 'data-default-file'            => '/livresVoyageurs/public/assets/images/avatar/' . $currentMember['avatar_member'], 
-                    'data-allowed-file-extensions' => 'jpg jpeg png'
-                ]
-            ])
-            ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
-
-            ->getForm();
-
-
-        # 4-b : Update Account - Password
-        $formAccountPass = $app['form.factory']->createBuilder(FormType::class)
-        
-            # Form Fields
-            ->add('pass_member', RepeatedType::class, array(
-                'type' => PasswordType::class,
-                'first_options'  => array(
-                    'label' => false,
-                    'attr' => [
-                        'placeholder' => 'Entrez votre mot de passe',
-                        'class'       => 'form-control'
-                    ]
-                ),
-                'second_options' => array(
-                    'label' => false,
-                    'attr' => [
-                        'placeholder' => 'Confirmez votre mot de passe',
-                        'class'       => 'form-control'
-                    ]
-                ),
-                'attr' => [
-                    'class'      => 'form-control'
-                    ]
-            ))
-            ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
-
-            ->getForm();
-        
-            
-
         $formAddBook->handleRequest($request);
             
         # If form Valid   
@@ -335,6 +218,251 @@ class  MemberController
         endif;
 
 
+        #3 : Capture
+        $formCapture = $app['form.factory']->createBuilder(FormType::class)
+
+            # Form Fields
+            ->add('id_book', TextType::class, [
+                'required'      =>  true,
+                'label'         =>  false,
+                'constraints'   =>  array(new Regex(array('pattern'=>'/[0-9]/{8}', 'message'=>'Numéro incorrect - Doit contenir 8 chiffres'))),
+                'attr'          =>  [
+                    'class'     => 'form-control'
+                ]
+            ])
+            ->add('address', TextType::class, [
+                'required'      =>  true,
+                'constraints'   =>  array(new NotBlank(array('message'=>'Vous n\'avez pas indiqué votre ville'))),
+                'label'         =>  false,
+                'attr' => [
+                    'class'    => 'form-control'
+                ]
+            ])
+            ->add('city_pointer', HiddenType::class, [
+                'required'      =>  false
+            ])
+            ->add('lat_pointer', HiddenType::class, [
+                'required'      =>  false
+            ])
+            ->add('lng_pointer', HiddenType::class, [
+                'required'      =>  false
+            ])
+            ->add('comment_capture', TextareaType::class, [
+                'required'      =>  false,
+                'label'         =>  false,
+                'attr'          =>  [
+                    'class'     => 'form-control'
+                ]
+            ])
+            ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
+
+            ->getForm();
+        # Handle Post Data
+        $formCapture->handleRequest($request);
+
+        // Check if form is valid
+        if ($formCapture->isSubmitted() && $formCapture->isValid()) :
+
+            # Capture = FormCapture data
+            $capture = $formCapture->getData();
+
+            # Connect to DB : Register a new pointer
+            $pointerDb = $app['idiorm.db']->for_table('pointers')->create();
+            $pointerDb->id_book           = $capture['id_book'];
+            $pointerDb->lat_pointer       = $capture['lat_pointer'];
+            $pointerDb->lng_pointer       = $capture['lng_pointer'];
+            $pointerDb->city_pointer      = $capture['city_pointer'];
+            $pointerDb->save();
+
+            # Get last inserted Id
+            $pointerId = $pointerDb->id();
+
+            #  Connect to DB : Register the capture's member and comment
+            $captureDb = $app['idiorm.db']->for_table('captures')->create();
+            $captureDb->id_pointer           = $pointerId;
+            $captureDb->id_member            = $currentMember['id_member'];
+            $captureDb->comment_capture      = $capture['comment_capture'];
+            $captureDb->save();
+            
+            # Connect to DB : Set the book as unavailable
+            $bookDb =  $app['idiorm.db']->for_table('books')->find_one($capture['id_book']);
+            $bookDb->disponibility_book      = 0;
+            $bookDb->pseudo_capture          = $currentMember['pseudo_member'];
+            $bookDb->save();
+
+            # Redirection
+            return $app->redirect('?capture=success');
+
+        endif;
+
+
+
+
+
+
+        # 4-a : Update Account Infos
+        $formAccount = $app['form.factory']->createBuilder(FormType::class)
+
+            # Form Fields
+            // ->add('pseudo_member', TextType::class, [
+            //     'required'      =>  true,
+            //     'label'         =>  false,
+            //     'constraints'   =>  array(new NotBlank(array('message' => 'Vous n\'avez pas indiqué votre Pseudo' ))),
+            //     'attr'          =>  [
+            //         'class'     => 'form-control',
+            //         'value'     => $currentMember['pseudo_member']
+            //     ]
+            // ])
+            ->add('mail_member', EmailType::class, [
+                'required'      =>  true,
+                'label'         =>  false,
+                'constraints'   =>  array(new NotBlank(array('message' => 'Vous n\'avez pas indiqué votre Email')), new Email(
+                    array(
+                        'message' => 'Veuillez saisir une adresse mail valide',
+                        'strict'  => true,
+                        'checkMX' => true
+                    )
+                )),
+                'attr'          =>  [
+                    'class'     => 'form-control',
+                    'value'     => $currentMember['mail_member']
+                ]
+            ])
+            ->add('avatar_member', FileType::class, [
+                'required'      =>  false,
+                'label'         =>  false,
+                'attr'          =>  [
+                    'class'     => 'form-control dropify',
+                    // 'data-default-file'            => '/livresVoyageurs/public/assets/images/avatar/' . $currentMember['avatar_member'], 
+                    'data-allowed-file-extensions' => 'jpg jpeg png'
+                ]
+            ])
+            ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
+
+            ->getForm();
+
+        # Handle Post data
+        $formAccount->handleRequest($request);
+        # If form is valid
+        if ($formAccount->isSubmitted() && $formAccount->isValid()) :
+
+            # Get Form Data
+            $member = $formAccount->getData();
+
+            # Path Image
+            $image  = $member['avatar_member'];
+            if($image)
+            {
+                #1. Removing the old avatar
+                $path = PATH_IMAGES . '/avatar/' . $currentMember['avatar_member'];
+                unlink($path);
+                #2. Define the path
+                $chemin = PATH_PUBLIC.'/assets/images/avatar/';
+                #3. Get the extension
+                $extension = $image->guessExtension();
+                if (!$extension) {
+                    // extension cannot be guessed
+                    $extension = 'jpg';
+                }
+                #4. Save the new image
+                $image->move($chemin, $this->generateSlug($currentMember['pseudo_member']).'.'.$extension);
+            };
+            
+            // if( $member['pseudo_member'] != $currentMember['pseudo_member'] )
+            // {
+            //     # Check if user mail does not exist
+            //     $checkUser = $app['idiorm.db']->for_table('members')
+            //     ->where('pseudo_member', $member['pseudo_member'])
+            //     ->count();
+            
+            //     # If the mail does not exist
+            //     if(!$checkUser)
+            //     {
+            //         # Connect to DB : Register a new member
+            //         $memberDb = $app['idiorm.db']->for_table('members')->find_one($app['user']->getId_member());
+                    
+            //         $memberDb->pseudo_member        = $member['pseudo_member'];
+            //         $memberDb->mail_member          = $member['mail_member'];
+            //         if($image)
+            //         {
+            //             $memberDb->avatar_member    = $this->generateSlug($member['pseudo_member']) . '.' . $extension ;
+            //         }
+            //         $memberDb->save();
+
+            //         # Redirection
+            //         return $app->redirect('?account=success');
+            //     }
+            //     else
+            //     {
+            //         # Redirection
+            //         return $app->redirect('?account=exist');
+            //     }
+            // }
+            // else 
+            // {
+                # Connect to DB : Register a new member
+                $memberDb = $app['idiorm.db']->for_table('members')->find_one($app['user']->getId_member());
+                $memberDb->mail_member          = $member['mail_member'];
+                if($image)
+                {
+                    $memberDb->avatar_member    = $this->generateSlug($currentMember['pseudo_member']) . '.' . $extension ;
+                }
+                $memberDb->save();
+
+                # Redirection
+                return $app->redirect('?account=success');
+            // }
+
+        endif;
+
+
+
+        # 4-b : Update Account - Password
+        $formAccountPass = $app['form.factory']->createBuilder(FormType::class)
+
+            # Form Fields
+            ->add('pass_member', RepeatedType::class, array(
+                'type' => PasswordType::class,
+                'first_options'  => array(
+                    'label' => false,
+                    'attr' => [
+                        'placeholder' => 'Entrez votre mot de passe',
+                        'class'       => 'form-control'
+                    ]
+                ),
+                'second_options' => array(
+                    'label' => false,
+                    'attr' => [
+                        'placeholder' => 'Confirmez votre mot de passe',
+                        'class'       => 'form-control'
+                    ]
+                ),
+                'attr' => [
+                    'class'      => 'form-control'
+                    ]
+            ))
+            ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
+
+            ->getForm();
+
+        # Handle request
+        $formAccountPass->handleRequest($request);
+        # If form is valid
+        if ( $formAccountPass->isSubmitted() && $formAccountPass->isValid() ) :
+
+            # Connect to DB : Register a new member
+            $memberPass = $formAccountPass->getData();
+
+            $memberPassDb = $app['idiorm.db']->for_table('members')->find_one($app['user']->getId_member());
+            $memberPassDb->pass_member          = $app['security.encoder.digest']->encodePassword($memberPass['pass_member'], '');
+            $memberPassDb->save();
+
+            # Redirection
+            return $app->redirect('pass=success');
+
+        endif;
+
+
 
         # 5 : Books registered by the user
         $bookList = $app['idiorm.db']->for_table('view_books')
@@ -381,7 +509,7 @@ class  MemberController
             'formAddBook'      => $formAddBook->createView(),
             'formAccount'      => $formAccount->createView(),
             'formAccountPass'  => $formAccountPass->createView(),
-            'formCapture'      =>$app['formCapture']->createView(),
+            'formCapture'      => $formCapture->createView(),
             'bookList'         => $bookList,
             'pendingList'      => $pendingList,
             'friendList'       => $friendList
@@ -418,149 +546,6 @@ class  MemberController
         # Attach the file to the browser (Attachement: option to display the pdf)
         $sticker->stream('sticker.pdf',array('Attachment'=>0));
     }
-
-
-    # Capture
-    public function capturePost(Application $app, Request $request) {       
-        
-            # Handle Post Data
-            $app['formCapture']->handleRequest($request);
-    
-            // Check if form is valid
-            if ($formCapture->isValid() && $formCapture->isSubmitted()) :
-    
-                # Capture = FormCapture data
-                $capture = $formCapture->getData();
-    
-                # Connect to DB : Register a new pointer
-                $pointerDb = $app['idiorm.db']->for_table('pointers')->create();
-                $pointerDb->id_book           = $capture['id_book'];
-                $pointerDb->lat_pointer       = $capture['lat_pointer'];
-                $pointerDb->lng_pointer       = $capture['lng_pointer'];
-                $pointerDb->city_pointer      = $capture['city_pointer'];
-                $pointerDb->save();
-    
-                # Get last inserted Id
-                $pointerId = $pointerDb->id();
-    
-                #  Connect to DB : Register the capture's member and comment
-                $captureDb = $app['idiorm.db']->for_table('captures')->create();
-                $captureDb->id_pointer           = $pointerId;
-                $captureDb->id_member            = $currentMember['id_member'];
-                $captureDb->comment_capture      = $capture['comment_capture'];
-                $captureDb->save();
-                
-                # Connect to DB : Set the book as unavailable
-                $bookDb =  $app['idiorm.db']->for_table('books')->find_one($capture['id_book']);
-                $bookDb->disponibility_book      = 0;
-                $bookDb->pseudo_capture          = $currentMember['pseudo_member'];
-                $bookDb->save();
-    
-                # Redirection
-                return $app->redirect('?capture=success');
-    
-            endif;
-        }
-    
-    
-    
-    
-        public function accountPost(Application $app, Request $request) {   
-            
-            # Handle Post data
-            $formAccount->handleRequest($request);
-            # If form is valid
-            if ($formAccount->isValid() && $formAccount->isSubmitted()) :
-    
-                # Get Form Data
-                $member = $formAccount->getData();
-    
-                # Path Image
-                $image  = $member['avatar_member'];
-                if($image)
-                {
-                    #1. Removing the old avatar
-                    $path = PATH_IMAGES . '/avatar/' . $currentMember['avatar_member'];
-                    unlink($path);
-                    #2. Define the path
-                    $chemin = PATH_PUBLIC.'/assets/images/avatar/';
-                    #3. Get the extension
-                    $extension = $image->guessExtension();
-                    if (!$extension) {
-                        // extension cannot be guessed
-                        $extension = 'jpg';
-                    }
-                    #4. Save the new image
-                    $image->move($chemin, $this->generateSlug($currentMember['pseudo_member']).'.'.$extension);
-                };
-                
-                // if( $member['pseudo_member'] != $currentMember['pseudo_member'] )
-                // {
-                //     # Check if user mail does not exist
-                //     $checkUser = $app['idiorm.db']->for_table('members')
-                //     ->where('pseudo_member', $member['pseudo_member'])
-                //     ->count();
-                
-                //     # If the mail does not exist
-                //     if(!$checkUser)
-                //     {
-                //         # Connect to DB : Register a new member
-                //         $memberDb = $app['idiorm.db']->for_table('members')->find_one($app['user']->getId_member());
-                        
-                //         $memberDb->pseudo_member        = $member['pseudo_member'];
-                //         $memberDb->mail_member          = $member['mail_member'];
-                //         if($image)
-                //         {
-                //             $memberDb->avatar_member    = $this->generateSlug($member['pseudo_member']) . '.' . $extension ;
-                //         }
-                //         $memberDb->save();
-    
-                //         # Redirection
-                //         return $app->redirect('?account=success');
-                //     }
-                //     else
-                //     {
-                //         # Redirection
-                //         return $app->redirect('?account=exist');
-                //     }
-                // }
-                // else 
-                // {
-                    # Connect to DB : Register a new member
-                    $memberDb = $app['idiorm.db']->for_table('members')->find_one($app['user']->getId_member());
-                    $memberDb->mail_member          = $member['mail_member'];
-                    if($image)
-                    {
-                        $memberDb->avatar_member    = $this->generateSlug($currentMember['pseudo_member']) . '.' . $extension ;
-                    }
-                    $memberDb->save();
-    
-                    # Redirection
-                    return $app->redirect('?account=success');
-                // }
-    
-            endif;
-        }
-    
-        public function passwordPost(Application $app, Request $request) {   
-    
-            # Handle request
-            $formAccountPass->handleRequest($request);
-            # If form is valid
-            if ($formAccountPass->isValid() && $formAccountPass->isSubmitted()) :
-    
-                # Connect to DB : Register a new member
-                $memberPass = $formAccountPass->getData();
-    
-                $memberPassDb = $app['idiorm.db']->for_table('members')->find_one($app['user']->getId_member());
-                $memberPassDb->pass_member          = $app['security.encoder.digest']->encodePassword($memberPass['pass_member'], '');
-                $memberPassDb->save();
-    
-                # Redirection
-                return $app->redirect('pass=success');
-    
-            endif;
-        }
 
 
 
