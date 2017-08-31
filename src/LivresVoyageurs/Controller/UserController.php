@@ -2,10 +2,15 @@
 
 namespace LivresVoyageurs\Controller;
 
+use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
+
 use Swift_Mailer;
 use Swift_Message;
 use Swift_SmtpTransport;
-use Silex\Application;
+
+use LivresVoyageurs\Traits\Shortcut;
+
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -15,11 +20,12 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use FabSchurt\Silex\Provider\Captcha\Form\Type\CaptchaType;
+
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\IsTrue;
-use Symfony\Component\HttpFoundation\Request;
-use LivresVoyageurs\Traits\Shortcut;
+use LivresVoyageurs\Constraints\passConstraint;
 
 // use Twig\Token;
 
@@ -70,6 +76,7 @@ class UserController
                 'type' => PasswordType::class,
                 'first_options'  => array(
                     'label'      => false,
+                    'constraints'=> array(new passConstraint()),
                     'attr'       => [
                         'placeholder' => 'Entrez votre mot de passe',
                         'class'       => 'form-control'
@@ -82,6 +89,7 @@ class UserController
                         'class'       => 'form-control'
                     ]
                 ),
+                'invalid_message' => 'Les deux mots de passe doivent être identiques',
                 'attr' => [
                     'class'           => 'form-control'
                     ]
@@ -96,10 +104,11 @@ class UserController
                 'label'               =>  false,
                 'attr'                =>  [
                     'class'           => 'form-control dropify',
-                    'data-default-file'            => '/livresVoyageurs/public/assets/images/avatar/default.png',
+                    // 'data-default-file'            => '/livresVoyageurs/public/assets/images/avatar/default.png',
                     'data-allowed-file-extensions' => 'jpg jpeg png'
                 ]
             ])
+            ->add('captcha', CaptchaType::class)
             ->add('termsAccepted', CheckboxType::class, array(
                 'label'               =>  'J\'ai lu et j\'accepte les termes et conditions',
                 'mapped'              =>  false,

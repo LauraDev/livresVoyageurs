@@ -37,6 +37,32 @@ class MemberControllerProvider implements ControllerProviderInterface
             # Route name
             ->bind('livresVoyageurs_espace_post');
 
+        # Personal space - Capture
+        $controllers
+        
+            # Associate a route with a controller and an action
+            ->match('/{pseudo}/capture', 'LivresVoyageurs\Controller\MemberController::capturePost')
+            ->method('GET|POST')
+            # Route name
+            ->bind('livresVoyageurs_espace_capture');
+
+        # Personal space - Change Account
+        $controllers
+        
+            # Associate a route with a controller and an action
+            ->match('/{pseudo}/dispo', 'LivresVoyageurs\Controller\MemberController::accountPost')
+            ->method('GET|POST')
+            # Route name
+            ->bind('livresVoyageurs_espace_account');
+
+        # Personal space - Change Password
+        $controllers
+        
+            # Associate a route with a controller and an action
+            ->match('/{pseudo}/pass', 'LivresVoyageurs\Controller\MemberController::passwordPost')
+            ->method('GET|POST')
+            # Route name
+            ->bind('livresVoyageurs_espace_pass');
 
         # Personal space - Get new book sticker
         $controllers
@@ -47,6 +73,17 @@ class MemberControllerProvider implements ControllerProviderInterface
             # Route name
             ->bind('livresVoyageurs_espace_sticker');
         
+
+
+        # Personal space - Delete account
+        $controllers
+        
+            # Associate a route with a controller and an action
+            ->get('/{pseudo}/delete', 'LivresVoyageurs\Controller\MemberController::deleteAction')
+            # Route name
+            ->bind('livresVoyageurs_espace_delete');
+        
+                    
 
         # Chat
         $controllers

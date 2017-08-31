@@ -145,7 +145,7 @@
                     </div>
                 {% endif %}
 
-                <form id="formCapturedBook" action="" method="POST">
+                <form id="formCapturedBook" action="{{ path('livresVoyageurs_espace_capture', {pseudo: app.user.pseudo_member} ) }}"  method="POST">
 
                     <!-- Id Book - Table Pointers -->
                     <div class="form-group">
@@ -382,10 +382,10 @@
                     </div>
                 {% endif %}
 
-                <form id="formMemberModification" action="" method="POST" enctype="multipart/form-data">
+                <form id="formMemberModification" action="{{ path('livresVoyageurs_espace_account', {pseudo: app.user.pseudo_member} ) }}"  method="POST" enctype="multipart/form-data">
 
                     <!-- Pseudo -->
-                    <div class="form-group">
+                    {# <div class="form-group">
                         <label for="pseudo_member">Pseudo *</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -394,7 +394,7 @@
                         <!-- Pseudo Errors -->
                         <p class="error alert alert-danger">{{ form_errors(formAccount.pseudo_member) }}</p>
                         <p class="error alert alert-danger">Ce pseudo existe déjà</p>
-                    </div>
+                    </div> #}
                     <!-- Email -->
                     <div class="form-group">
                         <label for="mail_member">Email *</label>
@@ -433,7 +433,7 @@
                     </div>
                 {% endif %}
 
-                <form id="formPassModification" action="" method="POST">
+                <form id="formPassModification" action="{{ path('livresVoyageurs_espace_pass', {pseudo: app.user.pseudo_member} ) }}"  method="POST">
 
                     <!-- Password -->
                     <div class="form-group">
@@ -458,6 +458,12 @@
                     </div>
 
                 </form>
+
+
+                <!-- Form: Password management -->
+                <h2> Supprimer mon compte </h2>
+                <a href="{{ path('livresVoyageurs_espace_delete', {pseudo:  app.user.pseudo_member} )  }}"> Supprimer </a>
+
             </div> <!-- Account -->
         
         </div> <!-- col-md-6 -->
@@ -483,6 +489,7 @@
         $(document).ready(function() {
             // Images
             $('.dropify').dropify({
+                defaultFile: "{{ asset('assets/images/avatar/' ~ app.user.avatar_member) }}",
                 messages: {
                     default: 'Glissez-d&eacute;posez un fichier ici ou cliquez',
                     replace: 'Glissez-d&eacute;posez un fichier ou cliquez pour remplacer',
@@ -511,7 +518,7 @@
                 var autocomplete = new google.maps.places.Autocomplete(input);
                 google.maps.event.addListener(autocomplete, 'place_changed', function () {
                     var place = autocomplete.getPlace();
-                    alert(JSON.stringify(place))
+                    //alert(JSON.stringify(place))
                     document.getElementById('form_city_pointer').value = place.name;
                     document.getElementById('form_lat_pointer').value = place.geometry.location.lat();
                     document.getElementById('form_lng_pointer').value = place.geometry.location.lng();

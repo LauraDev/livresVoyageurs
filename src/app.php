@@ -1,5 +1,7 @@
 <?php
 use Silex\Provider\SwiftmailerServiceProvider;
+use FabSchurt\Silex\Provider\Captcha\CaptchaServiceProvider;
+use Silex\Provider;
 
 #1 : Debug Mode Activation
 $app['debug'] = true;
@@ -38,13 +40,19 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
 #7 : Swiftmailer
 $app->register(new SwiftmailerServiceProvider());
 
-#8 : Doctrine DBAL
+#8 : Capcha
+$captchaProvider = new CaptchaServiceProvider();
+$app->register(new Provider\SessionServiceProvider());
+$app->register($captchaProvider);
+$app->mount('', $captchaProvider);
+
+#9 : Doctrine DBAL
 require PATH_RESSOURCES . '/config/database.config.php';
 
-#9 : Security
+#10 : Security
 require PATH_RESSOURCES . '/config/security.php';
 
-#10 : Errors Management
+#11 : Errors Management
 #  : https://gist.github.com/tournasdim/171b443065936bbb5ef3
 $app->error(function (\Exception $e) use ($app) {
     if ($e instanceof NotFoundHttpException) {

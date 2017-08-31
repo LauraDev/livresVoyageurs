@@ -143,4 +143,6 @@ class  FriendController
         # Redirection
         return $app->redirect( $app['url_generator']->generate('livresVoyageurs_espace', array('pseudo' => $currentMember['pseudo_member'])) . '#friendList');
     }
+
 }
+

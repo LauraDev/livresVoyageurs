@@ -50,6 +50,7 @@
                 <!-- Password -->
                 <div class="form-group">
                     <label for="pass_member">Mot de passe *</label>
+                    <p id="password_strength"></p>
                     <div class="input-group">
                         <div class="input-group-addon"><span class="ion-android-lock"></span></div>
                         {{ form_row(form.pass_member) }}
@@ -63,6 +64,9 @@
                     </div>
                 </div>
                     {{ form_row(form.role_member) }}
+                <!-- Captcha -->
+                {{ form_widget(form.captcha) }}
+                {{ form_errors(form.captcha) }}
                 <!-- Terms and Conditions-->
                 <div class="form-group">
                     <div class="input-group">
@@ -100,7 +104,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js" integrity="sha256-SUaao5Q7ifr2twwET0iyXVy0OVnuFJhGVi5E/dqEiLU=" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function() {
+
+            l = (l) => { 
+                console.log(l)
+            }
+
             $('.dropify').dropify({
+                defaultFile: "{{ asset('assets/images/avatar/default.png') }}",
                 messages: {
                     default: 'Glissez-d&eacute;posez un fichier ici ou cliquez',
                     replace: 'Glissez-d&eacute;posez un fichier ou cliquez pour remplacer',
@@ -108,6 +118,56 @@
                     error:   'D&eacute;sol&eacute;, le fichier trop volumineux'
                 }
             });
+
+
+            $("#form_pass_member_first").bind("keyup", function () {
+                //TextBox left blank.
+                if ($(this).val().length == 0) {
+                    $("#password_strength").html("");
+                    return;
+                }
+                //Regular Expressions.
+                var regex = new Array();
+                regex.push("[A-Z]"); //Uppercase Alphabet.
+                regex.push("[a-z]"); //Lowercase Alphabet.
+                regex.push("[0-9]"); //Digit.
+                // regex.push("[$@$!%*#?&]"); //Special Character.
+                var passed = 0;
+                //Validate for each Regular Expression.
+                for (var i = 0; i < regex.length; i++) {
+                    if (new RegExp(regex[i]).test($(this).val())) {
+                        passed++;
+                    }
+                }
+                //Validate for length of Password.
+                if (passed > 2 && $(this).val().length > 6) {
+                    passed++;
+                }
+                //Display status.
+                var color = "";
+                var strength = "";
+                switch (passed) {
+                    case 0:
+                    case 1:
+                    case 2:
+                    case 3:
+                        strength = "Weak";
+                        color = "red";
+                        break;
+                    case 4:
+                        strength = "Strong";
+                        color = "green";
+                        break;
+                    case 5:
+                        strength = "Very Strong";
+                        color = "darkgreen";
+                        break;
+                }
+                $("#password_strength").html(strength);
+                $("#password_strength").css("color", color);
+            });
+
+
         })
     </script>
 {% endblock %}
