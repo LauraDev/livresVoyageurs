@@ -5,7 +5,10 @@ namespace LivresVoyageurs\Controller;
 use Dompdf\Dompdf;
 use LivresVoyageurs\Traits\Shortcut;
 use LivresVoyageurs\Traits\TestIdBook;
+
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
+
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -16,10 +19,11 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
-use Symfony\Component\HttpFoundation\Request;
+use LivresVoyageurs\Constraints\passConstraint;
 
 class  MemberController
 {
@@ -56,7 +60,7 @@ class  MemberController
         # 2: Add a book
 
         # Create the form
-        $formAddBook = $app['form.factory']->createBuilder(FormType::class)
+        $formAddBook = $app['form.factory']->createNamedBuilder('formAddBook', FormType::class)
         
             # Field by Google book Api
             ->add('id_member', HiddenType::class, [
@@ -87,7 +91,9 @@ class  MemberController
                 'constraints'   =>  array(new NotBlank(array('message'=>'Vous n\'avez pas indiqué l\'ISBN'))),
                 'attr'          =>  [
                     'class'     => 'form-control',
-                    'placeholder'=> '000-0-0000-0000-0'
+                    'placeholder'   => '000-0-0000-0000-0',
+                    'autocomplete'  => 'off'
+                    
                 ]
             ])
             ->add('id_category', ChoiceType::class, [                
@@ -132,9 +138,10 @@ class  MemberController
             ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
 
             ->getForm();
-
-        $formAddBook->handleRequest($request);
-            
+        
+        if ($request->request->has("formAddBook") ){
+            $formAddBook->handleRequest($request);
+        }   
         # If form Valid   
         if ($formAddBook->isValid() && $formAddBook->isSubmitted()) :
             
@@ -219,23 +226,24 @@ class  MemberController
 
 
         #3 : Capture
-        $formCapture = $app['form.factory']->createBuilder(FormType::class)
+        $formCapture = $app['form.factory']->createNamedBuilder("formCapture", FormType::class)
 
             # Form Fields
             ->add('id_book', TextType::class, [
-                'required'      =>  true,
-                'label'         =>  false,
-                'constraints'   =>  array(new Regex(array('pattern'=>'/[0-9]/{8}', 'message'=>'Numéro incorrect - Doit contenir 8 chiffres'))),
-                'attr'          =>  [
-                    'class'     => 'form-control'
+                'required'          =>  true,
+                'label'             =>  false,
+                'constraints'       =>  array(new Regex(array('pattern'=>'/[0-9]/{8}', 'match'=> false, 'message'=>'Numéro incorrect - Doit contenir 8 chiffres'))),
+                'attr'              =>  [
+                    'class'         => 'form-control',
+                    'autocomplete'  => 'off'
                 ]
             ])
             ->add('address', TextType::class, [
                 'required'      =>  true,
                 'constraints'   =>  array(new NotBlank(array('message'=>'Vous n\'avez pas indiqué votre ville'))),
                 'label'         =>  false,
-                'attr' => [
-                    'class'    => 'form-control'
+                'attr'          => [
+                    'class'     => 'form-control'
                 ]
             ])
             ->add('city_pointer', HiddenType::class, [
@@ -258,8 +266,9 @@ class  MemberController
 
             ->getForm();
         # Handle Post Data
-        $formCapture->handleRequest($request);
-
+        if ($request->request->has("formCapture") ){
+            $formCapture->handleRequest($request);
+        }
         // Check if form is valid
         if ($formCapture->isSubmitted() && $formCapture->isValid()) :
 
@@ -301,7 +310,7 @@ class  MemberController
 
 
         # 4-a : Update Account Infos
-        $formAccount = $app['form.factory']->createBuilder(FormType::class)
+        $formAccount = $app['form.factory']->createNamedBuilder("formAccount", FormType::class)
 
             # Form Fields
             // ->add('pseudo_member', TextType::class, [
@@ -342,7 +351,9 @@ class  MemberController
             ->getForm();
 
         # Handle Post data
-        $formAccount->handleRequest($request);
+        if ($request->request->has("formAccount") ){
+            $formAccount->handleRequest($request);
+        }
         # If form is valid
         if ($formAccount->isSubmitted() && $formAccount->isValid()) :
 
@@ -418,27 +429,29 @@ class  MemberController
 
 
         # 4-b : Update Account - Password
-        $formAccountPass = $app['form.factory']->createBuilder(FormType::class)
+        $formAccountPass = $app['form.factory']->createNamedBuilder("formPass", FormType::class)
 
             # Form Fields
             ->add('pass_member', RepeatedType::class, array(
                 'type' => PasswordType::class,
-                'first_options'  => array(
-                    'label' => false,
-                    'attr' => [
-                        'placeholder' => 'Entrez votre mot de passe',
-                        'class'       => 'form-control'
+                'first_options'         => array(
+                    'label'             => false,
+                    'constraints'       => array(new passConstraint()),
+                    'attr'              => [
+                        'placeholder'   => 'Entrez votre mot de passe',
+                        'class'         => 'form-control'
                     ]
                 ),
                 'second_options' => array(
                     'label' => false,
                     'attr' => [
-                        'placeholder' => 'Confirmez votre mot de passe',
-                        'class'       => 'form-control'
+                        'placeholder'   => 'Confirmez votre mot de passe',
+                        'class'         => 'form-control'
                     ]
                 ),
+                'invalid_message' => 'Les deux mots de passe doivent être identiques',
                 'attr' => [
-                    'class'      => 'form-control'
+                    'class'             => 'form-control'
                     ]
             ))
             ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
@@ -446,7 +459,9 @@ class  MemberController
             ->getForm();
 
         # Handle request
-        $formAccountPass->handleRequest($request);
+        if ($request->request->has("formPass") ){
+            $formAccountPass->handleRequest($request);
+        }
         # If form is valid
         if ( $formAccountPass->isSubmitted() && $formAccountPass->isValid() ) :
 
@@ -491,17 +506,6 @@ class  MemberController
                                         ->order_by_desc('date_friend')
                                         ->find_result_set();
 
-
-        // Blocked
-        // # Connect to DB : Pending list
-        // $friends = $app['idiorm.db']->for_table(‘friends’)
-        //         ->where_any_is(array(
-        //                 array(‘id_member_1’  => $request->get(‘id_member’), ‘status_friend’ => 2 ),
-        //                 array(‘id_member_2’  => $request->get(‘id_member’), ‘status_friend’ => 2 )
-        //                 ))
-        //     ->where_not_equal(‘action_user_id’ => $request->get(‘id_member’))
-        // ->order_by_desc(‘date_friend’)
-        //         ->find_result_set();	
 
         # 8 : Return all to the view                                
         return $app['twig']->render('member/espacePerso.html.twig', [
@@ -554,8 +558,15 @@ class  MemberController
         
         # Current member
         $deleteMember = $app['idiorm.db']->for_table('members')
-        ->find_one($app['user']->getId_member())
-        ->delete();
+                                            ->find_one($app['user']->getId_member());
+        $deleteMember->pseudo_member   = 'anonyme';
+        $deleteMember->mail_member     = '';
+        $deleteMember->pass_member     = '';
+        $deleteMember->avatar_member   = '';
+        $deleteMember->role_member     = '';
+        $deleteMember->active_member   = 0;
+        $deleteMember->save();
+
         
         # Empty Session
         $app['session']->clear();

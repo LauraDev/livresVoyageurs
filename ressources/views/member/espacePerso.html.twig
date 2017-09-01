@@ -113,7 +113,7 @@
                     {{ form_row(formAddBook._token) }}
                     <!-- Submission -->
                     <div class="form-group text-center">
-                        <input type="submit" name="btnSub" value="Ajouter" id="btn_memberInscription" class="btn btn-success">
+                        <input type="submit" name="btnSub" value="Ajouter" class="btn btn-success">
                     </div>
                 </form>
         
@@ -184,7 +184,7 @@
                     {{ form_row(formCapture._token) }}
                     <!-- Submission -->
                     <div class="form-group text-center">
-                        {{ form_row(formCapture.submit) }}
+                        <input type="submit" name="btnSub" value="Déclarer comme capturé" class="btn btn-success">
                     </div>
                 </form>
 
@@ -264,7 +264,7 @@
                                                     <input type="hidden" value="0" id="disponibility_book" name="disponibility_book">
                                                     <!-- Submission -->
                                                     <div class="form-group text-center">
-                                                        <input type="submit" name="btnSub" value="Déclarer comme libéré" id="btn_memberInscription" class="btn btn-success">
+                                                        <input type="submit" name="btnSub" value="Déclarer comme libéré" class="btn btn-success">
                                                     </div>
                                                 </form>                        
                                             </div>
@@ -301,8 +301,9 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <h4 class="card-title"> {{ pending.pseudo_member_2 }} </h4>
-                                            <a href="{{ path('livresVoyageurs_acceptFriend', {pseudo:  pending.pseudo_member_2} ) }}" alt="accepter la demande de contact" class="btn btn-primary"> Accepter </a> 
+                                            <a href="{{ path('livresVoyageurs_acceptFriend', {pseudo:  pending.pseudo_member_2} ) }}" alt="accepter la demande de contact" class="btn btn-primary"> Accepter * </a> 
                                             <a href="{{ path('livresVoyageurs_declineFriend', {pseudo:  pending.pseudo_member_2} ) }}" alt="refuser la demande de contact" class="btn btn-primary"> Refuser </a> 
+                                            <p class="card-text"> * En cliquant sur ce bouton, j'accepte de transmettre mon adresse e-mail à ce contact</p>
                                         </div>
                                     </div>
                                 </div>
@@ -316,8 +317,9 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <h4 class="card-title"> {{ pending.pseudo_member_1 }} </h4>
-                                            <a href="{{ path('livresVoyageurs_acceptFriend', {pseudo:  pending.pseudo_member_1} ) }}" alt="accepter la demande de contact" class="btn btn-primary"> Accepter la demande </a> 
+                                            <a href="{{ path('livresVoyageurs_acceptFriend', {pseudo:  pending.pseudo_member_1} ) }}" alt="accepter la demande de contact" class="btn btn-primary"> Accepter * </a> 
                                             <a href="{{ path('livresVoyageurs_declineFriend', {pseudo:  pending.pseudo_member_1} ) }}" alt="refuser la demande de contact" class="btn btn-primary"> Refuser </a> 
+                                            <p class="card-text"> * En cliquant sur ce bouton, j'accepte de transmettre mon adresse e-mail à ce contact</p>
                                         </div>
                                     </div>
                                 </div>
@@ -344,7 +346,8 @@
                                     <div class="card">
                                     <div class="card-body">
                                         <h4 class="card-title"> {{ friend.pseudo_member_2 }} </h4>
-                                        <a href="{{ path('livresVoyageurs_blockFriend', {pseudo:  friend.pseudo_member_2} ) }}" alt="bloquer ce contact" class="btn btn-primary"> Bloquer </a> 
+                                        <p class="card-text"> {{ friend.mail_member_2 }} </p>
+                                        <a href="{{ path('livresVoyageurs_blockFriend', {pseudo:  friend.pseudo_member_2} ) }}" alt="bloquer ce contact" class="btn btn-primary"> Supprimer ce contact </a> 
                                     </div>
                                     </div>
                                 </div>
@@ -358,7 +361,8 @@
                                     <div class="card">
                                     <div class="card-body">
                                         <h4 class="card-title"> {{ friend.pseudo_member_1 }} </h4>
-                                        <a href="{{ path('livresVoyageurs_blockFriend', {pseudo:  friend.pseudo_member_1} ) }}" alt="bloquer ce contact" class="btn btn-primary"> Bloquer </a> 
+                                        <p class="card-text"> {{ friend.mail_member_1 }} </p>
+                                        <a href="{{ path('livresVoyageurs_blockFriend', {pseudo:  friend.pseudo_member_1} ) }}" alt="bloquer ce contact" class="btn btn-primary"> Supprimer ce contact </a> 
                                     </div>
                                     </div>
                                 </div>
@@ -415,7 +419,7 @@
                     {{ form_row(formAccount._token) }}
                     <!-- Submission -->
                     <div class="form-group text-center">
-                        <input type="submit" name="btnSub" value="Entrer" id="btn_memberInscription" class="btn btn-success">
+                        <input type="submit" name="btnSub" value="Modifier" iclass="btn btn-success">
                     </div>
                 </form>
 
@@ -438,23 +442,24 @@
                     <!-- Password -->
                     <div class="form-group">
                         <label for="pass_member">Mot de passe *</label>
+                        <!-- Help-text -->
+                        <p id="pass-helptext">Votre mot de passe doit contenir au moins 6 caractères, une majuscule et un chiffre</p>
+                        <!-- Password complexity -->
+                        <p id="password_strength"></p>
                         <div class="input-group">
                             <div class="input-group-addon"><span class="ion-android-lock"></span></div>
-                            {{ form_row(formAccountPass.pass_member) }}
+                            {{ form_widget(formAccountPass.pass_member.first) }}
+                            {{ form_widget(formAccountPass.pass_member.second) }}
                         </div>
-                        <!-- Help-text -->
-                        <p id="pass-helptext">Votre mot de passe doit contenir au moins 8 caractères, une majuscule et un chiffre</p>
                         <!-- Password Errors -->
-                        <p class="error alert alert-danger">Vous n'avez pas indiqué votre Mot de passe</p>
-                        <p class="error alert alert-danger">Mot de passe doit contenir au moins 8 caractères</p>
-                        <p class="error alert alert-danger">Le mot de passe doit contenir au moins une majuscule</p>
-                        <p class="error alert alert-danger">Le mot de passe doit contenir au moins un chiffre</p>
+                        {{ form_errors(formAccountPass.pass_member.first) }}
+                        {{ form_errors(formAccountPass.pass_member.second) }}
                     </div>
                     <!-- Token -->
                     {{ form_row(formAccountPass._token) }}
                     <!-- Submission -->
                     <div class="form-group text-center">
-                        <input type="submit" name="btnSub" value="Entrer" id="btn_memberInscription" class="btn btn-success">
+                        <input type="submit" name="btnSub" value="Modifier" class="btn btn-success">
                     </div>
 
                 </form>
@@ -501,40 +506,40 @@
             });
             // MASK JS - Add (-) while customer is typing ISBN
             // Set the ISBN
-            $('#form_ISBN_book').mask('000-0-0000-0000-0');
+            $('#formAddBook_ISBN_book').mask('000-0-0000-0000-0');
             // Google Auto-complete
             function initializeAddBook() {
-                var input = document.getElementById('form_addressStart');
+                var input = document.getElementById('formAddBook_addressStart');
                 var autocomplete = new google.maps.places.Autocomplete(input);
                 google.maps.event.addListener(autocomplete, 'place_changed', function () {
                     var place = autocomplete.getPlace();
-                    document.getElementById('form_city_startpoint').value = place.name;
-                    document.getElementById('form_lat_startpoint').value = place.geometry.location.lat();
-                    document.getElementById('form_lng_startpoint').value = place.geometry.location.lng();
+                    document.getElementById('formAddBook_city_startpoint').value = place.name;
+                    document.getElementById('formAddBook_lat_startpoint').value = place.geometry.location.lat();
+                    document.getElementById('formAddBook_lng_startpoint').value = place.geometry.location.lng();
                 });
             }
             google.maps.event.addDomListener(window, 'load', initializeAddBook);
             
             function initializeCapture() {
-                var input = document.getElementById('form_address');
+                var input = document.getElementById('formCapture_address');
                 var autocomplete = new google.maps.places.Autocomplete(input);
                 google.maps.event.addListener(autocomplete, 'place_changed', function () {
                     var place = autocomplete.getPlace();
                     //alert(JSON.stringify(place))
-                    document.getElementById('form_city_pointer').value = place.name;
-                    document.getElementById('form_lat_pointer').value = place.geometry.location.lat();
-                    document.getElementById('form_lng_pointer').value = place.geometry.location.lng();
+                    document.getElementById('formCapture_city_pointer').value = place.name;
+                    document.getElementById('formCapture_lat_pointer').value = place.geometry.location.lat();
+                    document.getElementById('formCapture_lng_pointer').value = place.geometry.location.lng();
                 });
             }
             google.maps.event.addDomListener(window, 'load', initializeCapture); 
             // ISBN - Book infos
-            document.getElementById("form_ISBN_book").addEventListener("focus", function() {
+            document.getElementById("formAddBook_ISBN_book").addEventListener("focus", function() {
                 // Hide the error message
                 $("#isbnInconnu").hide();
             });
-            document.getElementById("form_ISBN_book").addEventListener("blur", function() {
+            document.getElementById("formAddBook_ISBN_book").addEventListener("blur", function() {
                 // Set the ISBN
-                var myIsbn = document.getElementById("form_ISBN_book").value;
+                var myIsbn = document.getElementById("formAddBook_ISBN_book").value;
                 // Set the api variable
                 var googleAPI = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + myIsbn.replace(/-/g, '');
                 //alert(googleAPI);
@@ -568,16 +573,86 @@
                             document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Description: " + item.searchInfo.textSnippet + "</li>";
                             document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Langue: " + item.volumeInfo.language + "</li>";
                             // Set the book infos in the hidden input
-                            document.getElementById("form_photo_book").value    = item.volumeInfo.imageLinks.smallThumbnail;
-                            document.getElementById("form_title_book").value    = item.volumeInfo.title;
-                            document.getElementById("form_authors").value       = item.volumeInfo.authors;
-                            document.getElementById("form_summary_book").value  = item.searchInfo.textSnippet;
-                            document.getElementById("form_language_book").value = item.volumeInfo.language;
+                            document.getElementById("formAddBook_photo_book").value    = item.volumeInfo.imageLinks.smallThumbnail;
+                            document.getElementById("formAddBook_title_book").value    = item.volumeInfo.title;
+                            document.getElementById("formAddBook_authors").value       = item.volumeInfo.authors;
+                            document.getElementById("formAddBook_summary_book").value  = item.searchInfo.textSnippet;
+                            document.getElementById("formAddBook_language_book").value = item.volumeInfo.language;
                         }
                     }
                 });
             })
-                        
+
+
+            $("#formPass_pass_member_first").bind("keyup", function () {
+                //TextBox left blank.
+                if ($(this).val().length == 0) {
+                    $("#password_strength").html("");
+                    return;
+                }
+                //Regular Expressions.
+                var regex = new Array();
+                regex.push("[A-Z]"); //Uppercase Alphabet.
+                regex.push("[a-z]"); //Lowercase Alphabet.
+                regex.push("[0-9]"); //Digit.
+                // regex.push("[$@$!%*#?&]"); //Special Character.
+                var passed = 0;
+                //Validate for each Regular Expression.
+                for (var i = 0; i < regex.length; i++) {
+                    if (new RegExp(regex[i]).test($(this).val())) {
+                        passed++;
+                    }
+                }
+                //Validate for length of Password.
+                if (passed > 2 && $(this).val().length > 6) {
+                    passed++;
+                }
+                //Display status.
+                var color = "";
+                var strength = "";
+                switch (passed) {
+                    case 0:
+                    case 1:
+                    case 2:
+                    case 3:
+                        strength = "Weak";
+                        color = "red";
+                        break;
+                    case 4:
+                        strength = "Strong";
+                        color = "green";
+                        break;
+                    case 5:
+                        strength = "Very Strong";
+                        color = "darkgreen";
+                        break;
+                }
+                $("#password_strength").html(strength);
+                $("#password_strength").css("color", color);
+            });
+
+            // Show/Hide Mdp Help-text
+            $("#pass-helptext").hide();
+            
+            $("#formPass_pass_member_first").focus(function() {
+                $("#pass-helptext").show();
+            });
+            $("#formPass_pass_member_first").blur(function() {
+                $("#pass-helptext").hide();
+            });
+
+
+            // Redirect to the right tab on page reload
+            var hash = window.location.hash;
+            hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+
+            $('.nav-tabs a').click(function (e) {
+                $(this).tab('show');
+                var scrollmem = $('body').scrollTop();
+                window.location.hash = this.hash;
+                $('html,body').scrollTop(scrollmem);
+            });
+
         }) // document ready
     </script>
 

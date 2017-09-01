@@ -6,7 +6,7 @@ use Symfony\Component\Validator\Constraint;
 */
 class passConstraint extends Constraint{
     /*message when constraint failed*/
-    public $message = '8 caractères minimum dont au moins un chiffre et une lettre';
+    public $message = 'Veuillez saisir 6 caractères minimum dont au moins un chiffre et une lettre';
     public function validateBy(){
         return passConstraintValidator::class;
     }

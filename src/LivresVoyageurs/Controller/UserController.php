@@ -346,6 +346,7 @@ class UserController
                 'type'                  => PasswordType::class,
                 'first_options'         => array(
                     'label'             => false,
+                    'constraints'       => array(new passConstraint()),
                     'attr'              => [
                         'class'         => 'form-control',
                         'placeholder'   => 'Entrez votre mot de passe'
@@ -358,8 +359,9 @@ class UserController
                         'placeholder'   => 'Confirmer votre mot de passe'
                         ]
                 ),
+                'invalid_message'   => 'Les deux mots de passe doivent être identiques',
                 'attr' => [
-                'class'                 => 'form-control'
+                    'class'             => 'form-control'
                     ]
             ))
             ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])

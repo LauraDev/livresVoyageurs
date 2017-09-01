@@ -10,9 +10,6 @@
 {# Define Content #}
 {% block content %}
 
-
-
-
     <div class="row">
 
         <h1> Inscription </h1>
@@ -50,11 +47,17 @@
                 <!-- Password -->
                 <div class="form-group">
                     <label for="pass_member">Mot de passe *</label>
+                    <!-- Help-text -->
+                    <p id="pass-helptext">Votre mot de passe doit contenir au moins 6 caractères, une majuscule et un chiffre</p>
+                    <!-- Password complexity -->
                     <p id="password_strength"></p>
                     <div class="input-group">
                         <div class="input-group-addon"><span class="ion-android-lock"></span></div>
-                        {{ form_row(form.pass_member) }}
+                        {{ form_widget(form.pass_member.first) }}
+                        {{ form_widget(form.pass_member.second) }}
                     </div>
+                    {{ form_errors(form.pass_member.first) }}
+                    {{ form_errors(form.pass_member.second) }}
                 </div>
                 <!-- Picture -->
                 <div class="form-group">
@@ -65,8 +68,12 @@
                 </div>
                     {{ form_row(form.role_member) }}
                 <!-- Captcha -->
-                {{ form_widget(form.captcha) }}
-                {{ form_errors(form.captcha) }}
+                <div class="form-group">
+                    <div class="input-group">
+                        {{ form_widget(form.captcha) }}
+                    </div>
+                    {{ form_errors(form.captcha) }}
+                </div>
                 <!-- Terms and Conditions-->
                 <div class="form-group">
                     <div class="input-group">
@@ -84,10 +91,6 @@
 
             </form>
         </div> <!-- col-md -->
-
-    </div> <!-- row -->
-
-
 
     </div> <!-- row -->
 
@@ -165,6 +168,17 @@
                 }
                 $("#password_strength").html(strength);
                 $("#password_strength").css("color", color);
+            });
+
+
+            // Show/Hide Mdp Help-text
+            $("#pass-helptext").hide();
+            
+            $("#form_pass_member_first").focus(function() {
+                $("#pass-helptext").show();
+            });
+            $("#form_pass_member_first").blur(function() {
+                $("#pass-helptext").hide();
             });
 
 
