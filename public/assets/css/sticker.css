@@ -6,15 +6,21 @@ h1{
 #sticker{
     border: 2px solid black;
     border-radius: 15px;
-    position: relative;
+    /*position: relative;*/
     width: 50%;
-    padding: 5px;
+    /*padding: 5px;*/
 }
+ .dev1{
+     border: 1px solid red;
+ }
 
-img{
+ .dev2{
+     border: 1px solid aqua;
+ }
+/*img{
     position:absolute;
     top: 70px;
     right: 2px;
     width: 150px;
     height: auto;
-}
+}*/

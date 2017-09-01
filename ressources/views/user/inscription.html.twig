@@ -1,6 +1,9 @@
 {# This page inherits from base.html #}
 {% extends 'layout.html.twig' %}
 
+{# Customized error messages #}
+{% form_theme form 'form_errors.html.twig' %}
+
 {# Define Title #}
 {% block title %} Inscription {% endblock %}
 
@@ -33,7 +36,6 @@
                         {{ form_widget(form.pseudo_member) }}
                     </div>
                     {{ form_errors(form.pseudo_member) }}
-                    <p class="error alert alert-danger">Ce pseudo existe déjà</p>
                 </div>
                 <!-- Email -->
                 <div class="form-group">
@@ -108,7 +110,7 @@
     <script>
         $(document).ready(function() {
 
-            l = (l) => { 
+            l = (l) => {
                 console.log(l)
             }
 
@@ -143,7 +145,7 @@
                     }
                 }
                 //Validate for length of Password.
-                if (passed > 2 && $(this).val().length > 6) {
+                if (passed > 2 && $(this).val().length >= 6) {
                     passed++;
                 }
                 //Display status.
@@ -173,7 +175,7 @@
 
             // Show/Hide Mdp Help-text
             $("#pass-helptext").hide();
-            
+
             $("#form_pass_member_first").focus(function() {
                 $("#pass-helptext").show();
             });

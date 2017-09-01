@@ -29,7 +29,7 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
                                     <h4 class="card-title">{{ book.title_book }}</h4>
-                                    <p> {{ book.summary_book }} </p>
+                                    <p> {{ book.summary_book | replace({"&#39;" : "'"})}} </p>
                                 </li>
                                 <li class="list-group-item">Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</li>
                                 <li class="list-group-item">
@@ -61,10 +61,10 @@
                                         {% endif %}
                                         {# Create the path to contact the member who has the book #}
                                         {% if book.pseudo_capture == 'none' %}
-                                            <a href="{{ path('livresVoyageurs_addFriend', {pseudo:  book.pseudo_member} ) }}" alt="ajouter ce membre en ami" class="btn btn-primary"> Entrer en contact * </a> 
+                                            <a href="{{ path('livresVoyageurs_addFriend', {pseudo:  book.pseudo_member} ) }}" alt="ajouter ce membre en ami" class="btn btn-primary"> Entrer en contact * </a>
                                             <p> * En cliquant sur ce bouton, j'accepte de transmettre mon adresse e-mail à ce contact</p>
                                         {% else %}
-                                            <a href="{{ path('livresVoyageurs_addFriend', {pseudo:  book.pseudo_capture} ) }}" alt="ajouter ce membre en ami" class="btn btn-primary"> Entrer en contact *</a> 
+                                            <a href="{{ path('livresVoyageurs_addFriend', {pseudo:  book.pseudo_capture} ) }}" alt="ajouter ce membre en ami" class="btn btn-primary"> Entrer en contact *</a>
                                             <p> * En cliquant sur ce bouton, j'accepte de transmettre mon adresse e-mail à ce contact</p>
                                         {% endif %}
 

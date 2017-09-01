@@ -25,6 +25,18 @@ class AdminControllerProvider implements ControllerProviderInterface
                 # Route name
                 ->bind('livresVoyageurs_administrator');
 
+            # Change a category
+            $controllers
+                ->match('/change/categorie_{id}', 'LivresVoyageurs\Controller\AdminController::changeCatAction')
+                ->method('GET|POST')
+                ->bind('livresVoyageurs_changeCat');
+
+            # Delete a category
+            $controllers
+                ->get('/delete/{id_category}', 'LivresVoyageurs\Controller\AdminController::removeCatAction')
+                ->bind('livresVoyageurs_deleteCat');
+
+
         // Return the controllers (ControllerCollection)
         return $controllers;
     }

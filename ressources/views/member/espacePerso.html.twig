@@ -1,6 +1,11 @@
 {# This page inherits from base.html #}
 {% extends 'layout.html.twig' %}
 
+{# Customized error messages #}
+{% form_theme formAddBook 'form_errors.html.twig' %}
+{% form_theme formCapture 'form_errors.html.twig' %}
+{% form_theme formAccount 'form_errors.html.twig' %}
+
 {# Define Title #}
 {% block title %} Mon Espace {% endblock %}
 
@@ -47,7 +52,7 @@
                 {% if global.request.get('addBook') == 'success' %}
                     <div class="alert alert-success">
                         <p>
-                            <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                             Félicitation, votre livre a été enregistré.
                         </p>
                         <a href="{{ path('livresVoyageurs_espace_sticker', {pseudo: app.user.pseudo_member, uniqueId: global.request.get('idBook'), title: global.request.get('title')  } ) }}" title="Lien vers l'étiquette du livre" target="_blank">Cliquez sur ce lien pour télécharger l'étiquette de votre livre</a>
@@ -116,7 +121,7 @@
                         <input type="submit" name="btnSub" value="Ajouter" class="btn btn-success">
                     </div>
                 </form>
-        
+
                 <!-- Display ISBN API return -->
                 <div class="card">
                     <div class="col-md-3">
@@ -125,10 +130,10 @@
                     <div class="card-block col-md-9">
                         <ul class="list-group list-group-flush" id="bookInfos"></ul>
                     </div>
-                </div>  
-                
+                </div>
+
             </div> <!-- addBook -->
-            
+
 
 
             <!-- Form: Book I have captured -->
@@ -139,7 +144,7 @@
                 {% if global.request.get('capture') == 'success' %}
                     <div class="alert alert-success">
                         <p>
-                            <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                             Félicitation, votre capture a été enregistré.
                         </p>
                     </div>
@@ -238,8 +243,8 @@
                                             <li class="list-group-item">Numéro unique: {{ book.id_book }}</li>
                                             <div class="card-footer text-muted">
                                                 <li class="list-group-item" style="background-color:#f7f7f9">Livre libéré</li>
-                                                <a 
-                                                    href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'étiquette du livre" 
+                                                <a
+                                                    href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'étiquette du livre"
                                                     class="btn btn-primary col-md-12">
                                                         Suivre son chemin
                                                 </a>
@@ -247,7 +252,7 @@
                                         </ul>
                                     </div> <!-- card block -->
                                 </div> <!-- card col-md -->
-                            
+
                             {% else %}
                                 <div class="card col-md-4" style="background-color:#e7ffe7">
                                     <img class="card-img-top img img-responsive" src="{{ book.photo_book }}" alt="Card image cap">
@@ -266,10 +271,10 @@
                                                     <div class="form-group text-center">
                                                         <input type="submit" name="btnSub" value="Déclarer comme libéré" class="btn btn-success">
                                                     </div>
-                                                </form>                        
+                                                </form>
                                             </div>
-                                            <a 
-                                                href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'histoire du livre" 
+                                            <a
+                                                href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'histoire du livre"
                                                 class="btn btn-primary col-md-12">
                                                     Suivre son chemin
                                             </a>
@@ -286,8 +291,8 @@
 
             <!-- List friends / demands -->
             <div id="friendList" class="tab-pane fade" role="tabpanel">
-                
-                
+
+
                 {# {{ dump(pendingList)}} #}
                 {% if not pendingList is empty %}
                     <h2> En attente de réponse </h2>
@@ -301,8 +306,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <h4 class="card-title"> {{ pending.pseudo_member_2 }} </h4>
-                                            <a href="{{ path('livresVoyageurs_acceptFriend', {pseudo:  pending.pseudo_member_2} ) }}" alt="accepter la demande de contact" class="btn btn-primary"> Accepter * </a> 
-                                            <a href="{{ path('livresVoyageurs_declineFriend', {pseudo:  pending.pseudo_member_2} ) }}" alt="refuser la demande de contact" class="btn btn-primary"> Refuser </a> 
+                                            <a href="{{ path('livresVoyageurs_acceptFriend', {pseudo:  pending.pseudo_member_2} ) }}" alt="accepter la demande de contact" class="btn btn-primary"> Accepter * </a>
+                                            <a href="{{ path('livresVoyageurs_declineFriend', {pseudo:  pending.pseudo_member_2} ) }}" alt="refuser la demande de contact" class="btn btn-primary"> Refuser </a>
                                             <p class="card-text"> * En cliquant sur ce bouton, j'accepte de transmettre mon adresse e-mail à ce contact</p>
                                         </div>
                                     </div>
@@ -317,8 +322,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <h4 class="card-title"> {{ pending.pseudo_member_1 }} </h4>
-                                            <a href="{{ path('livresVoyageurs_acceptFriend', {pseudo:  pending.pseudo_member_1} ) }}" alt="accepter la demande de contact" class="btn btn-primary"> Accepter * </a> 
-                                            <a href="{{ path('livresVoyageurs_declineFriend', {pseudo:  pending.pseudo_member_1} ) }}" alt="refuser la demande de contact" class="btn btn-primary"> Refuser </a> 
+                                            <a href="{{ path('livresVoyageurs_acceptFriend', {pseudo:  pending.pseudo_member_1} ) }}" alt="accepter la demande de contact" class="btn btn-primary"> Accepter * </a>
+                                            <a href="{{ path('livresVoyageurs_declineFriend', {pseudo:  pending.pseudo_member_1} ) }}" alt="refuser la demande de contact" class="btn btn-primary"> Refuser </a>
                                             <p class="card-text"> * En cliquant sur ce bouton, j'accepte de transmettre mon adresse e-mail à ce contact</p>
                                         </div>
                                     </div>
@@ -347,7 +352,7 @@
                                     <div class="card-body">
                                         <h4 class="card-title"> {{ friend.pseudo_member_2 }} </h4>
                                         <p class="card-text"> {{ friend.mail_member_2 }} </p>
-                                        <a href="{{ path('livresVoyageurs_blockFriend', {pseudo:  friend.pseudo_member_2} ) }}" alt="bloquer ce contact" class="btn btn-primary"> Supprimer ce contact </a> 
+                                        <a href="{{ path('livresVoyageurs_blockFriend', {pseudo:  friend.pseudo_member_2} ) }}" alt="bloquer ce contact" class="btn btn-primary"> Supprimer ce contact </a>
                                     </div>
                                     </div>
                                 </div>
@@ -362,7 +367,7 @@
                                     <div class="card-body">
                                         <h4 class="card-title"> {{ friend.pseudo_member_1 }} </h4>
                                         <p class="card-text"> {{ friend.mail_member_1 }} </p>
-                                        <a href="{{ path('livresVoyageurs_blockFriend', {pseudo:  friend.pseudo_member_1} ) }}" alt="bloquer ce contact" class="btn btn-primary"> Supprimer ce contact </a> 
+                                        <a href="{{ path('livresVoyageurs_blockFriend', {pseudo:  friend.pseudo_member_1} ) }}" alt="bloquer ce contact" class="btn btn-primary"> Supprimer ce contact </a>
                                     </div>
                                     </div>
                                 </div>
@@ -380,7 +385,7 @@
                 {% if global.request.get('account') == 'success' %}
                     <div class="alert alert-success">
                         <p>
-                            <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                             Félicitation, votre compte a été modifié avec succès.
                         </p>
                     </div>
@@ -389,7 +394,7 @@
                 <form id="formMemberModification" action="" method="POST" enctype="multipart/form-data">
 
                     <!-- Pseudo -->
-                    {# <div class="form-group">
+                    <div class="form-group">
                         <label for="pseudo_member">Pseudo *</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -398,7 +403,7 @@
                         <!-- Pseudo Errors -->
                         <p class="error alert alert-danger">{{ form_errors(formAccount.pseudo_member) }}</p>
                         <p class="error alert alert-danger">Ce pseudo existe déjà</p>
-                    </div> #}
+                    </div>
                     <!-- Email -->
                     <div class="form-group">
                         <label for="mail_member">Email *</label>
@@ -431,7 +436,7 @@
                 {% if global.request.get('pass') == 'success' %}
                     <div class="alert alert-success">
                         <p>
-                            <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                             Félicitation, votre mot de passe a été modifié avec succès.
                         </p>
                     </div>
@@ -472,7 +477,7 @@
 
                 </form>
             </div> <!-- Account -->
-        
+
         </div> <!-- col-md-6 -->
     </div> <!-- row -->
 
@@ -489,7 +494,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js" integrity="sha256-SUaao5Q7ifr2twwET0iyXVy0OVnuFJhGVi5E/dqEiLU=" crossorigin="anonymous"></script>
     <script src="{{ asset('assets/js/jquery.mask.js') }}"></script>
     <script>
@@ -502,7 +507,7 @@
                     replace: 'Glissez-d&eacute;posez un fichier ou cliquez pour remplacer',
                     remove:  'Supprimer',
                     error:   'D&eacute;sol&eacute;, le fichier trop volumineux'
-                }	
+                }
             });
             // MASK JS - Add (-) while customer is typing ISBN
             // Set the ISBN
@@ -519,7 +524,7 @@
                 });
             }
             google.maps.event.addDomListener(window, 'load', initializeAddBook);
-            
+
             function initializeCapture() {
                 var input = document.getElementById('formCapture_address');
                 var autocomplete = new google.maps.places.Autocomplete(input);
@@ -531,7 +536,7 @@
                     document.getElementById('formCapture_lng_pointer').value = place.geometry.location.lng();
                 });
             }
-            google.maps.event.addDomListener(window, 'load', initializeCapture); 
+            google.maps.event.addDomListener(window, 'load', initializeCapture);
             // ISBN - Book infos
             document.getElementById("formAddBook_ISBN_book").addEventListener("focus", function() {
                 // Hide the error message
@@ -604,7 +609,7 @@
                     }
                 }
                 //Validate for length of Password.
-                if (passed > 2 && $(this).val().length > 6) {
+                if (passed > 2 && $(this).val().length >= 6) {
                     passed++;
                 }
                 //Display status.
@@ -633,7 +638,7 @@
 
             // Show/Hide Mdp Help-text
             $("#pass-helptext").hide();
-            
+
             $("#formPass_pass_member_first").focus(function() {
                 $("#pass-helptext").show();
             });

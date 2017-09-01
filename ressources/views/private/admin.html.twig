@@ -2,47 +2,66 @@
 {% extends 'layout.html.twig' %}
 
 {# Define Title #}
-{% block title %} Administration {% endblock %}
+{% block title %}
+    Administration
+{% endblock %}
 
 {#  Breadcrumb trail #}
 {% set active_page = 'Administration' %}
 
-
 {# Define Content #}
 {% block content %}
-
-
     <div class="row">
 
-        <h1> Administration </h1>
+        <h1>
+            Administration
+        </h1>
 
         <div class="row">
             <div class="col-md-2">
                 <img class="img img-responsive img-circle" src="{{ asset('assets/images/avatar/' ~ app.user.avatar_member) }}">
             </div>
             <div class="col-md-offset-1 col-md-9">
-                <h2> Bonjour {{ app.user.pseudo_member }}</h2>
-                <p> Membre actif depuis le: {{ app.user.date_member | date("d/m/Y") }} </p>
-                <p> Email: {{ app.user.mail_member }} </p>
+                <h2>
+                    Bonjour
+                    {{ app.user.pseudo_member }}</h2>
+                <p>
+                    Membre actif depuis le:
+                    {{ app.user.date_member | date("d/m/Y") }}
+                </p>
+                <p>
+                    Email:
+                    {{ app.user.mail_member }}
+                </p>
             </div>
         </div>
 
         <div class="col-md-offset-3 col-md-6">
 
             <!-- Stats -->
-            <h2> Nombre de membres: {{ members }} </h2>
-            <h2> Nombre de livres disponibles: {{ availableBooks }}</h2>
-            <h2> Nombre total de livres créés sur la plateforme: {{ books }} </h2>
+            <h2>
+                Nombre de membres:
+                {{ members }}
+            </h2>
+            <h2>
+                Nombre de livres disponibles:
+                {{ availableBooks }}</h2>
+            <h2>
+                Nombre total de livres créés sur la plateforme:
+                {{ books }}
+            </h2>
 
             <!-- Google Charts -->
-            
+
             <!-- Form: Add a category -->
-            <h2> Ajouter une catégorie </h2>
+            <h2>
+                Ajouter une catégorie
+            </h2>
 
             {% if global.request.get('addCat') == 'success' %}
                 <div class="alert alert-success">
                     <p>
-                        <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                         Félicitation, la catégorie a été créée.
                     </p>
                 </div>
@@ -65,18 +84,75 @@
                 </div>
             </form>
 
-            {# <h2> Les catégories </h2> #}
+            <h2>
+                Les catégories
+            </h2>
             {# {{ dump(categories) }} #}
+            {% if global.request.get('delete') == 'true' %}
+            <div class="alert alert-danger">
+                <p class="text-center">
+                    La catégorie a bien été supprimée
+                </p>
+            </div>
+            {% endif %}
+            {% if global.request.get('exist') == 'true' %}
+            <div class="alert alert-warning">
+                <p class="text-center">
+                    La catégorie {{global.request.get('name')}} existe déjà
+                </p>
+            </div>
+            {% endif %}
+            {% if global.request.get('change') == 'true' %}
+            <div class="alert alert-success">
+                <p class="text-center">
+                    La catégorie n°{{ global.request.get('id') }} a été modifiée
+                </p>
+            </div>
+            {% endif %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Catégorie</th>
+                        <th>Supprimer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for categorie in categories %}
+                        <tr>
+                            <td>
+                                {{categorie.id_category}}
+                            </td>
+                            <td>
+                                <form class="form-inline" action="{{ url('livresVoyageurs_changeCat', {id: categorie.id_category}) }}" method="post">
+                                  <input type="hidden" name="id_category" value="{{categorie.id_category}}">
+                                  <input type="text" name="name_category" value="{{categorie.name_category}}">
+                                  <button type="submit" class="btn btn-warning btn-xs"> Modifier</button>
+                                </form>
+                            </td>
+                            <td>
+                                <a href="{{ url('livresVoyageurs_deleteCat', {id_category: categorie.id_category}) }}" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-remove"></i></a>
+                            </td>
 
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
 
             <!-- Form: Look for an ID -->
-            <h2> Rechercher l'identifiant d'un membre </h2>
+            <h2>
+                Rechercher l'identifiant d'un membre
+            </h2>
 
             {% if global.request.get('idMember') == 'success' %}
                 <div class="alert alert-success">
                     <p>
-                        <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
-                        L'identifiant de  {{ global.request.get('pseudo') }} est: {{ global.request.get('id_member') }}
+                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                        L'identifiant de
+                        {{ global.request.get('pseudo') }}
+                        est:
+                        {{ global.request.get('id_member') }}
                     </p>
                 </div>
             {% endif %}
@@ -99,12 +175,14 @@
             </form>
 
             <!-- Form: Look for an ID -->
-            <h2> Définir le rôle d'un membre </h2>
+            <h2>
+                Définir le rôle d'un membre
+            </h2>
 
             {% if global.request.get('changeRole') == 'success' %}
                 <div class="alert alert-success">
                     <p>
-                        <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                         Félicitation, le rôle a été modifié.
                     </p>
                 </div>
@@ -136,7 +214,6 @@
                 </div>
             </form>
 
-            
             {# Change Role by Pseudo #}
             <form id="formRole2" action="" method="POST" class="col-md-6">
                 <!-- Id du membre -->
@@ -163,15 +240,15 @@
                 </div>
             </form>
 
-
-
             <!-- Form: Delete a member-->
-            <h2> Bannir un membre </h2>
+            <h2>
+                Bannir un membre
+            </h2>
 
             {% if global.request.get('delete') == 'success' %}
                 <div class="alert alert-success">
                     <p>
-                        <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                         Le membre a bien été effacé.
                     </p>
                 </div>
@@ -211,7 +288,6 @@
                     <input type="submit" name="btnSub" value="Supprimer" class="btn btn-success">
                 </div>
             </form>
-
 
         </div>
     </div>

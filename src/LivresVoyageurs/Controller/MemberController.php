@@ -30,7 +30,7 @@ class  MemberController
 
     use Shortcut;
     use TestIdBook;
-    
+
 
     //Display Personal Space
     public function espacePersoAction(Application $app, Request $request, $pseudo) {
@@ -43,9 +43,9 @@ class  MemberController
         ->find_one($app['user']->getId_member());
 
         # 1-b Book categories
-        $categories = function() use($app) {            
+        $categories = function() use($app) {
             # Get cat from DB
-            $categories = $app['idiorm.db']->for_table('categories')->find_result_set();        
+            $categories = $app['idiorm.db']->for_table('categories')->find_result_set();
             # Format (ChoiceType)
             $array = [];
             foreach ($categories as $categorie) :
@@ -61,7 +61,7 @@ class  MemberController
 
         # Create the form
         $formAddBook = $app['form.factory']->createNamedBuilder('formAddBook', FormType::class)
-        
+
             # Field by Google book Api
             ->add('id_member', HiddenType::class, [
                 'required'      =>  true,
@@ -85,7 +85,7 @@ class  MemberController
                 'required'      =>  false
             ])
             # Field by the member
-            ->add('ISBN_book', TextType::class, [                
+            ->add('ISBN_book', TextType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
                 'constraints'   =>  array(new NotBlank(array('message'=>'Vous n\'avez pas indiqué l\'ISBN'))),
@@ -93,10 +93,10 @@ class  MemberController
                     'class'     => 'form-control',
                     'placeholder'   => '000-0-0000-0000-0',
                     'autocomplete'  => 'off'
-                    
+
                 ]
             ])
-            ->add('id_category', ChoiceType::class, [                
+            ->add('id_category', ChoiceType::class, [
                 'choices'       => $categories(),
                 'expanded'      => false,
                 'multiple'      => false,
@@ -106,7 +106,7 @@ class  MemberController
                 ]
             ])
             # Address
-            ->add('addressStart', TextType::class, [                
+            ->add('addressStart', TextType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
                 'constraints'   =>  array(new NotBlank(array('message'=>'Vous n\'avez pas indiqué votre ville'))),
@@ -138,18 +138,18 @@ class  MemberController
             ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
 
             ->getForm();
-        
+
         if ($request->request->has("formAddBook") ){
             $formAddBook->handleRequest($request);
-        }   
-        # If form Valid   
+        }
+        # If form Valid
         if ($formAddBook->isValid() && $formAddBook->isSubmitted()) :
-            
+
             # $book = form fields
-            $book = $formAddBook->getData(); 
+            $book = $formAddBook->getData();
 
             # A - Generate unique identifier for the book
-            # Loop: generate Id and return true while exist 
+            # Loop: generate Id and return true while exist
             # Using the function: isUsed (Trait) to check if ID exist in db
             function bcid($lenght) {
                 $number = '';
@@ -162,13 +162,13 @@ class  MemberController
 
 
             $generateIdBook = bcid(8);
-            
+
             while( $this->isUsed( $app, $generateIdBook) ) {
                 $generateIdBook = bcid(8);
             }
             # if not in DB : create $idBook
-            $idBook = $generateIdBook; 
-            
+            $idBook = $generateIdBook;
+
             # B- authors
             # Separate firstname and lastname
             $name = explode(" ", $book['authors']);
@@ -179,12 +179,12 @@ class  MemberController
                 ->where('firstname_author', $firstname)
                 ->where('lastname_author', $lastname)
                 ->find_one();
-            
+
             # if exists: Get authors id from table authors
-            if ($checkAuthor) 
+            if ($checkAuthor)
             {
                 $idAuthor = $checkAuthor->id();
-            } 
+            }
             # else: create author
             else
             {
@@ -217,7 +217,7 @@ class  MemberController
             $bookDb->lng_startpoint      = $book['lng_startpoint'];
             $bookDb->city_startpoint     = $book['city_startpoint'];
             $bookDb->save();
-            
+
 
             # Redirection
             return $app->redirect('?addBook=success&idBook=' . $idBook . '&title=' . $book['title_book']);
@@ -232,7 +232,15 @@ class  MemberController
             ->add('id_book', TextType::class, [
                 'required'          =>  true,
                 'label'             =>  false,
-                'constraints'       =>  array(new Regex(array('pattern'=>'/[0-9]/{8}', 'match'=> false, 'message'=>'Numéro incorrect - Doit contenir 8 chiffres'))),
+                'constraints'       =>  array(
+                    new Regex(
+                    array(
+                        'pattern'   => '/[0-9]/{8}',
+                        'match'     => false,
+                        'message'   => 'Numéro incorrect - Doit contenir 8 chiffres')),
+                    new NotBlank(array(
+                        'message'   => 'Vous devez saisir un numéro')),
+                    ),
                 'attr'              =>  [
                     'class'         => 'form-control',
                     'autocomplete'  => 'off'
@@ -292,7 +300,7 @@ class  MemberController
             $captureDb->id_member            = $currentMember['id_member'];
             $captureDb->comment_capture      = $capture['comment_capture'];
             $captureDb->save();
-            
+
             # Connect to DB : Set the book as unavailable
             $bookDb =  $app['idiorm.db']->for_table('books')->find_one($capture['id_book']);
             $bookDb->disponibility_book      = 0;
@@ -313,15 +321,15 @@ class  MemberController
         $formAccount = $app['form.factory']->createNamedBuilder("formAccount", FormType::class)
 
             # Form Fields
-            // ->add('pseudo_member', TextType::class, [
-            //     'required'      =>  true,
-            //     'label'         =>  false,
-            //     'constraints'   =>  array(new NotBlank(array('message' => 'Vous n\'avez pas indiqué votre Pseudo' ))),
-            //     'attr'          =>  [
-            //         'class'     => 'form-control',
-            //         'value'     => $currentMember['pseudo_member']
-            //     ]
-            // ])
+            ->add('pseudo_member', TextType::class, [
+                'required'      =>  true,
+                'label'         =>  false,
+                'constraints'   =>  array(new NotBlank(array('message' => 'Vous n\'avez pas indiqué votre Pseudo' ))),
+                'attr'          =>  [
+                    'class'     => 'form-control',
+                    'value'     => $currentMember['pseudo_member']
+                ]
+            ])
             ->add('mail_member', EmailType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
@@ -342,7 +350,7 @@ class  MemberController
                 'label'         =>  false,
                 'attr'          =>  [
                     'class'     => 'form-control dropify',
-                    // 'data-default-file'            => '/livresVoyageurs/public/assets/images/avatar/' . $currentMember['avatar_member'], 
+                    // 'data-default-file'            => '/livresVoyageurs/public/assets/images/avatar/' . $currentMember['avatar_member'],
                     'data-allowed-file-extensions' => 'jpg jpeg png'
                 ]
             ])
@@ -378,39 +386,39 @@ class  MemberController
                 #4. Save the new image
                 $image->move($chemin, $this->generateSlug($currentMember['pseudo_member']).'.'.$extension);
             };
-            
-            // if( $member['pseudo_member'] != $currentMember['pseudo_member'] )
-            // {
-            //     # Check if user mail does not exist
-            //     $checkUser = $app['idiorm.db']->for_table('members')
-            //     ->where('pseudo_member', $member['pseudo_member'])
-            //     ->count();
-            
-            //     # If the mail does not exist
-            //     if(!$checkUser)
-            //     {
-            //         # Connect to DB : Register a new member
-            //         $memberDb = $app['idiorm.db']->for_table('members')->find_one($app['user']->getId_member());
-                    
-            //         $memberDb->pseudo_member        = $member['pseudo_member'];
-            //         $memberDb->mail_member          = $member['mail_member'];
-            //         if($image)
-            //         {
-            //             $memberDb->avatar_member    = $this->generateSlug($member['pseudo_member']) . '.' . $extension ;
-            //         }
-            //         $memberDb->save();
 
-            //         # Redirection
-            //         return $app->redirect('?account=success');
-            //     }
-            //     else
-            //     {
-            //         # Redirection
-            //         return $app->redirect('?account=exist');
-            //     }
-            // }
-            // else 
-            // {
+            if( $member['pseudo_member'] != $currentMember['pseudo_member'] )
+            {
+                # Check if user mail does not exist
+                $checkUser = $app['idiorm.db']->for_table('members')
+                ->where('pseudo_member', $member['pseudo_member'])
+                ->count();
+
+                # If the mail does not exist
+                if(!$checkUser)
+                {
+                    # Connect to DB : Register a new member
+                    $memberDb = $app['idiorm.db']->for_table('members')->find_one($app['user']->getId_member());
+
+                    $memberDb->pseudo_member        = $member['pseudo_member'];
+                    $memberDb->mail_member          = $member['mail_member'];
+                    if($image)
+                    {
+                        $memberDb->avatar_member    = $this->generateSlug($member['pseudo_member']) . '.' . $extension ;
+                    }
+                    $memberDb->save();
+
+                    # Redirection
+                    return $app->redirect('?account=success');
+                }
+                else
+                {
+                    # Redirection
+                    return $app->redirect('?account=exist');
+                }
+            }
+            else
+            {
                 # Connect to DB : Register a new member
                 $memberDb = $app['idiorm.db']->for_table('members')->find_one($app['user']->getId_member());
                 $memberDb->mail_member          = $member['mail_member'];
@@ -422,7 +430,7 @@ class  MemberController
 
                 # Redirection
                 return $app->redirect('?account=success');
-            // }
+            }
 
         endif;
 
@@ -484,8 +492,8 @@ class  MemberController
                                         ->where('id_member', $app['user']->getId_member())
                                         ->order_by_desc('date_book')
                                         ->find_result_set();
-            
-            
+
+
 
         # 6 : user's pending friends
         $pendingList = $app['idiorm.db']->for_table('view_friends')
@@ -493,7 +501,7 @@ class  MemberController
                                                 array('id_member_1'  =>  $currentMember['id_member'], 'status_friend' => 0 ),
                                                 array('id_member_2'  =>  $currentMember['id_member'], 'status_friend' => 0 )
                                         ))
-                                        ->where_not_equal('action_friend', $currentMember['id_member'])
+                                        // ->where_not_equal('action_friend', $currentMember['id_member'])
                                         ->order_by_desc('date_friend')
                                         ->find_result_set();
         # 7 : user's friends
@@ -502,12 +510,12 @@ class  MemberController
                                                 array('id_member_1'  =>  $currentMember['id_member'], 'status_friend' => 1 ),
                                                 array('id_member_2'  =>  $currentMember['id_member'], 'status_friend' => 1 )
                                         ))
-                                        ->where_not_equal('action_friend', $currentMember['id_member'])
+                                        // ->where_not_equal('action_friend', $currentMember['id_member'])
                                         ->order_by_desc('date_friend')
                                         ->find_result_set();
 
 
-        # 8 : Return all to the view                                
+        # 8 : Return all to the view
         return $app['twig']->render('member/espacePerso.html.twig', [
             'pseudo'           => $pseudo,
             'formAddBook'      => $formAddBook->createView(),
@@ -523,7 +531,7 @@ class  MemberController
 
     # Change disponibility
     public function espacePersoPost(Application $app, Request $request) {
-        
+
         # Connect to DB : Register the book as unavailable
         $bookDispoDb = $app['idiorm.db']->for_table('books')->find_one($request->get('id_book'));
         $bookDispoDb->disponibility_book = $request->get('disponibility_book');
@@ -534,7 +542,7 @@ class  MemberController
     }
 
     # Sticker creation
-    public function stickerAction(Application $app, Request $request, $uniqueId, $title) {       
+    public function stickerAction(Application $app, Request $request, $uniqueId, $title) {
 
         # Instanciate a new Dompdf object
         $sticker = new Dompdf();
@@ -555,7 +563,7 @@ class  MemberController
 
     # Delete account
     public function deleteAction(Application $app) {
-        
+
         # Current member
         $deleteMember = $app['idiorm.db']->for_table('members')
                                             ->find_one($app['user']->getId_member());
@@ -567,10 +575,10 @@ class  MemberController
         $deleteMember->active_member   = 0;
         $deleteMember->save();
 
-        
+
         # Empty Session
         $app['session']->clear();
-    
+
         # Redirection
         return $app->redirect( $app['url_generator']->generate('livresVoyageurs_home'));
     }
@@ -579,11 +587,11 @@ class  MemberController
 
     # Display Chat Page
     public function chatAction(Application $app, $receiver) {
-        
+
         # Define messages sender
-        // $sender = $app['pseudo']; 
+        // $sender = $app['pseudo'];
 $sender = 'Loic';
-        
+
         return $app['twig']->render('member/chat.html.twig', [
             'receiver' => $receiver,
             'sender'   => $sender

@@ -5,15 +5,9 @@ namespace LivresVoyageurs\Controller;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Validator\Constraints\NotBlank;
+
 use Symfony\Component\HttpFoundation\Request;
 
 class  AdminController
@@ -23,9 +17,9 @@ class  AdminController
     public function administrateurAction(Application $app, Request $request, $pseudoAdmin) {
 
             # Deal with categories
-            // $categories = function() use($app) {            
+            // $categories = function() use($app) {
                 # Get cat from DB
-                $categories = $app['idiorm.db']->for_table('categories')->find_result_set();        
+                $categories = $app['idiorm.db']->for_table('categories')->find_result_set();
             //     # Format (ChoiceType)
             //     $array = [];
             //     foreach ($categories as $categorie) :
@@ -33,14 +27,14 @@ class  AdminController
             //     endforeach;
             //     # Return
             //     return $array;
-            
+
             // };
 
             # Add a category
             # Form
             $formAddCat = $app['form.factory']->createBuilder(FormType::class)
 
-                ->add('name_category', TextType::class, [                
+                ->add('name_category', TextType::class, [
                     'required'      =>  true,
                     'label'         =>  false,
                     'attr' => [
@@ -50,25 +44,25 @@ class  AdminController
                 ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
 
                 ->getForm();
-            
-            $formAddCat->handleRequest($request);            
-            # If form Valid   
-            if ($formAddCat->isValid()) :            
+
+            $formAddCat->handleRequest($request);
+            # If form Valid
+            if ($formAddCat->isValid()) :
                 # $cat = form field
-                $cat = $formAddCat->getData(); 
+                $cat = $formAddCat->getData();
                 # Persist in DB
                 $addCat = $app['idiorm.db']->for_table('categories')->create();
                 $addCat->name_category = $cat['name_category'];
                 $addCat->save();
                 # Redirection
                 return $app->redirect('?addCat=success');
-            
+
             endif;
 
 
 
         # Modify a category
-        // if ($formModifCat->isValid()) :  
+        // if ($formModifCat->isValid()) :
         //     # Persist in DB
         //     $modifCat = $app['idiorm.db']->for_table('categories')->find_one($modif['id_category']);
         //     $modifCat->name_category = $cat['name_category'];
@@ -78,7 +72,7 @@ class  AdminController
         // endif;
 
         // # Delete a category
-        // if ($formDelCat->isValid()) :  
+        // if ($formDelCat->isValid()) :
         //     $modifCat = $app['idiorm.db']->for_table('categories')->find_one($modif['id_category']);
         //     $modifCat->delete();
 
@@ -90,8 +84,8 @@ class  AdminController
 
             # A- Search for a member by pseudo and return it's ID
                 $formMember = $app['form.factory']->createBuilder(FormType::class)
-                
-                    ->add('pseudo_member', TextType::class, [                
+
+                    ->add('pseudo_member', TextType::class, [
                         'required'      =>  true,
                         'label'         =>  false,
                         'attr' => [
@@ -101,12 +95,12 @@ class  AdminController
                     ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
 
                     ->getForm();
-                
-                $formMember->handleRequest($request);            
-                # If form Valid   
-                if ($formMember->isValid()) :            
+
+                $formMember->handleRequest($request);
+                # If form Valid
+                if ($formMember->isValid()) :
                     # $pseudo = form field
-                    $member = $formMember->getData(); 
+                    $member = $formMember->getData();
                     # Check in DB
                     $memberDb = $app['idiorm.db']->for_table('members')
                         ->where('pseudo_member', $member['pseudo_member'])
@@ -114,13 +108,13 @@ class  AdminController
                     # Get ID
                     $id_member = $memberDb->id();
                     # Redirection
-                    return $app->redirect('?idMember=success&pseudo=' . $member['pseudo_member'] .'&id_member=' . $id_member);            
+                    return $app->redirect('?idMember=success&pseudo=' . $member['pseudo_member'] .'&id_member=' . $id_member);
                 endif;
 
             # B- Change Role by Id
                 $formRole = $app['form.factory']->createBuilder(FormType::class)
-                
-                    ->add('id_member', TextType::class, [                
+
+                    ->add('id_member', TextType::class, [
                         'required'              =>  true,
                         'label'                 =>  false,
                         'attr'                  => [
@@ -141,24 +135,24 @@ class  AdminController
                     ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
 
                     ->getForm();
-                
-                $formRole->handleRequest($request);            
-                # If form Valid   
-                if ($formRole->isValid()) :            
+
+                $formRole->handleRequest($request);
+                # If form Valid
+                if ($formRole->isValid()) :
                     # $pseudo = form field
-                    $role = $formRole->getData(); 
+                    $role = $formRole->getData();
                     # Check in DB
                     $roleDb = $app['idiorm.db']->for_table('members')->find_one($role['id_member']);
                     $roleDb->role_member = $role['role_member'];
                     $roleDb->save();
                     # Redirection
-                    return $app->redirect('?changeRole=success');            
+                    return $app->redirect('?changeRole=success');
                 endif;
 
                 # C- Change Role by Pseudo
                 $formRole2 = $app['form.factory']->createBuilder(FormType::class)
-                
-                    ->add('pseudo_member2', TextType::class, [                
+
+                    ->add('pseudo_member2', TextType::class, [
                         'required'              =>  true,
                         'label'                 =>  false,
                         'attr'                  => [
@@ -179,12 +173,12 @@ class  AdminController
                     ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
 
                     ->getForm();
-                
-                $formRole2->handleRequest($request);            
-                # If form Valid   
-                if ($formRole2->isValid()) :            
+
+                $formRole2->handleRequest($request);
+                # If form Valid
+                if ($formRole2->isValid()) :
                     # $pseudo = form field
-                    $role = $formRole2->getData(); 
+                    $role = $formRole2->getData();
                     # Check in DB
                     $roleDb = $app['idiorm.db']->for_table('members')
                         ->where('pseudo_member', $role['pseudo_member2'])
@@ -192,7 +186,7 @@ class  AdminController
                     $roleDb->role_member = $role['role_member2'];
                     $roleDb->save();
                     # Redirection
-                    return $app->redirect('?changeRole=success');            
+                    return $app->redirect('?changeRole=success');
                 endif;
 
 
@@ -200,8 +194,8 @@ class  AdminController
         # Delete a member
             # A- Delete by Id
             $formDel = $app['form.factory']->createBuilder(FormType::class)
-            
-                ->add('id_member3', TextType::class, [                
+
+                ->add('id_member3', TextType::class, [
                     'required'              =>  true,
                     'label'                 =>  false,
                     'attr'                  => [
@@ -211,22 +205,22 @@ class  AdminController
                 ->add('submit', SubmitType::class, ['label' => 'Supprimer'])
 
                 ->getForm();
-            
-            $formDel->handleRequest($request);            
-            # If form Valid   
-            if ($formDel->isValid()) :   
-                $member = $formDel->getData();          
+
+            $formDel->handleRequest($request);
+            # If form Valid
+            if ($formDel->isValid()) :
+                $member = $formDel->getData();
                 $delete = $app['idiorm.db']->for_table('members')->find_one($member['id_member3']);
                 $delete->delete();
                 # Redirection
-                return $app->redirect('?delete=success');            
+                return $app->redirect('?delete=success');
             endif;
 
 
             # B- Delete by Pseudo
             $formDel2 = $app['form.factory']->createBuilder(FormType::class)
-            
-                ->add('pseudo_member3', TextType::class, [                
+
+                ->add('pseudo_member3', TextType::class, [
                     'required'              =>  true,
                     'label'                 =>  false,
                     'attr'                  => [
@@ -234,19 +228,19 @@ class  AdminController
                     ]
                 ])
                 ->add('submit', SubmitType::class, ['label' => 'Supprimer'])
-                
+
                 ->getForm();
-            
-            $formDel2->handleRequest($request);            
-            # If form Valid   
-            if ($formDel2->isValid()) :   
-                $member = $formDel2->getData();          
+
+            $formDel2->handleRequest($request);
+            # If form Valid
+            if ($formDel2->isValid()) :
+                $member = $formDel2->getData();
                 $delete = $app['idiorm.db']->for_table('members')
                                             ->where('pseudo_member', $member['pseudo_member3'])
                                             ->find_one();
                 $delete->delete();
                 # Redirection
-                return $app->redirect('?delete=success');            
+                return $app->redirect('?delete=success');
             endif;
 
 
@@ -267,7 +261,7 @@ class  AdminController
 
         # Chart: books by country
 
-        
+
         // View
         return $app['twig']->render('private/admin.html.twig', [
             'members'           => $members,
@@ -281,6 +275,52 @@ class  AdminController
             'formDel2'          => $formDel2->createView(),
             'categories'        => $categories
         ]);
+    }
+
+    // Change a category
+    public function changeCatAction(Application $app, Request $request, $id){
+        if ($request->isMethod('POST')) {
+            # 1. Check if the name already exist
+            $name  = $request->get('name_category');
+            $exist = $app['idiorm.db']->for_table('categories')
+                                      ->where('name_category', $name)
+                                      ->count();
+            # 2. Change the name of the category
+            if (!$exist) {
+                # Connect to database
+                $change = $app['idiorm.db']->for_table('categories')
+                                           ->find_one($id);
+                # Update entry
+                $change->name_category = $name;
+                $change->save();
+
+                # Redirect
+                return $app->redirect($app['url_generator']->generate('livresVoyageurs_administrator', array('pseudoAdmin' => $app['user']->getPseudo_member(),
+                      'change'      => 'true',
+                      'id'          => $id
+                 ) ) );
+            }
+            else {
+                return $app->redirect($app['url_generator']->generate('livresVoyageurs_administrator', array('pseudoAdmin' => $app['user']->getPseudo_member(),
+                      'exist'       => 'true',
+                      'name'        => $name
+                 ) ) );
+            }
+        }
+    }
+
+    // Delete a category
+    public function removeCatAction(Application $app, $id_category){
+        # 1. Database connection
+        $delete = $app['idiorm.db']->for_table('categories')
+                                    ->find_one($id_category);
+        # 2. delete the category
+        $delete->delete();
+
+        # 3. Redirect
+        return $app->redirect( $app['url_generator']->generate('livresVoyageurs_administrator', array('pseudoAdmin' => $app['user']->getPseudo_member(),
+              'delete' => 'true'
+              ) ) );
     }
 
 }
