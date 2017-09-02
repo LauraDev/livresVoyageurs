@@ -215,9 +215,16 @@ class  AdminController
             $formDel->handleRequest($request);            
             # If form Valid   
             if ($formDel->isValid()) :   
-                $member = $formDel->getData();          
-                $delete = $app['idiorm.db']->for_table('members')->find_one($member['id_member3']);
-                $delete->delete();
+                $member = $formDel->getData(); 
+                $deleteMember = $app['idiorm.db']->for_table('members')
+                    ->find_one($member['id_member3']);
+                $deleteMember->pseudo_member   = 'anonyme';
+                $deleteMember->mail_member     = '';
+                $deleteMember->pass_member     = '';
+                $deleteMember->avatar_member   = '';
+                $deleteMember->role_member     = '';
+                $deleteMember->active_member   = 0;
+                $deleteMember->save();
                 # Redirection
                 return $app->redirect('?delete=success');            
             endif;
@@ -265,8 +272,49 @@ class  AdminController
 
         # Chart: books by category
 
-        # Chart: books by country
+        // SELECT category, COUNT(*) as count FROM table GROUP BY category
+        $booksByCat = $app['idiorm.db']->for_table('view_books')
+            ->select('name_category')
+            ->select_expr('COUNT(*)', 'count')
+            ->group_by('name_category')
+            ->find_many();
 
+        $tableCat = array();
+        $rowCat = array();
+        $tableCat['cols'] = array(
+                                array('label' => 'Catégorie', 'type' => 'string'),
+                                array('label' => 'Nombre de livres', 'type' => 'number')
+                                );
+        for ($i=0; $i < count($booksByCat); $i++) {
+            $ligneCat = $booksByCat[$i];
+            $temp = array();
+            $temp[] = array ('v' => $ligneCat['name_category']);
+            $temp[] = array('v' => $ligneCat['count']);
+            $rowCat[] = array('c' => $temp);
+            }
+        $tableCat['rows'] = $rowCat;
+
+        # Chart: members by city
+        $membersByCity = $app['idiorm.db']->for_table('view_story')
+        ->select('city_startpoint')
+        ->select_expr('COUNT(*)', 'count')
+        ->group_by('city_startpoint')
+        ->find_many();
+
+        $tableCity = array();
+        $rowCity = array();
+        $tableCity['cols'] = array(
+                                array('label' => 'Ville', 'type' => 'string'),
+                                array('label' => 'Nombre de membres', 'type' => 'number')
+                                );
+        for ($i=0; $i < count($membersByCity); $i++) {
+            $ligneCity = $membersByCity[$i];
+            $temp = array();
+            $temp[] = array ('v' => $ligneCity['city_startpoint']);
+            $temp[] = array('v' => $ligneCity['count']);
+            $rowCity[] = array('c' => $temp);
+            }
+        $tableCity['rows'] = $rowCity;
         
         // View
         return $app['twig']->render('private/admin.html.twig', [
@@ -279,7 +327,9 @@ class  AdminController
             'formRole2'         => $formRole2->createView(),
             'formDel'           => $formDel->createView(),
             'formDel2'          => $formDel2->createView(),
-            'categories'        => $categories
+            'categories'        => $categories,
+            'booksByCat'        => $tableCat,
+            'membersByCity'     => $tableCity
         ]);
     }
 

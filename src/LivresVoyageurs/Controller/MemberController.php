@@ -313,15 +313,15 @@ class  MemberController
         $formAccount = $app['form.factory']->createNamedBuilder("formAccount", FormType::class)
 
             # Form Fields
-            // ->add('pseudo_member', TextType::class, [
-            //     'required'      =>  true,
-            //     'label'         =>  false,
-            //     'constraints'   =>  array(new NotBlank(array('message' => 'Vous n\'avez pas indiqué votre Pseudo' ))),
-            //     'attr'          =>  [
-            //         'class'     => 'form-control',
-            //         'value'     => $currentMember['pseudo_member']
-            //     ]
-            // ])
+            ->add('pseudo_member', TextType::class, [
+                'required'      =>  true,
+                'label'         =>  false,
+                'constraints'   =>  array(new NotBlank(array('message' => 'Vous n\'avez pas indiqué votre Pseudo' ))),
+                'attr'          =>  [
+                    'class'     => 'form-control',
+                    'value'     => $currentMember['pseudo_member']
+                ]
+            ])
             ->add('mail_member', EmailType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
@@ -379,38 +379,38 @@ class  MemberController
                 $image->move($chemin, $this->generateSlug($currentMember['pseudo_member']).'.'.$extension);
             };
             
-            // if( $member['pseudo_member'] != $currentMember['pseudo_member'] )
-            // {
-            //     # Check if user mail does not exist
-            //     $checkUser = $app['idiorm.db']->for_table('members')
-            //     ->where('pseudo_member', $member['pseudo_member'])
-            //     ->count();
+            if( $member['pseudo_member'] != $currentMember['pseudo_member'] )
+            {
+                # Check if user mail does not exist
+                $checkUser = $app['idiorm.db']->for_table('members')
+                ->where('pseudo_member', $member['pseudo_member'])
+                ->count();
             
-            //     # If the mail does not exist
-            //     if(!$checkUser)
-            //     {
-            //         # Connect to DB : Register a new member
-            //         $memberDb = $app['idiorm.db']->for_table('members')->find_one($app['user']->getId_member());
+                # If the mail does not exist
+                if(!$checkUser)
+                {
+                    # Connect to DB : Register a new member
+                    $memberDb = $app['idiorm.db']->for_table('members')->find_one($app['user']->getId_member());
                     
-            //         $memberDb->pseudo_member        = $member['pseudo_member'];
-            //         $memberDb->mail_member          = $member['mail_member'];
-            //         if($image)
-            //         {
-            //             $memberDb->avatar_member    = $this->generateSlug($member['pseudo_member']) . '.' . $extension ;
-            //         }
-            //         $memberDb->save();
+                    $memberDb->pseudo_member        = $member['pseudo_member'];
+                    $memberDb->mail_member          = $member['mail_member'];
+                    if($image)
+                    {
+                        $memberDb->avatar_member    = $this->generateSlug($member['pseudo_member']) . '.' . $extension ;
+                    }
+                    $memberDb->save();
 
-            //         # Redirection
-            //         return $app->redirect('?account=success');
-            //     }
-            //     else
-            //     {
-            //         # Redirection
-            //         return $app->redirect('?account=exist');
-            //     }
-            // }
-            // else 
-            // {
+                    # Redirection
+                    return $app->redirect('?account=success');
+                }
+                else
+                {
+                    # Redirection
+                    return $app->redirect('?account=exist');
+                }
+            }
+            else 
+            {
                 # Connect to DB : Register a new member
                 $memberDb = $app['idiorm.db']->for_table('members')->find_one($app['user']->getId_member());
                 $memberDb->mail_member          = $member['mail_member'];
@@ -422,7 +422,7 @@ class  MemberController
 
                 # Redirection
                 return $app->redirect('?account=success');
-            // }
+            }
 
         endif;
 
@@ -494,6 +494,8 @@ class  MemberController
                                                 array('id_member_2'  =>  $currentMember['id_member'], 'status_friend' => 0 )
                                         ))
                                         ->where_not_equal('action_friend', $currentMember['id_member'])
+                                        ->where_not_equal('pseudo_member_1', 'anonyme')
+                                        ->where_not_equal('pseudo_member_2', 'anonyme')
                                         ->order_by_desc('date_friend')
                                         ->find_result_set();
         # 7 : user's friends
@@ -502,7 +504,8 @@ class  MemberController
                                                 array('id_member_1'  =>  $currentMember['id_member'], 'status_friend' => 1 ),
                                                 array('id_member_2'  =>  $currentMember['id_member'], 'status_friend' => 1 )
                                         ))
-                                        ->where_not_equal('action_friend', $currentMember['id_member'])
+                                        ->where_not_equal('pseudo_member_1', 'anonyme')
+                                        ->where_not_equal('pseudo_member_2', 'anonyme')
                                         ->order_by_desc('date_friend')
                                         ->find_result_set();
 

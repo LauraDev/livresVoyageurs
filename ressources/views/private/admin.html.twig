@@ -11,7 +11,7 @@
 {# Define Content #}
 {% block content %}
 
-
+{# {{ dump(membersByCity) }} #}
     <div class="row">
 
         <h1> Administration </h1>
@@ -65,8 +65,6 @@
                 </div>
             </form>
 
-            {# <h2> Les catégories </h2> #}
-            {# {{ dump(categories) }} #}
 
 
             <!-- Form: Look for an ID -->
@@ -98,7 +96,7 @@
                 </div>
             </form>
 
-            <!-- Form: Look for an ID -->
+            <!-- Form: Change ROLE -->
             <h2> Définir le rôle d'un membre </h2>
 
             {% if global.request.get('changeRole') == 'success' %}
@@ -112,7 +110,7 @@
 
             {# Change Role by ID #}
             <form id="formRole" action="" method="POST" class="col-md-6">
-                <!-- Id du membre -->
+                <!-- Member Id -->
                 <div class="form-group">
                     <label for="id_member">Identifiant</label>
                     <div class="input-group">
@@ -120,7 +118,7 @@
                     </div>
                     <p class="error alert alert-danger">Vous n'avez pas indiqué l'identifiant</p>
                 </div>
-                <!-- Role du membre -->
+                <!-- Checkbox Role -->
                 <div class="form-group">
                     <label for="role_member">Rôle</label>
                     <div class="input-group">
@@ -178,7 +176,7 @@
             {% endif %}
             {# Delete using ID #}
             <form id="formDel" action="" method="POST" class="col-md-6">
-                <!-- ID membre -->
+                <!-- ID member -->
                 <div class="form-group">
                     <label for="id_member">Identifiant</label>
                     <div class="input-group">
@@ -196,7 +194,7 @@
 
             {# Delete using Pseudo #}
             <form id="formDel2" action="" method="POST" class="col-md-6">
-                <!-- Pseudo membre -->
+                <!-- Pseudo membrer -->
                 <div class="form-group">
                     <label for="pseudo_member">Pseudo</label>
                     <div class="input-group">
@@ -214,6 +212,73 @@
 
 
         </div>
+
+        <!-- Google Charts -->
+        <div class="row">
+            {# Books by categories #}
+            <div class="">
+                <div id="chart_div_cat" class="chart"></div>
+            </div>
+            {# Members by country #}
+            <div class="">
+                <div id="chart_div_country" class="chart"></div>
+            </div>
+            {#  #}
+            {# <div class="">
+                <div id="chart_div_" class="chart" style="width: 1000px; height: 400px;"></div>
+            </div> #}
+
+        </div>
+
     </div>
+
+{% endblock %}
+
+
+
+{% block javascripts %}
+    {{ parent() }}
+    
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+        // Load the Visualization API
+        google.charts.load('current', {'packages':['corechart']});
+
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            // Table : books by category
+            var dataCat = new google.visualization.DataTable( {{ (booksByCat | json_encode | raw) }} );
+            // Creation du tableau
+            var chartCat = new google.visualization.ColumnChart(document.getElementById('chart_div_cat'));
+            chartCat.draw(dataCat, {
+                title: "Livres par Catégorie",
+                titleTextStyle:{
+                    fontName: 'Baloo',
+                    fontSize: 18,
+                },
+                colors: ['#9e846d']
+            });
+
+            // Table : members by city
+            var dataCountry = new google.visualization.DataTable( {{ (membersByCity | json_encode | raw) }} );
+            var chartCountry = new google.visualization.ColumnChart(document.getElementById('chart_div_country'));
+            chartCountry.draw(dataCountry, {
+                title: "Membres par Ville",
+                titleTextStyle:{
+                    fontName: 'Baloo',
+                    fontSize: 18,
+                },
+                colors: ['#9e846d']
+            });
+
+        } // end drawchart
+
+
+    </script>
+
 
 {% endblock %}
