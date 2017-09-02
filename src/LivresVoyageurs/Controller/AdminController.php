@@ -17,18 +17,17 @@ class  AdminController
     public function administrateurAction(Application $app, Request $request, $pseudoAdmin) {
 
             # Deal with categories
-            // $categories = function() use($app) {
                 # Get cat from DB
-                $categories = $app['idiorm.db']->for_table('categories')->find_result_set();
-            //     # Format (ChoiceType)
-            //     $array = [];
-            //     foreach ($categories as $categorie) :
-            //         $array[$categorie->name_category] = $categorie->id_category;
-            //     endforeach;
-            //     # Return
-            //     return $array;
+                $categories = $app['idiorm.db']->for_table('categories')
+                ->find_result_set();
 
-            // };
+                $catNotUsed = $app['idiorm.db']->for_table('books')
+                ->select('categories.id_category')
+                ->right_outer_join('categories', 
+                    array('categories.id_category', '=', 'books.id_category'))
+                ->where_null('books.id_category')
+                ->find_many();
+                
 
             # Add a category
             # Form
@@ -59,25 +58,6 @@ class  AdminController
 
             endif;
 
-
-
-        # Modify a category
-        // if ($formModifCat->isValid()) :
-        //     # Persist in DB
-        //     $modifCat = $app['idiorm.db']->for_table('categories')->find_one($modif['id_category']);
-        //     $modifCat->name_category = $cat['name_category'];
-        //     $modifCat->save();
-        //     # Redirection
-        //     return $app->redirect('?modifCat=success');
-        // endif;
-
-        // # Delete a category
-        // if ($formDelCat->isValid()) :
-        //     $modifCat = $app['idiorm.db']->for_table('categories')->find_one($modif['id_category']);
-        //     $modifCat->delete();
-
-        //     return $app->redirect('?delCat=success');
-        // endif;
 
 
         # Add an Admin
@@ -326,7 +306,8 @@ class  AdminController
             'formDel2'          => $formDel2->createView(),
             'categories'        => $categories,
             'booksByCat'        => $tableCat,
-            'membersByCity'     => $tableCity
+            'membersByCity'     => $tableCity,
+            'catNotUsed'        => $catNotUsed
         ]);
     }
 
@@ -364,16 +345,18 @@ class  AdminController
 
     // Delete a category
     public function removeCatAction(Application $app, $id_category){
-        # 1. Database connection
-        $delete = $app['idiorm.db']->for_table('categories')
-                                    ->find_one($id_category);
-        # 2. delete the category
-        $delete->delete();
 
-        # 3. Redirect
-        return $app->redirect( $app['url_generator']->generate('livresVoyageurs_administrator', array('pseudoAdmin' => $app['user']->getPseudo_member(),
-            'delete' => 'true'
+            # 1. Retrieve the category
+            $delete = $app['idiorm.db']->for_table('categories')
+                                        ->find_one($id_category);
+            # 2. delete the category
+            $delete->delete();
+
+            # 3. Redirect
+            return $app->redirect( $app['url_generator']->generate('livresVoyageurs_administrator', array('pseudoAdmin' => $app['user']->getPseudo_member(),
+                'delete' => 'true'
             ) ) );
+        // }
     }
 
 }

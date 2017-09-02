@@ -3,9 +3,12 @@
 namespace LivresVoyageurs\Controller;
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
+
 use Swift_Mailer;
 use Swift_Message;
 use Swift_SmtpTransport;
+
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -16,10 +19,11 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\IsTrue;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class  OverviewController
 {
@@ -48,19 +52,28 @@ class  OverviewController
         $formCapture = $app['form.factory']->createBuilder(FormType::class)
         
             # Form Fields
-            ->add('id_book', TextType::class, [                
-                'required'      =>  true,
-                'label'         =>  false,
-                'constraints'   =>  array(new NotBlank()),
-                'attr'          =>  [
-                    'class'     => 'form-control'
+            ->add('id_book', TextType::class, [
+                'required'          =>  true,
+                'label'             =>  false,
+                'constraints'       =>  array(
+                    new Regex(
+                    array(
+                        'pattern'   => '([\d]{8})',
+                        'message'   => 'Numéro incorrect - Doit contenir 8 chiffres')),
+                    new NotBlank(array(
+                        'message'   => 'Vous devez saisir un numéro')),
+                    ),
+                'attr'              =>  [
+                    'class'         => 'form-control',
+                    'autocomplete'  => 'off'
                 ]
             ])
-            ->add('address', TextType::class, [                
+            ->add('address', TextType::class, [
                 'required'      =>  true,
+                'constraints'   =>  array(new NotBlank(array('message'=>'Vous n\'avez pas indiqué votre ville'))),
                 'label'         =>  false,
-                'attr' => [
-                    'class'    => 'form-control'
+                'attr'          => [
+                    'class'     => 'form-control'
                 ]
             ])
             ->add('city_pointer', HiddenType::class, [

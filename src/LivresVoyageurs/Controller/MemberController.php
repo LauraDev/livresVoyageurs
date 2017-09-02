@@ -151,11 +151,11 @@ class  MemberController
             # A - Generate unique identifier for the book
             # Loop: generate Id and return true while exist
             # Using the function: isUsed (Trait) to check if ID exist in db
-            function bcid($lenght) {
+            function bcid($length) {
                 $number = '';
-                for($i = 0; $i<$lenght; $i++)
+                for($i = 0; $i<$length; $i++)
                 {
-                    $number.= rand(0,9);
+                    $number.= rand(1,9);
                 }
                 return $number;
             }
@@ -235,8 +235,7 @@ class  MemberController
                 'constraints'       =>  array(
                     new Regex(
                     array(
-                        'pattern'   => '/[0-9]/{8}',
-                        'match'     => false,
+                        'pattern'   => '([\d]{8})',
                         'message'   => 'Numéro incorrect - Doit contenir 8 chiffres')),
                     new NotBlank(array(
                         'message'   => 'Vous devez saisir un numéro')),

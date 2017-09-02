@@ -11,6 +11,8 @@
 
 {# Define Content #}
 {% block content %}
+
+{# {{ dump(catExists) }} #}
     <div class="row">
 
         <h1>
@@ -131,7 +133,11 @@
                                 </form>
                             </td>
                             <td>
-                                <a href="{{ url('livresVoyageurs_deleteCat', {id_category: categorie.id_category}) }}" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-remove"></i></a>
+                                {% for notUsed in catNotUsed %}
+                                    {% if categorie.id_category == notUsed.id_category %}
+                                        <a href="{{ url('livresVoyageurs_deleteCat', {id_category: categorie.id_category}) }}" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-remove"></i></a>
+                                    {% endif %}
+                                {% endfor %}
                             </td>
 
                         </tr>

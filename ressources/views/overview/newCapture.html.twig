@@ -36,20 +36,18 @@
                 <label for="id_book">Numéro unique inscript sur l'étiquette du livre *</label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
-                    {{ form_row(formCapture.id_book) }}
+                    {{ form_widget(formCapture.id_book) }}
                 </div>
-                <p class="error alert alert-danger">Vous n'avez pas indiqué le numéro unique du livre</p>
-                <p class="error alert alert-danger">Numéro incorrect - Doit contenir 8 chiffres</p>
+                {{ form_errors(formCapture.id_book) }}
             </div>
             <!-- address - Table Pointers -->
             <div class="form-group">
                 <label for="address">Ville *</label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                    {{ form_row(formCapture.address) }}
+                    {{ form_widget(formCapture.address) }}
                 </div>
-                <p class="error alert alert-danger">Vous n'avez pas indiqué votre ville</p>
-                <p class="error alert alert-danger">Le nom de la ville est incorrecte</p>
+                {{ form_errors(formCapture.address) }}
             </div>
             <!-- city_pointer - Table Pointers -->
             {{ form_row(formCapture.city_pointer) }}
@@ -62,7 +60,7 @@
                 <label for="comment_capture">Commentaire</label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-align-left"></i></span>
-                    {{ form_row(formCapture.comment_capture) }}
+                    {{ form_widget(formCapture.comment_capture) }}
                 </div>
             </div>
 
