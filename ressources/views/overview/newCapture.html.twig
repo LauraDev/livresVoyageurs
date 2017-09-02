@@ -1,6 +1,9 @@
 {# This page inherits from base.html #}
 {% extends 'layout.html.twig' %}
 
+{# Customized error messages #}
+{% form_theme formCapture 'form_errors.html.twig' %}
+
 {# Define Title #}
 {% block title %} Enregister une capture {% endblock %}
 
@@ -19,7 +22,7 @@
         {% if global.request.get('capture') == 'success' %}
             <div class="alert alert-success">
                 <p>
-                    <i class="fa fa-thumbs-up" aria-hidden="true"></i> 
+                    <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                     Félicitation, votre capture a été enregistré.
                 </p>
             </div>
@@ -93,8 +96,8 @@
                     document.getElementById('form_lng_pointer').value = place.geometry.location.lng();
                 });
             }
-            google.maps.event.addDomListener(window, 'load', initializeCapture); 
-                        
+            google.maps.event.addDomListener(window, 'load', initializeCapture);
+
         }) // document ready
     </script>
 

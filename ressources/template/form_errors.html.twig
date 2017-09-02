@@ -1,0 +1,17 @@
+{# Inherits the form base layout #}
+{% extends 'form_div_layout.html.twig' %}
+
+{# Override the error message display from the base layout #}
+{% block form_errors %}
+    {% spaceless %}
+        {% if errors | length > 0 %}
+            <div class="alert alert-danger">
+                <p class="text-center">
+                    {% for error in errors %}
+                        {{ error.message }}
+                    {% endfor %}
+                </p>
+            </div>
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}

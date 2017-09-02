@@ -27,10 +27,10 @@ class  FriendController
             $id1 = $currentMember['id_member'];
             $id2 = $idFriend->id_member;
         }
-        else 
+        else
         {
             $id1 = $idFriend->id_member;
-            $id2 = $currentMember['id_member']; 
+            $id2 = $currentMember['id_member'];
         }
 
         # Friend request
@@ -43,7 +43,7 @@ class  FriendController
         if( $checkFriend )
         {
             return $app->redirect( $app['url_generator']->generate('livresVoyageurs_bookList', array( 'addFriend' => 'exist', 'friend' => $idFriend->pseudo_member)));
-        } 
+        }
         else
         {
             $addFriendDb = $app['idiorm.db']->for_table('friends')->create();
@@ -52,7 +52,7 @@ class  FriendController
             $addFriendDb->action_friend = $currentMember['id_member'];
             $addFriendDb->status_friend = 0;
             $addFriendDb->save();
-    
+
             # Redirection
             return $app->redirect( $app['url_generator']->generate('livresVoyageurs_bookList', array( 'addFriend' => 'success', 'friend' => $idFriend->pseudo_member)));
         }
@@ -61,7 +61,7 @@ class  FriendController
 
     # Accept Friend
     public function acceptFriendAction(Application $app, $pseudo) {
-        
+
         # Current member
         $currentMember = $app['idiorm.db']->for_table('members')
         ->find_one($app['user']->getId_member());
@@ -70,7 +70,7 @@ class  FriendController
         $idFriend = $app['idiorm.db']->for_table('members')
         ->where('pseudo_member', $pseudo)
         ->find_one();
-        # Use variables 
+        # Use variables
         $id1 = $currentMember['id_member'];
         $id2 = $idFriend->id_member;
 
@@ -82,7 +82,7 @@ class  FriendController
             ->find_one();
         $checkFriend->status_friend = 1;
         $checkFriend->save();
-    
+
         # Redirection
         return $app->redirect( $app['url_generator']->generate('livresVoyageurs_espace', array('pseudo' => $currentMember['pseudo_member'])) . '#friendList');
     }
@@ -90,7 +90,7 @@ class  FriendController
 
     # Decline Friend
     public function declineFriendAction(Application $app, $pseudo) {
-        
+
         # Current member
         $currentMember = $app['idiorm.db']->for_table('members')
         ->find_one($app['user']->getId_member());
@@ -99,7 +99,7 @@ class  FriendController
         $idFriend = $app['idiorm.db']->for_table('members')
         ->where('pseudo_member', $pseudo)
         ->find_one();
-        # Use variables 
+        # Use variables
         $id1 = $currentMember['id_member'];
         $id2 = $idFriend->id_member;
 
@@ -111,14 +111,14 @@ class  FriendController
             ->find_one();
         $checkFriend->status_friend = 2;
         $checkFriend->save();
-    
+
         # Redirection
         return $app->redirect( $app['url_generator']->generate('livresVoyageurs_espace', array('pseudo' => $currentMember['pseudo_member'])) . '#friendList');
     }
 
     # Block Friend
     public function blockFriendAction(Application $app, $pseudo) {
-        
+
         # Current member
         $currentMember = $app['idiorm.db']->for_table('members')
         ->find_one($app['user']->getId_member());
@@ -127,7 +127,7 @@ class  FriendController
         $idFriend = $app['idiorm.db']->for_table('members')
         ->where('pseudo_member', $pseudo)
         ->find_one();
-        # Use variables 
+        # Use variables
         $id1 = $currentMember['id_member'];
         $id2 = $idFriend->id_member;
 
@@ -139,10 +139,9 @@ class  FriendController
             ->find_one();
         $checkFriend->status_friend = 3;
         $checkFriend->save();
-    
+
         # Redirection
         return $app->redirect( $app['url_generator']->generate('livresVoyageurs_espace', array('pseudo' => $currentMember['pseudo_member'])) . '#friendList');
     }
 
 }
-

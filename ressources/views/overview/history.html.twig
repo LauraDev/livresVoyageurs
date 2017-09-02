@@ -20,21 +20,21 @@
     </div>
     {% for stor in story %}
         <div class="startpoint ">
-            <p class="lat_startpoint">{{ stor.lat_startpoint }}</p> 
-            <p class="lng_startpoint">{{ stor.lng_startpoint }}</p> 
+            <p class="lat_startpoint">{{ stor.lat_startpoint }}</p>
+            <p class="lng_startpoint">{{ stor.lng_startpoint }}</p>
             <p class="city_startpoint">{{ stor.city_startpoint }}</p>
-            <p class="pseudo_startpoint">{{ stor.pseudo_member }}</p> 
+            <p class="pseudo_startpoint">{{ stor.pseudo_member }}</p>
             <p class="date_startpoint">{{ stor.date_book | date('d/m/Y') }}</p>
             <p class="avatar_startpoint">{{ stor.avatar_member }}</p>
 
         </div>
         {% if not stor.lat_pointer == 0 %}
             <div class="pointer">
-                <p class="lat_pointer">{{ stor.lat_pointer }}</p> 
-                <p class="lng_pointer">{{ stor.lng_pointer  }}</p> 
-                <p class="city_pointer">{{ stor.city_pointer }}</p> 
-                <p class="pseudo_pointer">{{ stor.pseudo_captures }}</p> 
-                <p class="date_pointer">{{ stor.date_pointer | date('d/m/Y') }}</p> 
+                <p class="lat_pointer">{{ stor.lat_pointer }}</p>
+                <p class="lng_pointer">{{ stor.lng_pointer  }}</p>
+                <p class="city_pointer">{{ stor.city_pointer }}</p>
+                <p class="pseudo_pointer">{{ stor.pseudo_captures }}</p>
+                <p class="date_pointer">{{ stor.date_pointer | date('d/m/Y') }}</p>
                 <p class="avatar_pointer">{{ stor.avatar_captures }}</p>
             </div>
         {% endif %}
@@ -48,7 +48,7 @@
         #map{height: 600px;}
         .logo{width: 200px;}
     </style>
-    
+
 {% endblock %}
 
 
@@ -57,7 +57,7 @@
 
     <script>
         $(document).ready(function() {
-    
+
             // variable pour la carte
             var map;
             // Hide pointers data
@@ -66,12 +66,12 @@
 
             //fonction init pour executer l'API par google
             function init() {
-                
+
                 var bounds  = new google.maps.LatLngBounds();
                 var loc;
                 // Define where to postion the map
                 var mapDiv = document.getElementById('map');
-                // Lat / lng startpoint 
+                // Lat / lng startpoint
                 var latStart =  Number($('.lat_startpoint').eq(0).html())
                 var lngStart = Number($('.lng_startpoint').eq(0).html())
                 var latlng = {lat: Number($('.lat_startpoint').html()), lng:Number($('.lng_startpoint').html()) };
@@ -90,8 +90,8 @@
                     ]
                 })
 
-                var contentStart = 
-                    '<h1>Point de départ</h1>' +	
+                var contentStart =
+                    '<h1>Point de départ</h1>' +
                     '<div class="row">' +
                         '<img class="col-sm-7 img img-responsive" src="/livresVoyageurs/public/assets/images/avatar/' + $('.avatar_startpoint').html() +'" style="width:65px; height:auto" alt="Avatar membre" />' +
                         '<div class="col-sm-4">'+
@@ -123,13 +123,13 @@
 
                 // Create captures markers
                 for (var i = 0; i < pointer.length; i++) {
-                
+
                 var latPoint = Number($('.lat_pointer').eq(i).html())
                 var lngPoint = Number($('.lng_pointer').eq(i).html())
                     var markers = [];
                     var pos = new google.maps.LatLng( latPoint , lngPoint);
-                    var contentCapture =	
-                        '<h1>Capturé le:<br>'+ $('.date_pointer').eq(i).html() +'</h1>' +	
+                    var contentCapture =
+                        '<h1>Capturé le:<br>'+ $('.date_pointer').eq(i).html() +'</h1>' +
 						'<div class="row">' +
                             '<img class="col-sm-7 img img-responsive" src="/livresVoyageurs/public/assets/images/avatar/' + $('.avatar_pointer').eq(i).html() + '" style="width:65px; height:auto" alt="Avatar Membre" />'+
                             '<div class="col-sm-4">'+
@@ -154,7 +154,7 @@
                         infowindow.open(map, markers[i]);
                     });
                     infowindow.open(map, markers[i]);
-                    
+
                     // Marker position
                     posCapt[0] = {lat: latStart , lng: lngStart }
                     posCapt[i] = {lat:latPoint , lng:lngPoint};
@@ -163,10 +163,10 @@
                     loc[i] = {lat:latPoint , lng:lngPoint};
                     bounds.extend(loc[i]);
 
-                } // loop end  
+                } // loop end
 
 
-                // alert(JSON.stringify(loc)) 
+                // alert(JSON.stringify(loc))
 
                 // Lines between marker: Follow the path
                 var flightPath = new google.maps.Polyline({
@@ -181,7 +181,7 @@
                 // Automatically zoom and center the map (include all markers inside the map)
                 map.fitBounds(bounds);       // auto-zoom
                 map.panToBounds(bounds);     // auto-center
-            
+
 
             } // init() end
             // load map on window load
