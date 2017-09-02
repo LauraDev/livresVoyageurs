@@ -33,15 +33,18 @@ $(document).ready(function() {
         })
 
         var contentStart =
-            '<link href="/livresVoyageurs/public/assets/css/infowindow.css">'+
-            '<h1>Point de départ</h1>' +
-            '<div class="row">' +
-                '<img class="col-xs-7 img" src="/livresVoyageurs/public/assets/images/avatar/' + $('.avatar_startpoint').html() +'" style="width:65px; height:auto" alt="Avatar membre" />' +
-                '<div class="col-sm-4">'+
-                    '<h2>' + $('.city_startpoint').html() +'</h2>' +
-                    '<h2>' + $('.pseudo_startpoint').html() + '</h2>' +
+            '<div class="iw-container">'+
+                '<div class="iw-title">'+
+                    '<h1 class="text-center">Point de départ : ' +$('.city_startpoint').html() + '</h1>' +
                 '</div>'+
+                '<div class="row">' +
+                    '<img class="col-xs-4 img" src="/livresVoyageurs/public/assets/images/avatar/' + $('.avatar_startpoint').html() +'" alt="Avatar membre" />' +
+                    '<div class="col-xs-8">'+
+                        '<h2>' + $('.pseudo_startpoint').html() + '</h2>' +
+                    '</div>'+
+                '</div>'
             '</div>'
+
         // Create startpoint marker
         var marker =  new google.maps.Marker({
             position: latlng,
@@ -72,14 +75,18 @@ $(document).ready(function() {
             var markers = [];
             var pos = new google.maps.LatLng( latPoint , lngPoint);
             var contentCapture =
-                '<h1>Capturé le:<br>'+ $('.date_pointer').eq(i).html() +'</h1>' +
+            '<div class="iw-container">'+
+                '<div class="iw-title">'+
+                '<h1 class="text-center">Capturé le : '+ $('.date_pointer').eq(i).html() +'</h1>' +
+                '</div>'+
                 '<div class="row">' +
-                    '<img class="col-sm-7 img img-responsive" src="/livresVoyageurs/public/assets/images/avatar/' + $('.avatar_pointer').eq(i).html() + '" style="width:65px; height:auto" alt="Avatar Membre" />'+
-                    '<div class="col-sm-4">'+
-                        '<h2>' + $('.city_pointer').eq(i).html() +'</h2>' +
-                        '<h2>' + $('.pseudo_pointer').eq(i).html() + '</h2>' +
+                    '<img class="col-xs-4 img" src="/livresVoyageurs/public/assets/images/avatar/' + $('.avatar_pointer').html() +'" alt="Avatar membre" />' +
+                    '<div class="col-xs-8">'+
+                        '<h2>Par : ' + $('.pseudo_pointer').html() + '</h2>' +
+                        '<h3>' + $('.city_pointer').eq(i).html() +'</h3>' +
                     '</div>'+
                 '</div>'
+            '</div>'
             // Create captures marker
             markers[i] = new google.maps.Marker({
                 position: pos,
@@ -109,8 +116,6 @@ $(document).ready(function() {
         } // loop end
 
 
-        // alert(JSON.stringify(loc))
-
         // Lines between marker: Follow the path
         var flightPath = new google.maps.Polyline({
         path: posCapt,
@@ -124,6 +129,38 @@ $(document).ready(function() {
         // Automatically zoom and center the map (include all markers inside the map)
         map.fitBounds(bounds);       // auto-zoom
         map.panToBounds(bounds);     // auto-center
+
+        google.maps.event.addListener(infowindow, 'domready', function() {
+            
+            // Reference to the DIV which receives the contents of the infowindow using jQuery
+            var iwOuter = $('.gm-style-iw');
+
+            /* The DIV we want to change is above the .gm-style-iw DIV.
+            * So, we use jQuery and create a iwBackground variable,
+            * and took advantage of the existing reference to .gm-style-iw for the previous DIV with .prev().
+            */
+            var iwBackground = iwOuter.prev();
+            // Remove the background shadow DIV
+            iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+            // Remove the white background DIV
+            iwBackground.children(':nth-child(4)').css({'display' : 'none'});
+            // Reference to the div that groups the close button elements.
+            var iwCloseBtn = iwOuter.next();
+
+            iwCloseBtn.css({
+                opacity: '1', // by default the close button has an opacity of 0.7
+                right: '38px',
+                top: '3px', // button repositioning
+                border: '10px solid #48b5e9', // increasing button border and new color
+                'border-radius': '13px', // circular effect
+                'box-shadow': '0 0 5px #3990B9' // 3D effect to highlight the button
+            });
+
+            iwCloseBtn.mouseout(function(){
+                $(this).css({opacity: '1'});
+            });
+        });
+            
 
 
     } // init() end

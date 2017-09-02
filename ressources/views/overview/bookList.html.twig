@@ -80,7 +80,7 @@
                                 <div class="card-footer text-muted">
                                     <li>Date de libération: {{ book.date_book | date("d/m/Y")  }}</li>
                                 </div>
-                                <a href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'histoire du livre"  class="btn btn-primary col-md-12">Suivre son chemin</a>
+                                <a href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'histoire du livre"  target="_blank" class="btn btn-primary col-md-12">Suivre son chemin</a>
                             </ul>
                         </div> <!-- card block -->
                     </div> <!-- card col-md -->
