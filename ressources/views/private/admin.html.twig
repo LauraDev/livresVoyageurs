@@ -12,11 +12,6 @@
 {# Define Content #}
 {% block content %}
 
-{# {{ dump(catExists) }} #}
-<pre>
-{{dump(membersByMonth)}}
-
-</pre>
     <div class="row">
 
         <h1>
@@ -301,18 +296,18 @@
 
         <!-- Google Charts -->
         <div class="row">
+            {# Inscriptions by month #}
+            <div class="">
+                <div id="chart_div_month" class="chart"></div>
+            </div>
+            {# Members by city #}
+            <div class="">
+                <div id="chart_div_city" class="chart"></div>
+            </div>
             {# Books by categories #}
             <div class="">
-                <div id="chart_div_cat" class="chart"></div>
+                <div id="chart_div_cat" class="chart" style="width: 1000px; height: 400px;"></div>
             </div>
-            {# Members by country #}
-            <div class="">
-                <div id="chart_div_country" class="chart"></div>
-            </div>
-            {#  #}
-            {# <div class="">
-                <div id="chart_div_" class="chart" style="width: 1000px; height: 400px;"></div>
-            </div> #}
 
         </div>
 
@@ -320,6 +315,11 @@
 
 {% endblock %}
 
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('assets/css/style/admin/admin.min.css') }}">
+{% endblock %}
 
 
 {% block javascripts %}
@@ -336,12 +336,12 @@
         google.charts.setOnLoadCallback(drawChart);
 
         function drawChart() {
-            // Table : books by category
-            var dataCat = new google.visualization.DataTable( {{ (booksByCat | json_encode | raw) }} );
-            // Creation du tableau
-            var chartCat = new google.visualization.ColumnChart(document.getElementById('chart_div_cat'));
-            chartCat.draw(dataCat, {
-                title: "Livres par Catégorie",
+
+            // Table : inscriptions by month
+            var dataCountry = new google.visualization.DataTable( {{ (inscriptionsByMonth | json_encode | raw) }} );
+            var chartCountry = new google.visualization.ColumnChart(document.getElementById('chart_div_month'));
+            chartCountry.draw(dataCountry, {
+                title: "Inscriptions par Mois",
                 titleTextStyle:{
                     fontName: 'Baloo',
                     fontSize: 18,
@@ -351,7 +351,7 @@
 
             // Table : members by city
             var dataCountry = new google.visualization.DataTable( {{ (membersByCity | json_encode | raw) }} );
-            var chartCountry = new google.visualization.ColumnChart(document.getElementById('chart_div_country'));
+            var chartCountry = new google.visualization.ColumnChart(document.getElementById('chart_div_city'));
             chartCountry.draw(dataCountry, {
                 title: "Membres par Ville",
                 titleTextStyle:{
@@ -360,6 +360,17 @@
                 },
                 colors: ['#9e846d']
             });
+
+            // Table : books by category
+            var dataCat = new google.visualization.DataTable( {{ (booksByCat | json_encode(constant('JSON_NUMERIC_CHECK')) | raw) }} );
+            var optionsCat = { title: 'Livres par Catégories', is3D: true,
+            titleTextStyle:{
+                fontName: 'Baloo',
+                fontSize: 18,},
+            colors: ['#9e846d','#d0b49b','#302013','#aa7243'] };
+            var chartCat = new google.visualization.PieChart(document.getElementById('chart_div_cat'));
+
+            chartCat.draw(dataCat, optionsCat);
 
         } // end drawchart
 

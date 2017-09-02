@@ -92,3 +92,9 @@
     </div>
 
 {% endblock %}
+
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('assets/css/style/bookList/bookList.min.css') }}">
+{% endblock %}

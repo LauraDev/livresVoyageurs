@@ -223,8 +223,8 @@ class  AdminController
             if ($formDel2->isValid()) :
                 $member = $formDel2->getData();
                 $delete = $app['idiorm.db']->for_table('members')
-                                            ->where('pseudo_member', $member['pseudo_member3'])
-                                            ->find_one();
+                    ->where('pseudo_member', $member['pseudo_member3'])
+                    ->find_one();
                 $delete->delete();
                 # Redirection
                 return $app->redirect('?delete=success');
@@ -238,42 +238,55 @@ class  AdminController
 
         # Number of available books
         $availableBooks = $app['idiorm.db']->for_table('books')
-                                        ->where('disponibility_book', 1)
-                                        ->count();
+            ->where('disponibility_book', 1)
+            ->count();
 
         # Total of boooks created on the platform
         $books = $app['idiorm.db']->for_table('books')->count();
 
-        # Chart: books by category
 
-        // SELECT category, COUNT(*) as count FROM table GROUP BY category
-        $booksByCat = $app['idiorm.db']->for_table('view_books')
-            ->select('name_category')
-            ->select_expr('COUNT(*)', 'count')
-            ->group_by('name_category')
+        # Chart: inscriptions by month
+        $inscriptionsByMonth = $app['idiorm.db']->for_table('members')
+            ->raw_query("SELECT CASE EXTRACT(MONTH 
+                        FROM date_member) WHEN 1 Then 'Janvier'
+                        WHEN 2 then 'Février'
+                        WHEN 3 then 'Mars'
+                        WHEN 4 Then 'Avril'
+                        WHEN 5 Then 'Mai'
+                        WHEN 6 Then 'Juin'
+                        WHEN 7 then 'Juillet'
+                        WHEN 8 then 'Août'
+                        WHEN 9 then 'Septembre'
+                        WHEN 10 then 'Octobre'
+                        WHEN 11 then 'Novembre'
+                        WHEN 12 then 'Décembre'
+                        END as month,
+                        COUNT(*) as count 
+                        FROM `members` 
+                        GROUP BY MONTH(`date_member`)")
             ->find_many();
 
-        $tableCat = array();
-        $rowCat = array();
-        $tableCat['cols'] = array(
-                                array('label' => 'Catégorie', 'type' => 'string'),
-                                array('label' => 'Nombre de livres', 'type' => 'number')
-                                );
-        for ($i=0; $i < count($booksByCat); $i++) {
-            $ligneCat = $booksByCat[$i];
+        $tableMonth = array();
+        $rowMonth = array();
+        $tableMonth['cols'] = array(
+            array('label' => 'Mois', 'type' => 'string'),
+            array('label' => 'Nombre d\'inscriptions', 'type' => 'number')
+            );
+        for ($i=0; $i < count($inscriptionsByMonth); $i++) {
+            $ligneMonth = $inscriptionsByMonth[$i];
             $temp = array();
-            $temp[] = array ('v' => $ligneCat['name_category']);
-            $temp[] = array('v' => $ligneCat['count']);
-            $rowCat[] = array('c' => $temp);
+            $temp[] = array ('v' => $ligneMonth['month']);
+            $temp[] = array('v' => $ligneMonth['count']);
+            $rowMonth[] = array('c' => $temp);
             }
-        $tableCat['rows'] = $rowCat;
+        $tableMonth['rows'] = $rowMonth;
 
         # Chart: members by city
         $membersByCity = $app['idiorm.db']->for_table('view_story')
-        ->select('city_startpoint')
-        ->select_expr('COUNT(*)', 'count')
-        ->group_by('city_startpoint')
-        ->find_many();
+            ->select('city_startpoint')
+            ->select_expr('COUNT(*)', 'count')
+            ->group_by('city_startpoint')
+            ->find_many();
 
         $tableCity = array();
         $rowCity = array();
@@ -290,29 +303,46 @@ class  AdminController
             }
         $tableCity['rows'] = $rowCity;
 
-        # Chart: inscription by month
-        # SELECT MONTH(date_member),COUNT(*) as count FROM `members` GROUP BY MONTH(`date_member`)
-        $membersByMonth = $app['idiorm.db']->for_table('members')
-        ->raw_query('SELECT MONTH(date_member),COUNT(*) as count FROM `members` GROUP BY MONTH(`date_member`)')
-        ->find_many();
+
+        # Chart: books by category
+        $booksByCat = $app['idiorm.db']->for_table('view_books')
+            ->select('name_category')
+            ->select_expr('COUNT(*)', 'count')
+            ->group_by('name_category')
+            ->find_many();
+
+        $tableCat = array();
+        $rowCat = array();
+        $tableCat['cols'] = array(
+            array('label' => 'Catégories', 'type' => 'string'),
+            array('label' => 'Nombre de Livres', 'type' => 'number')
+            );
+        for ($i=0; $i < count($booksByCat); $i++) {
+            $ligneCat = $booksByCat[$i];
+            $temp = array();
+            $temp[] = array ('v' => $ligneCat['name_category']);
+            $temp[] = array('v' => $ligneCat['count']);
+            $rowCat[] = array('c' => $temp);
+            }
+        $tableCat['rows'] = $rowCat;
 
 
         // View
         return $app['twig']->render('private/admin.html.twig', [
-            'members'           => $members,
-            'availableBooks'    => $availableBooks,
-            'books'             => $books,
-            'formAddCat'        => $formAddCat->createView(),
-            'formMember'        => $formMember->createView(),
-            'formRole'          => $formRole->createView(),
-            'formRole2'         => $formRole2->createView(),
-            'formDel'           => $formDel->createView(),
-            'formDel2'          => $formDel2->createView(),
-            'categories'        => $categories,
-            'booksByCat'        => $tableCat,
-            'membersByCity'     => $tableCity,
-            'catNotUsed'        => $catNotUsed
-            'membersByMonth'    => $membersByMonth
+            'members'               => $members,
+            'availableBooks'        => $availableBooks,
+            'books'                 => $books,
+            'formAddCat'            => $formAddCat->createView(),
+            'formMember'            => $formMember->createView(),
+            'formRole'              => $formRole->createView(),
+            'formRole2'             => $formRole2->createView(),
+            'formDel'               => $formDel->createView(),
+            'formDel2'              => $formDel2->createView(),
+            'categories'            => $categories,
+            'inscriptionsByMonth'   => $tableMonth,
+            'membersByCity'         => $tableCity,
+            'booksByCat'            => $tableCat,
+            'catNotUsed'            => $catNotUsed
         ]);
     }
 

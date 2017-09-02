@@ -76,3 +76,9 @@
     <p id="mentions"> * Les mentions légales ont été générées et offertes par Subdelirium <a target="_blank" href="http://www.subdelirium.com/generateur-de-mentions-legales/" alt="rédaction des mentions légales">Générateur de mentions légales</a></p>
 
 {% endblock %}
+
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('assets/css/style/mentions/mentions.min.css') }}">
+{% endblock %}
