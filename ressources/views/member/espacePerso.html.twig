@@ -143,9 +143,17 @@
 
                 {% if global.request.get('capture') == 'success' %}
                     <div class="alert alert-success">
-                        <p>
+                        <p class="text-center">
                             <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                             Félicitation, votre capture a été enregistré.
+                        </p>
+                    </div>
+                {% endif %}
+                {% if global.request.get('capture') == 'fail' %}
+                    <div class="alert alert-danger">
+                        <p class="text-center">
+                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                            Numéro unique incorrect
                         </p>
                     </div>
                 {% endif %}

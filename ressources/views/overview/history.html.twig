@@ -54,7 +54,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-
+    <script src="{{asset('assets/js/infobubble.js')}}" charset="utf-8"></script>
     <script>
         $(document).ready(function() {
 
@@ -91,9 +91,10 @@
                 })
 
                 var contentStart =
+                    '<link href="/livresVoyageurs/public/assets/css/infowindow.css">'+
                     '<h1>Point de départ</h1>' +
                     '<div class="row">' +
-                        '<img class="col-sm-7 img img-responsive" src="/livresVoyageurs/public/assets/images/avatar/' + $('.avatar_startpoint').html() +'" style="width:65px; height:auto" alt="Avatar membre" />' +
+                        '<img class="col-xs-7 img" src="/livresVoyageurs/public/assets/images/avatar/' + $('.avatar_startpoint').html() +'" style="width:65px; height:auto" alt="Avatar membre" />' +
                         '<div class="col-sm-4">'+
                             '<h2>' + $('.city_startpoint').html() +'</h2>' +
                             '<h2>' + $('.pseudo_startpoint').html() + '</h2>' +

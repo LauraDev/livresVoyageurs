@@ -2,6 +2,7 @@
 use Silex\Provider\SwiftmailerServiceProvider;
 use FabSchurt\Silex\Provider\Captcha\CaptchaServiceProvider;
 use Silex\Provider;
+use \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 #1 : Debug Mode Activation
 $app['debug'] = true;

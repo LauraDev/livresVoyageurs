@@ -205,11 +205,11 @@ class  AdminController
                 ->add('submit', SubmitType::class, ['label' => 'Supprimer'])
 
                 ->getForm();
-            
-            $formDel->handleRequest($request);            
-            # If form Valid   
-            if ($formDel->isValid()) :   
-                $member = $formDel->getData(); 
+
+            $formDel->handleRequest($request);
+            # If form Valid
+            if ($formDel->isValid()) :
+                $member = $formDel->getData();
                 $deleteMember = $app['idiorm.db']->for_table('members')
                     ->find_one($member['id_member3']);
                 $deleteMember->pseudo_member   = 'anonyme';
@@ -309,8 +309,12 @@ class  AdminController
             $rowCity[] = array('c' => $temp);
             }
         $tableCity['rows'] = $rowCity;
-        
-        # Chart: books by country
+
+        # Chart: inscription by month
+        # SELECT MONTH(date_member),COUNT(*) as count FROM `members` GROUP BY MONTH(`date_member`)
+        $membersByMonth = $app['idiorm.db']->for_table('members')
+        ->raw_query('SELECT MONTH(date_member),COUNT(*) as count FROM `members` GROUP BY MONTH(`date_member`)')
+        ->find_many();
 
 
         // View
@@ -326,7 +330,8 @@ class  AdminController
             'formDel2'          => $formDel2->createView(),
             'categories'        => $categories,
             'booksByCat'        => $tableCat,
-            'membersByCity'     => $tableCity
+            'membersByCity'     => $tableCity,
+            'membersByMonth'    => $membersByMonth
         ]);
     }
 

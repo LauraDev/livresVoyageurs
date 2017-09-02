@@ -11,6 +11,10 @@
 
 {# Define Content #}
 {% block content %}
+<pre>
+{{dump(membersByMonth)}}
+
+</pre>
     <div class="row">
 
         <h1>
@@ -314,7 +318,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    
+
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">

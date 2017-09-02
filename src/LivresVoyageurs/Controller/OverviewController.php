@@ -6,19 +6,17 @@ use Silex\Application;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_SmtpTransport;
+
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\IsTrue;
+use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\HttpFoundation\Request;
 
 class  OverviewController
@@ -39,24 +37,33 @@ class  OverviewController
         ]);
     }
 
-    
 
 
-    # Capture         
+
+    # Capture
     public function newCaptureAction(Application $app, Request $request) {
 
         $formCapture = $app['form.factory']->createBuilder(FormType::class)
-        
+
             # Form Fields
-            ->add('id_book', TextType::class, [                
-                'required'      =>  true,
-                'label'         =>  false,
-                'constraints'   =>  array(new NotBlank()),
-                'attr'          =>  [
-                    'class'     => 'form-control'
+            ->add('id_book', TextType::class, [
+                'required'          =>  true,
+                'label'             =>  false,
+                'constraints'       =>  array(
+                    new Regex(
+                    array(
+                        'pattern'   => '([\d]{8})',
+                        // 'match'     => false,
+                        'message'   => 'Numéro incorrect - Doit contenir 8 chiffres')),
+                    new NotBlank(array(
+                        'message'   => 'Vous devez saisir un numéro')),
+                    ),
+                'attr'              =>  [
+                    'class'         => 'form-control',
+                    'autocomplete'  => 'off'
                 ]
             ])
-            ->add('address', TextType::class, [                
+            ->add('address', TextType::class, [
                 'required'      =>  true,
                 'label'         =>  false,
                 'attr' => [
@@ -87,39 +94,51 @@ class  OverviewController
 
         // Check if form is valid
         if ($formCapture->isValid()) :
-            
+
             # Capture = FormCapture data
             $capture = $formCapture->getData();
 
-            # Connect to DB : Register a new pointer
-            $pointerDb = $app['idiorm.db']->for_table('pointers')->create();
-            $pointerDb->id_book           = $capture['id_book'];
-            $pointerDb->lat_pointer       = $capture['lat_pointer'];
-            $pointerDb->lng_pointer       = $capture['lng_pointer'];
-            $pointerDb->city_pointer      = $capture['city_pointer'];
-            $pointerDb->save();
+            # Check if id_book exist
+            $exist = $app['idiorm.db']->for_table('books')
+                                        ->where('id_book', $capture['id_book'])
+                                        ->count();
+            if ($exist) {
 
-            # Get last inserted Id
-            $pointerId = $pointerDb->id();
+                # Connect to DB : Register a new pointer
+                $pointerDb = $app['idiorm.db']->for_table('pointers')->create();
+                $pointerDb->id_book           = $capture['id_book'];
+                $pointerDb->lat_pointer       = $capture['lat_pointer'];
+                $pointerDb->lng_pointer       = $capture['lng_pointer'];
+                $pointerDb->city_pointer      = $capture['city_pointer'];
+                $pointerDb->save();
 
-            #  Connect to DB : Register the capture's member and comment
-            $captureDb = $app['idiorm.db']->for_table('captures')->create();
-            $captureDb->id_pointer           = $pointerId;
-            $captureDb->id_member            = 1;
-            $captureDb->comment_capture      = $capture['comment_capture'];
-            $captureDb->save();
-            
-            # Connect to DB : Set the book as unavailable
-            $bookDb =  $app['idiorm.db']->for_table('books')->find_one($capture['id_book']);
-            $bookDb->disponibility_book      = 0;
-            $bookDb->pseudo_capture          = 'anonyme';
-            $bookDb->save();
+                # Get last inserted Id
+                $pointerId = $pointerDb->id();
 
-            # Redirection
-            return $app->redirect('?capture=success');
+                #  Connect to DB : Register the capture's member and comment
+                $captureDb = $app['idiorm.db']->for_table('captures')->create();
+                $captureDb->id_pointer           = $pointerId;
+                $captureDb->id_member            = 1;
+                $captureDb->comment_capture      = $capture['comment_capture'];
+                $captureDb->save();
+
+                # Connect to DB : Set the book as unavailable
+                $bookDb =  $app['idiorm.db']->for_table('books')->find_one($capture['id_book']);
+                $bookDb->disponibility_book      = 0;
+                $bookDb->pseudo_capture          = 'anonyme';
+                $bookDb->save();
+
+                # Redirection
+                return $app->redirect('?capture=success');
+            }
+            else{
+                # Redirection
+                return $app->redirect('?capture=fail');
+            }
+
 
         endif;
-        
+
         return $app['twig']->render('overview/newCapture.html.twig', [
             'formCapture'      => $formCapture->createView(),
         ]);
@@ -129,7 +148,7 @@ class  OverviewController
 
     # Search
     public function searchAction(Application $app) {
-        
+
         return $app['twig']->render('overview/search.html.twig', []);
     }
 
@@ -220,7 +239,7 @@ class  OverviewController
 
     //Display a book history
     public function historyAction(Application $app, $id_book) {
-        
+
         $story = $app['idiorm.db']->for_table('view_story')
                                     ->where('id_book', $id_book)
                                     ->find_result_set();
@@ -230,6 +249,6 @@ class  OverviewController
             'story'   => $story
         ]);
     }
-    
+
 
 }
