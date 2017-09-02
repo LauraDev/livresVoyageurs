@@ -498,13 +498,9 @@ class  MemberController
                                                 array('id_member_1'  =>  $currentMember['id_member'], 'status_friend' => 0 ),
                                                 array('id_member_2'  =>  $currentMember['id_member'], 'status_friend' => 0 )
                                         ))
-<<<<<<< HEAD
                                         ->where_not_equal('action_friend', $currentMember['id_member'])
                                         ->where_not_equal('pseudo_member_1', 'anonyme')
                                         ->where_not_equal('pseudo_member_2', 'anonyme')
-=======
-                                        // ->where_not_equal('action_friend', $currentMember['id_member'])
->>>>>>> 33bfda141905284d67e1470d750f301593c87d94
                                         ->order_by_desc('date_friend')
                                         ->find_result_set();
         # 7 : user's friends
@@ -513,12 +509,8 @@ class  MemberController
                                                 array('id_member_1'  =>  $currentMember['id_member'], 'status_friend' => 1 ),
                                                 array('id_member_2'  =>  $currentMember['id_member'], 'status_friend' => 1 )
                                         ))
-<<<<<<< HEAD
                                         ->where_not_equal('pseudo_member_1', 'anonyme')
                                         ->where_not_equal('pseudo_member_2', 'anonyme')
-=======
-                                        // ->where_not_equal('action_friend', $currentMember['id_member'])
->>>>>>> 33bfda141905284d67e1470d750f301593c87d94
                                         ->order_by_desc('date_friend')
                                         ->find_result_set();
 
