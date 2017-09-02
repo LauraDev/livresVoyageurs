@@ -282,32 +282,43 @@ class  MemberController
             # Capture = FormCapture data
             $capture = $formCapture->getData();
 
-            # Connect to DB : Register a new pointer
-            $pointerDb = $app['idiorm.db']->for_table('pointers')->create();
-            $pointerDb->id_book           = $capture['id_book'];
-            $pointerDb->lat_pointer       = $capture['lat_pointer'];
-            $pointerDb->lng_pointer       = $capture['lng_pointer'];
-            $pointerDb->city_pointer      = $capture['city_pointer'];
-            $pointerDb->save();
+            # check if id_book exist
+            $exist = $app['idiorm.db']->for_table('books')
+                                        ->where('id_book', $capture['id_book'])
+                                        ->count();
+            if($exist){
 
-            # Get last inserted Id
-            $pointerId = $pointerDb->id();
+                # Connect to DB : Register a new pointer
+                $pointerDb = $app['idiorm.db']->for_table('pointers')->create();
+                $pointerDb->id_book           = $capture['id_book'];
+                $pointerDb->lat_pointer       = $capture['lat_pointer'];
+                $pointerDb->lng_pointer       = $capture['lng_pointer'];
+                $pointerDb->city_pointer      = $capture['city_pointer'];
+                $pointerDb->save();
 
-            #  Connect to DB : Register the capture's member and comment
-            $captureDb = $app['idiorm.db']->for_table('captures')->create();
-            $captureDb->id_pointer           = $pointerId;
-            $captureDb->id_member            = $currentMember['id_member'];
-            $captureDb->comment_capture      = $capture['comment_capture'];
-            $captureDb->save();
+                # Get last inserted Id
+                $pointerId = $pointerDb->id();
 
-            # Connect to DB : Set the book as unavailable
-            $bookDb =  $app['idiorm.db']->for_table('books')->find_one($capture['id_book']);
-            $bookDb->disponibility_book      = 0;
-            $bookDb->pseudo_capture          = $currentMember['pseudo_member'];
-            $bookDb->save();
+                #  Connect to DB : Register the capture's member and comment
+                $captureDb = $app['idiorm.db']->for_table('captures')->create();
+                $captureDb->id_pointer           = $pointerId;
+                $captureDb->id_member            = $currentMember['id_member'];
+                $captureDb->comment_capture      = $capture['comment_capture'];
+                $captureDb->save();
 
-            # Redirection
-            return $app->redirect('?capture=success');
+                # Connect to DB : Set the book as unavailable
+                $bookDb =  $app['idiorm.db']->for_table('books')->find_one($capture['id_book']);
+                $bookDb->disponibility_book      = 0;
+                $bookDb->pseudo_capture          = $currentMember['pseudo_member'];
+                $bookDb->save();
+
+                # Redirection
+                return $app->redirect('?capture=success');
+            }
+            else{
+                return $app->redirect('?capture=fail');
+            }
+
 
         endif;
 

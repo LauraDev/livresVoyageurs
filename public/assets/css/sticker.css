@@ -1,26 +1,46 @@
-/*Stylesheet for stickers*/
-h1{
-    text-align: center;
+/*Stylesheet for sticker*/
+h1 {
+  text-align: center;
 }
 
-#sticker{
-    border: 2px solid black;
-    border-radius: 15px;
-    /*position: relative;*/
-    width: 50%;
-    /*padding: 5px;*/
+/*Sticker 1*/
+#sticker {
+  border: 2px solid #000;
+  border-radius: 15px;
+  position: relative;
+  width: 50%;
+  padding: 5px;
 }
- .dev1{
-     border: 1px solid red;
- }
 
- .dev2{
-     border: 1px solid aqua;
- }
-/*img{
-    position:absolute;
-    top: 70px;
-    right: 2px;
-    width: 150px;
-    height: auto;
-}*/
+#sticker img {
+  position: absolute;
+  top: 70px;
+  right: 2px;
+  width: 150px;
+  height: auto;
+}
+
+/*Sticker 2*/
+#sticker2 {
+  border: 2px solid #000;
+  border-radius: 15px;
+  width: 50%;
+  padding: 5px;
+  position: relative;
+}
+
+#sticker2 .alert {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+#sticker2 .row p:nth-child(3) {
+  font-style: italic;
+}
+
+#sticker2 .row img {
+  position: absolute;
+  left: -100px;
+  top: -20px;
+  border: none;
+}
