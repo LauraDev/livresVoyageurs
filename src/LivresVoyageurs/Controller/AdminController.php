@@ -23,11 +23,11 @@ class  AdminController
 
                 $catNotUsed = $app['idiorm.db']->for_table('books')
                 ->select('categories.id_category')
-                ->right_outer_join('categories', 
+                ->right_outer_join('categories',
                     array('categories.id_category', '=', 'books.id_category'))
                 ->where_null('books.id_category')
                 ->find_many();
-                
+
 
             # Add a category
             # Form
@@ -311,7 +311,7 @@ class  AdminController
             'categories'        => $categories,
             'booksByCat'        => $tableCat,
             'membersByCity'     => $tableCity,
-            'catNotUsed'        => $catNotUsed
+            'catNotUsed'        => $catNotUsed,
             'membersByMonth'    => $membersByMonth
         ]);
     }
