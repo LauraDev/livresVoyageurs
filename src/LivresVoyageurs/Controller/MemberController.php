@@ -225,6 +225,64 @@ class  MemberController
         endif;
 
 
+
+        #2b : Liberate a book
+        $formLiberation = $app['form.factory']->createNamedBuilder("formLiberation", FormType::class)
+        
+            # Form Fields
+            ->add('id_books', TextType::class, [
+                'required'          =>  true,
+                'label'             =>  false,
+                'constraints'       =>  array(
+                    new Regex(
+                    array(
+                        'pattern'   => '([\d]{8})',
+                        'message'   => 'Numéro incorrect - Doit contenir 8 chiffres')),
+                    new NotBlank(array(
+                        'message'   => 'Vous devez saisir un numéro')),
+                    ),
+                'attr'              =>  [
+                    'class'         => 'form-control',
+                    'autocomplete'  => 'off'
+                ]
+            ])
+            ->add('submit', SubmitType::class, ['label' => 'Enregistrer'])
+
+            ->getForm();
+
+        # Handle Post Data
+        if ($request->request->has("formLiberation") ){
+            $formLiberation->handleRequest($request);
+        }
+        // Check if form is valid
+        if ($formLiberation->isSubmitted() && $formLiberation->isValid()) :
+
+            # Capture = FormCapture data
+            $liberation = $formLiberation->getData();
+
+            # check if id_book exist
+            $exist = $app['idiorm.db']->for_table('books')
+                                        ->where('id_book', $liberation['id_books'])
+                                        ->count();
+            if($exist)
+            {
+                # Connect to DB : Set the book as available
+                $bookDb =  $app['idiorm.db']->for_table('books')->find_one($liberation['id_books']);
+                $bookDb->disponibility_book      = 1;
+                $bookDb->pseudo_capture          = $currentMember['pseudo_member'];
+                $bookDb->save();
+
+                # Redirection
+                return $app->redirect('?liberation=success');
+            }
+            else
+            {
+                return $app->redirect('?liberation=fail');
+            }
+
+        endif;
+
+
         #3 : Capture
         $formCapture = $app['form.factory']->createNamedBuilder("formCapture", FormType::class)
 
@@ -494,9 +552,12 @@ class  MemberController
 
 
 
-        # 5 : Books registered by the user
+        # 5 : Books registered and captured by the user
         $bookList = $app['idiorm.db']->for_table('view_books')
-                                        ->where('id_member', $app['user']->getId_member())
+                                        ->where_any_is(array(
+                                            array('id_member' => $app['user']->getId_member()),
+                                            array('pseudo_capture' => $app['user']->getPseudo_member())
+                                        ))
                                         ->order_by_desc('date_book')
                                         ->find_result_set();
 
@@ -529,6 +590,7 @@ class  MemberController
         return $app['twig']->render('member/espacePerso.html.twig', [
             'pseudo'           => $pseudo,
             'formAddBook'      => $formAddBook->createView(),
+            'formLiberation'   => $formLiberation->createView(),
             'formAccount'      => $formAccount->createView(),
             'formAccountPass'  => $formAccountPass->createView(),
             'formCapture'      => $formCapture->createView(),

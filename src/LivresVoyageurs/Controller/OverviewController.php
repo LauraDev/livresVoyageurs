@@ -153,6 +153,52 @@ class  OverviewController
         return $app['twig']->render('overview/search.html.twig', []);
     }
 
+    public function searchPost(Application $app, Request $request) {
+        
+        if($request->isMethod('POST')) :
+            
+            # Check if book exist in DB
+            $isBookInDb = $app['idiorm.db']->for_table('books')
+                ->where('ISBN_book', $request->get('ISBN_book'))
+                ->count();
+        
+            if($isBookInDb) :
+                
+                # Get books infos from DB
+                $books = $app['idiorm.db']->for_table('books')
+                ->where('ISBN_book', $request->get('ISBN_book'))
+                ->find_many();
+
+                $tableBooks = array();
+                $rowBooks = array();
+                $tableBooks['cols'] = array(
+                    array('label' => 'ID Book', 'type' => 'string'),
+                    array('label' => 'Title Book', 'type' => 'string')
+                    );
+                for ($i=0; $i < count($books); $i++) {
+                    $ligneBooks = $books[$i];
+                    $temp = array();
+                    $temp[] = array ('v' => $ligneBooks['id_book']);
+                    $temp[] = array('v' => $ligneBooks['title_book']);
+                    $rowBooks[] = array('c' => $temp);
+                    }
+                $tableBooks['rows'] = $rowBooks;
+        
+                
+                # Response : true
+                $result['ok'] = $isBookInDb;
+                
+            else :
+            
+                # There is no book, response: false
+                $result['nok'] = 'not in DB';
+            
+            endif;
+            
+            return $app->json($result);            
+        
+        endif;
+    }
 
 
 

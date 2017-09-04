@@ -25,19 +25,19 @@
 	<div class="animation" id="headerHome" class="row">
 		<h1 id="community"> COMMUNAUTE DE <br> PARTAGE DE LIVRES </h1>
 		<p>Libérez vos livres pour faire du monde une bibliothèque!</p>
-		<p><a class="btnInscriptionHome" href="">DÉCOUVRIR</a></p>
+		<p><a class="btnInscriptionHome" href="#presentation">DÉCOUVRIR</a></p>
+	</div>
 
-		<div id="bottomHome">
-			<p> Vous possédez un livre que vous souhaitez mettre à la disposition de la communauté ou que vous voulez libérer dans la nature?
-			<span id="nbreEtapes"> 3 ETAPES SUFFISENT ! </span>
-		</div>
+	<div id="bottomHome" class="animation">
+		<p id="explain"> Vous possédez un livre que vous souhaitez mettre à la disposition de la communauté ou libérer dans la nature?
+		<p id="numberStep"> 3 ETAPES SUFFISENT ! </p>
 	</div>
 
 	<main id="mainHome">
 
 		<section id="steps">
 
-			<article class="step" id="">
+			<article class="step" id="#presentation">
 				<div class="container">
 					<div class="divStep row">
 						<div class="col-md-6 animation midHeight">
@@ -50,13 +50,10 @@
 						</div>
 						<div class="col-md-5 text animation midHeight">
 							<h2>Étiquetez</h2>
-							<p>Enregistrez le livre sur le site, <br>
-							    Il vous sera fourni un numéro d'identifiant unique (BCID). <br>
-								Ce numéro suivra votre livre tout au long de son périple. <br>
-								Récupérez une étiquette (lien vers téléchargement) <br>
-								Indiquez le BCID et collez le sur votre livre.
+							<p>Créer un livre voyageur dans votre espace membre puis imprimer son étiquette.
+								Celle-ci vous permettra de suivre votre livre tout au long de son périple.								
 							</p>
-							<p class="button"><a href="">DÉCOUVRIR</a></p>
+							{# <p class="button"><a href="{{ path('livresVoyageurs_espace_sticker', { pseudo: 'Lola123', uniqueId: 18976845 , title: 'Les fables de la fontaine'  } ) }}" target="_blank">DÉCOUVRIR</a></p> #}
 						</div>
 					</div> <!-- row -->
 				</div> <!-- container -->
@@ -70,12 +67,12 @@
 						</div>
 						<div class="col-md-5 text animation midHeight">
 							<h2>Partagez</h2>
-							<p> Plusieurs possibilités s'offrent à vous : <br>
-								• libération contrôlée : partagez votre livre avec un ami, un collègue ou un membre du site. Ce mode vous permet de connaître la prochaine destination de votre livre. <br>
-								• libération 'sauvage' : libérez votre livre dans un lieu publique (parc, gare, café,...) et laissez le hasard prendre les choses en main. <br>
-								Qui sait quelles seront les futures pérégrinations de votre livre ?
+							<p> Plusieurs possibilités s'offrent à vous : </p>
+							<p><strong> - La libération contrôlée: </strong> partagez votre livre avec un ami, un collègue ou un membre du site. Ce mode vous permet de connaître la prochaine destination de votre livre.</p>
+							<p><strong>	- La libération dans la nature: </strong> libérez votre livre dans un lieu publique (parc, gare, café,...) et laissez le hasard prendre les choses en main.</p>
+							<p> Qui sait quelles seront les futures pérégrinations de votre livre ?
 							</p>
-							<p class="button"><a href="">DÉCOUVRIR</a></p>
+							<p class="button"><a href="{{ path('livresVoyageurs_bookList') }}">DÉCOUVRIR</a></p>
 						</div>
 						<div class="col-md-6 animation midHeight">
 							<div class="largeImage inverseXL animation midHeight">
@@ -100,13 +97,14 @@
 						</div>
 						<div class="col-md-5 text animation midHeight">
 							<h2>Suivez</h2>
-							<p> Connectez vous sur le site et suivez le trajet de votre livre. <br>
-								Grâce au BCID vous serez en mesure de savoir qui a lu votre livre, <br>
-								les différentes étapes de son voyage ainsi que les commentaires laissés <br>
-								par d'autres lecteurs. Certains livres resteront près de chez vous, d'autres <br>
+							<p> Connectez vous sur le site et suivez le trajet de votre livre.</p>
+							<p> Vous serez en mesure de savoir qui a lu votre livre, 
+								les différentes étapes de son voyage ainsi que les commentaires laissés	par d'autres lecteurs.
+							</p> 
+							<p> Certains livres resteront près de chez vous, d'autres
 								feront le tour du monde.
 							</p>
-							<p class="button"><a href="">DÉCOUVRIR</a></p>
+							<p class="button"><a href="{{ path('livresVoyageurs_history', {id_book: 39373419 } ) }}" target="_blank">DÉCOUVRIR</a></p>
 						</div>
 					</div> <!-- row -->
 				</div> <!-- container -->
@@ -118,7 +116,7 @@
 						<div class="col-md-12 animation">
 							<img class="appIcons" src="" alt="">
 							<img class="appIcons" src="" alt="">
-							<a class="btnInscriptionHome2" href="">JE M"INSCRIT GRATUITEMENT</a>
+							<a class="btnInscriptionHome2" href="{{ path('livresVoyageurs_inscription') }}">JE M"INSCRIT GRATUITEMENT</a>
 						</div>
 					</div> <!-- row -->
 				</div> <!-- container -->
@@ -131,7 +129,7 @@
 							<h2>Plus de XXX livres partagés en france </h2>
 							<img class="picsComunity" src="" alt="">
 							<img class="picsComunity" src="" alt="">
-							<a class="btnInscriptionHome2" href="">REJOIGNEZ LA COMMUNAUTE AUJOURD"HUI</a>
+							<a class="btnInscriptionHome2" href="{{ path('livresVoyageurs_inscription') }}">REJOIGNEZ LA COMMUNAUTE AUJOURD"HUI</a>
 						</div>
 					</div> <!-- row -->
 				</div> <!-- container -->

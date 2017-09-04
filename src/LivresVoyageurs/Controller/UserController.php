@@ -208,11 +208,6 @@ class UserController
         return $app['twig']->render('menu.html.twig', [
             'active_page' => $active_page ]);
     }
-    public function secondMenu(Application $app, $active_page)
-    {
-        return $app['twig']->render('secondMenu.html.twig', [
-            'active_page' => $active_page ]);
-    }
 
 
 

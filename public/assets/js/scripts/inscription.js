@@ -35,20 +35,28 @@ $(document).ready(function() {
             case 1:
             case 2:
             case 3:
-                strength = "Weak";
-                color = "red";
+            $("#password_strength").html(`
+                <div class="progress">
+                    <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
+                    <span class="sr-only">50% Complete (warning)</span>
+                    </div>
+                </div>
+            `);
                 break;
             case 4:
-                strength = "Strong";
-                color = "green";
+                $("#password_strength").html(`
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                        <span class="sr-only">100% Complete (success)</span>
+                        </div>
+                    </div>
+                `);
                 break;
             case 5:
                 strength = "Very Strong";
                 color = "darkgreen";
                 break;
         }
-        $("#password_strength").html(strength);
-        $("#password_strength").css("color", color);
     });
 
 

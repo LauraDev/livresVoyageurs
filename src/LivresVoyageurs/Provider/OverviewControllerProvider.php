@@ -55,6 +55,13 @@ class OverviewControllerProvider implements ControllerProviderInterface
                 ->get('/recherche', 'LivresVoyageurs\Controller\OverviewController::searchAction')
                 # Route name
                 ->bind('livresVoyageurs_search');
+
+            $controllers
+                
+                # Associate a route with a controller and an action
+                ->post('/recherche_ISBN', 'LivresVoyageurs\Controller\OverviewController::searchPost')
+                # Route name
+                ->bind('livresVoyageurs_research');
                 
 
             #Contact

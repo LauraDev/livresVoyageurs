@@ -47,7 +47,48 @@
 
             <!-- Form: Add a book -->
             <div id="addBook" class="tab-pane fade in active" role="tabpanel">
-                <h2> Ajouter un livre </h2>
+
+                <!-- Form: Captured book liberation -->
+                <h2> Libérer un livre voyageur </h2>
+
+                {% if global.request.get('liberation') == 'success' %}
+                    <div class="alert alert-success">
+                        <p class="text-center">
+                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                            Félicitation, votre libération a été enregistrée.
+                        </p>
+                    </div>
+                {% endif %}
+                {% if global.request.get('liberation') == 'fail' %}
+                    <div class="alert alert-danger">
+                        <p class="text-center">
+                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                            Numéro unique incorrect
+                        </p>
+                    </div>
+                {% endif %}
+
+                <form id="formLiberationBook" action="" method="POST">
+
+                    <!-- Id Book -->
+                    <div class="form-group">
+                        <label for="id_books">Numéro unique inscript sur l'étiquette du livre *</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
+                            {{ form_widget(formLiberation.id_books) }}
+                        </div>
+                        <p class="error alert alert-danger">{{ form_errors(formLiberation.id_books) }}</p>
+                    </div>
+
+                    {{ form_row(formLiberation._token) }}
+                    <!-- Submission -->
+                    <div class="form-group text-center">
+                        <input type="submit" name="btnSub" value="Remettre en liberté" class="btn btn-success">
+                    </div>
+                </form>
+
+
+                <h2> Créer un livre voyageur </h2>
 
                 {% if global.request.get('addBook') == 'success' %}
                     <div class="alert alert-success">
@@ -132,7 +173,9 @@
                     </div>
                 </div>
 
+                
             </div> <!-- addBook -->
+
 
 
 
@@ -432,7 +475,7 @@
                     {{ form_row(formAccount._token) }}
                     <!-- Submission -->
                     <div class="form-group text-center">
-                        <input type="submit" name="btnSub" value="Modifier" iclass="btn btn-success">
+                        <input type="submit" name="btnSub" value="Modifier" class="btn btn-success">
                     </div>
                 </form>
 
@@ -543,6 +586,4 @@
     </script>
     <script src="{{ asset('assets/js/jquery.mask.js') }}"></script>
     <script src="{{ asset('assets/js/scripts/espacePerso.js') }}"></script>
-
-
 {% endblock %}

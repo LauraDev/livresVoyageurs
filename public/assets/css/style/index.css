@@ -1,3 +1,11 @@
+.container {
+  width: 85%;
+}
+.navbar2 {
+  background-color: transparent;
+}
+
+
 /* 
 * =======================================================
 *
@@ -5,10 +13,22 @@
 *
 * ======================================================= 
 */
+
+.bg-clipper {
+  z-index: -1;
+  width:100%;
+  position: absolute;
+  top: -360px;
+  left: -36%;
+}
+.bg {
+  width: 150%;
+}
+
 #headerHome {
   min-height: 41vh;
-  position: relative;
-  top: -320px;
+  margin-left: 50px;
+  margin-top: 50px;
 }
 
 #community {
@@ -21,7 +41,7 @@
 
 .btnInscriptionHome, .btnInscriptionHome2 {
   padding: 15px 20px;
-  background: #9ac43a;
+  background: #00ADEE;
   color: white;
   width: 200px;
   border-radius: 10px;
@@ -29,19 +49,23 @@
   top: 80px;
 }
 
-#bottomHome p {
+#bottomHome {
   position: relative;
-  top: 350px;
-  font-size: 1.2em;
-}
-
-#nbreEtapes {
-  font-family: bold;
-  font-size: 1.3em;
-  color: #9ac43a;
+  top: 240px;
   width: 100%;
   text-align: center;
+  font-size: 1.4em;
 }
+
+#numberStep {
+  font-family: bold;
+  color: #8BC53F;
+  width: 100%;
+  text-align: center;
+  font-size: 2em;
+  margin-top: 20px;
+}
+
 
 /* 
 * =======================================================
@@ -52,6 +76,8 @@
 */
 #mainHome {
   height: 500%;
+  position: relative;
+  top: 380px;
 }
 
 #steps {
@@ -74,7 +100,7 @@
 
 .stepNumber {
   position: relative;
-  top: 20px;
+  top: 30px;
   font-size: 9em;
 }
 
@@ -107,10 +133,13 @@
 .text {
   margin-top: 100px;
 }
-
+.text h2 {
+  font-size: 2.5em;
+}
 .text p {
-  margin: 0px;
+  margin: 10px 0;
   color: grey;
+  font-size: 1.3em;
 }
 
 .text .button {
