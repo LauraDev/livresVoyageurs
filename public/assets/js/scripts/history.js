@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    
+
     // variable pour la carte
     var map;
     // Hide pointers data
@@ -56,7 +56,8 @@ $(document).ready(function() {
             loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
             bounds.extend(loc);
         var infowindow = new google.maps.InfoWindow({
-            content: contentStart
+            content: contentStart,
+            maxWidth: 200
         });
         // ajout de la boite d'info et du listener
         marker.addListener('click', function() {
@@ -83,8 +84,8 @@ $(document).ready(function() {
                     '<img class="col-xs-4 img" src="/livresVoyageurs/public/assets/images/avatar/' + $('.avatar_pointer').html() +'" alt="Avatar membre" />' +
                     '<div class="col-xs-8">'+
                         '<h2>Par : ' + $('.pseudo_pointer').html() + '</h2>' +
-                        '<h3>' + $('.city_pointer').eq(i).html() +'</h3>' +
                     '</div>'+
+                    '<h3 class="text-center">' + $('.city_pointer').eq(i).html() +'</h3>' +
                 '</div>'
             '</div>'
             // Create captures marker
@@ -97,7 +98,9 @@ $(document).ready(function() {
             });
             // Define markers infos
             var infowindow = new google.maps.InfoWindow({
-                content: contentCapture
+                content: contentCapture,
+                maxWidth: 200
+
             });
             // add listener
             markers[i].addListener('click', function() {
@@ -131,7 +134,7 @@ $(document).ready(function() {
         map.panToBounds(bounds);     // auto-center
 
         google.maps.event.addListener(infowindow, 'domready', function() {
-            
+
             // Reference to the DIV which receives the contents of the infowindow using jQuery
             var iwOuter = $('.gm-style-iw');
 
@@ -149,8 +152,8 @@ $(document).ready(function() {
 
             iwCloseBtn.css({
                 opacity: '1', // by default the close button has an opacity of 0.7
-                right: '38px',
-                top: '3px', // button repositioning
+                right: '45px',
+                top: '5px', // button repositioning
                 border: '10px solid #48b5e9', // increasing button border and new color
                 'border-radius': '13px', // circular effect
                 'box-shadow': '0 0 5px #3990B9' // 3D effect to highlight the button
@@ -160,7 +163,7 @@ $(document).ready(function() {
                 $(this).css({opacity: '1'});
             });
         });
-            
+
 
 
     } // init() end

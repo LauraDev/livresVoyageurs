@@ -1,0 +1,1 @@
+.container{width:90%}.heading{text-decoration:underline}@media (max-width: 992px){aside{display:none}}#breakpoint{display:none}@media (max-width: 768px){#breakpoint{display:block}}@media (min-width: 768px) and (max-width: 992px){#breakpoint{display:block}}input[type="radio"]{margin:0 5px}.success{background-color:#00ADEE;color:#fff}.chart{height:400px}

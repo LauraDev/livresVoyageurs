@@ -2,8 +2,8 @@ $(document).ready(function() {
 
     // MASK JS - Add (-) while customer is typing ISBN
     $('#search').mask('000-0-0000-0000-0');
-    
-    $('#research').click(function() {
+
+    $('#research').click(function(event) {
 
         // 1- Stop propagation submit
         event.preventDefault();
@@ -11,10 +11,10 @@ $(document).ready(function() {
         $("#isbnInconnu").hide();
         // 3- Check if there is a research
         // If the input is empty, change the placeholder
-        if ($("#search").val() == '') 
+        if ($("#search").val() == '')
         {
-            $('#search').attr('placeholder','Que rechercher-vous?');
-        } 
+            $('#search').attr('placeholder','Que recherchez-vous?');
+        }
         else
         {
             // If the user wrote something
@@ -22,7 +22,7 @@ $(document).ready(function() {
             var myIsbn = $("#search").val()
             // Set the api variable
             var googleAPI = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + myIsbn.replace(/-/g, '');
-            
+
             // 4- Check if ISBN exist
             // Make an ajax call to get the json data as response.
             $.getJSON(googleAPI, function (response) {
@@ -44,15 +44,15 @@ $(document).ready(function() {
                         }
                     }).done(function(data) {
                         console.log(JSON.stringify(data.ok));
-                        if(data.ok) 
+                        if(data.ok)
                         {
                             // alert(data.ok)
                             //<input type="hidden" value="`+ JSON.stringify(data.ok.rows[0].c[6]) + `">
                             $('#list').replaceWith($(`
                                 <div class="alert alert-success">
-                                    Ce livre a été répertorié par `+data.ok+` membres. 
+                                    Ce livre a été répertorié par `+data.ok+` membres.
                                     <a href="{{ url('livresVoyageurs_inscription') }}">
-                                        Inscrivez-vous pour entrer en contact avec eux. 
+                                        Inscrivez-vous pour entrer en contact avec eux.
                                     </a>
                                 </div>
                             `))
@@ -77,13 +77,13 @@ $(document).ready(function() {
                                 document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Description: " + item.searchInfo.textSnippet + "</li>";
                                 document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Langue: " + item.volumeInfo.language + "</li>";
                             }
-                        } 
-                        else 
+                        }
+                        else
                         {
                             $(`
                                 <div class="alert alert-warning">
                                     <strong>
-                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> 
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                         Attention !
                                     </strong><br>Ce livre n'est pas encore répertorié.
                                 </div>

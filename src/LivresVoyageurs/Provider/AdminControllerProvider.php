@@ -36,7 +36,6 @@ class AdminControllerProvider implements ControllerProviderInterface
                 ->get('/delete/{id_category}', 'LivresVoyageurs\Controller\AdminController::removeCatAction')
                 ->bind('livresVoyageurs_deleteCat');
 
-
         // Return the controllers (ControllerCollection)
         return $controllers;
     }

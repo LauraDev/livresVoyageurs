@@ -82,13 +82,22 @@ class  AdminController
                     # $pseudo = form field
                     $member = $formMember->getData();
                     # Check in DB
-                    $memberDb = $app['idiorm.db']->for_table('members')
+                    # Check if pseudo_member exist
+                    $exist = $app['idiorm.db']->for_table('members')
+                                                ->where('pseudo_member', $member['pseudo_member'])
+                                                ->count();
+                    if ($exist) {
+                        $memberDb = $app['idiorm.db']->for_table('members')
                         ->where('pseudo_member', $member['pseudo_member'])
                         ->find_one();
-                    # Get ID
-                    $id_member = $memberDb->id();
-                    # Redirection
-                    return $app->redirect('?idMember=success&pseudo=' . $member['pseudo_member'] .'&id_member=' . $id_member);
+                        # Get ID
+                        $id_member = $memberDb->id();
+                        # Redirection
+                        return $app->redirect('?idMember=success&pseudo=' . $member['pseudo_member'] .'&id_member=' . $id_member);
+                    }
+                    else {
+                        return $app->redirect('?idMember=fail');
+                    }
                 endif;
 
             # B- Change Role by Id
@@ -247,7 +256,7 @@ class  AdminController
 
         # Chart: inscriptions by month
         $inscriptionsByMonth = $app['idiorm.db']->for_table('members')
-            ->raw_query("SELECT CASE EXTRACT(MONTH 
+            ->raw_query("SELECT CASE EXTRACT(MONTH
                         FROM date_member) WHEN 1 Then 'Janvier'
                         WHEN 2 then 'Février'
                         WHEN 3 then 'Mars'
@@ -261,8 +270,8 @@ class  AdminController
                         WHEN 11 then 'Novembre'
                         WHEN 12 then 'Décembre'
                         END as month,
-                        COUNT(*) as count 
-                        FROM `members` 
+                        COUNT(*) as count
+                        FROM `members`
                         GROUP BY MONTH(`date_member`)")
             ->find_many();
 

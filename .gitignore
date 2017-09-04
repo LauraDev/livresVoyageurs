@@ -4,4 +4,4 @@
 /composer.lock
 /node_modules
 /ressources/config/database.config.php
-public/assets/sass
+.tern-project
