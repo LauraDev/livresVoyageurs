@@ -33,8 +33,13 @@ input[type="radio"] {
   margin: 0 5px;
 }
 
-.success {
-  background-color: #00ADEE;
+.change {
+  background-color: #a2d0d8;
+  color: #fff;
+}
+
+.delete {
+  background-color: #b86e58;
   color: #fff;
 }
 

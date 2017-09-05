@@ -173,14 +173,14 @@
                                                 <form class="form-inline" action="{{ url('livresVoyageurs_changeCat', {id: categorie.id_category}) }}" method="post">
                                                     <input type="hidden" name="id_category" value="{{categorie.id_category}}">
                                                     <input type="text" name="name_category" value="{{categorie.name_category}}">
-                                                    <button type="submit" class="btn btn-warning btn-xs">
+                                                    <button type="submit" class="btn btn-xs change">
                                                         Modifier</button>
                                                 </form>
                                             </td>
                                             <td class="text-center">
                                                 {% for notUsed in catNotUsed %}
                                                     {% if categorie.id_category == notUsed.id_category %}
-                                                        <a href="{{ url('livresVoyageurs_deleteCat', {id_category: categorie.id_category}) }}" class="btn btn-danger btn-xs">
+                                                        <a href="{{ url('livresVoyageurs_deleteCat', {id_category: categorie.id_category}) }}" class="btn btn-xs delete">
                                                             <i class="glyphicon glyphicon-remove"></i>
                                                         </a>
                                                     {% endif %}
