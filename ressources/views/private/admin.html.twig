@@ -18,7 +18,7 @@
             Administration
         </h1>
 
-        <div class="row" >
+        <div class="row">
             <aside class="col-md-3" id="aside">
                 <div class="row">
                     <div class="col-md-12">
@@ -68,15 +68,21 @@
                 <div class="row" id="main">
 
                     <!-- Stats -->
-                        <h2 class="heading">
-                            Statistiques:
-                        </h2>
-                        <ul role="list-group" class="col-sm-6 col-md-5">
-                          <li class="list-group-item">Nombre de membres: <span class="badge">{{ members }}</span></li>
-                          <li class="list-group-item">Nombre de livres disponibles: <span class="badge">{{ availableBooks }}</span></li>
-                          <li class="list-group-item">Nombre total de livres créés sur la plateforme: <span class="badge">{{ books }}</span></li>
-                        </ul>
-                         <!-- <h2>
+                    <h2 class="heading">
+                        Statistiques:
+                    </h2>
+                    <ul role="list-group" class="col-sm-6 col-md-5">
+                        <li class="list-group-item">Nombre de membres:
+                            <span class="badge">{{ members }}</span>
+                        </li>
+                        <li class="list-group-item">Nombre de livres disponibles:
+                            <span class="badge">{{ availableBooks }}</span>
+                        </li>
+                        <li class="list-group-item">Nombre total de livres créés sur la plateforme:
+                            <span class="badge">{{ books }}</span>
+                        </li>
+                    </ul>
+                    <!-- <h2>
                             Nombre de membres:
                             {#{{ members }}#}
                         </h2>
@@ -88,135 +94,141 @@
                             {#{{ books }}#}
                         </h2> -->
 
-                        <!-- Google Charts -->
-                        <div class="row">
-                            {# Books by categories #}
-                            <div class="col-sm-12 col-md-8 col-md-offset-2">
-                                <div id="chart_div_cat" class="chart"></div>
-                            </div>
-                            <div class="row">
-                                {# Inscriptions by month #}
-                                <div class="col-sm-12 col-md-6">
-                                    <div id="chart_div_month" class="chart"></div>
-                                </div>
-                                {# Members by city #}
-                                <div class="col-sm-12 col-md-6">
-                                    <div id="chart_div_city" class="chart"></div>
-                                </div>
-                            </div>
-
+                    <!-- Google Charts -->
+                    <div class="row">
+                        {# Books by categories #}
+                        <div class="col-sm-12 col-md-8 col-md-offset-2">
+                            <div id="chart_div_cat" class="chart"></div>
                         </div>
-                        <!-- Form: Add a category -->
-                        <!-- <h2>
+                        <div class="row">
+                            {# Inscriptions by month #}
+                            <div class="col-sm-12 col-md-6">
+                                <div id="chart_div_month" class="chart"></div>
+                            </div>
+                            {# Members by city #}
+                            <div class="col-sm-12 col-md-6">
+                                <div id="chart_div_city" class="chart"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- Form: Add a category -->
+                    <!-- <h2>
                             Ajouter une catégorie
                         </h2> -->
-                        <hr>
-                        <h2 class="heading">
-                            Catégories:
-                        </h2>
+                    <hr>
+                    <h2 class="heading">
+                        Catégories:
+                    </h2>
 
-                        <h3>
-                            Modification/suppression
-                        </h3>
-                        <!-- <h2>
+                    <h3>
+                        Modification/suppression
+                    </h3>
+                    <!-- <h2>
                             Les catégories
                         </h2> -->
-                        {# {{ dump(categories) }} #}
-                        {% if global.request.get('delete') == 'true' %}
+                    {# {{ dump(categories) }} #}
+                    {% if global.request.get('delete') == 'true' %}
                         <div class="alert alert-danger col-md-8 col-md-offset-2">
                             <p class="text-center">
                                 La catégorie a bien été supprimée
                             </p>
                         </div>
-                        {% endif %}
-                        {% if global.request.get('exist') == 'true' %}
+                    {% endif %}
+                    {% if global.request.get('exist') == 'true' %}
                         <div class="alert alert-warning col-md-8 col-md-offset-2">
                             <p class="text-center">
-                                La catégorie {{global.request.get('name')}} existe déjà
+                                La catégorie
+                                {{global.request.get('name')}}
+                                existe déjà
                             </p>
                         </div>
-                        {% endif %}
-                        {% if global.request.get('change') == 'true' %}
+                    {% endif %}
+                    {% if global.request.get('change') == 'true' %}
                         <div class="alert alert-success col-md-8 col-md-offset-2">
                             <p class="text-center">
-                                La catégorie n°{{ global.request.get('id') }} a été modifiée
+                                La catégorie n°{{ global.request.get('id') }}
+                                a été modifiée
                             </p>
                         </div>
-                        {% endif %}
+                    {% endif %}
 
-                        <div class="row">
-                            <div class="col-md-8">
-                                <table class="table table-hover table-bordered table-condensed">
-                                    <thead>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <table class="table table-hover table-bordered table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Id</th>
+                                        <th class="text-center">Catégorie</th>
+                                        <th class="text-center">Supprimer</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for categorie in categories %}
                                         <tr>
-                                            <th class="text-center">Id</th>
-                                            <th class="text-center">Catégorie</th>
-                                            <th class="text-center">Supprimer</th>
+                                            <td class="text-center">
+                                                {{categorie.id_category}}
+                                            </td>
+                                            <td>
+                                                <form class="form-inline" action="{{ url('livresVoyageurs_changeCat', {id: categorie.id_category}) }}" method="post">
+                                                    <input type="hidden" name="id_category" value="{{categorie.id_category}}">
+                                                    <input type="text" name="name_category" value="{{categorie.name_category}}">
+                                                    <button type="submit" class="btn btn-warning btn-xs">
+                                                        Modifier</button>
+                                                </form>
+                                            </td>
+                                            <td class="text-center">
+                                                {% for notUsed in catNotUsed %}
+                                                    {% if categorie.id_category == notUsed.id_category %}
+                                                        <a href="{{ url('livresVoyageurs_deleteCat', {id_category: categorie.id_category}) }}" class="btn btn-danger btn-xs">
+                                                            <i class="glyphicon glyphicon-remove"></i>
+                                                        </a>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </td>
+
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for categorie in categories %}
-                                            <tr>
-                                                <td class="text-center">
-                                                    {{categorie.id_category}}
-                                                </td>
-                                                <td>
-                                                    <form class="form-inline" action="{{ url('livresVoyageurs_changeCat', {id: categorie.id_category}) }}" method="post">
-                                                        <input type="hidden" name="id_category" value="{{categorie.id_category}}">
-                                                        <input type="text" name="name_category" value="{{categorie.name_category}}">
-                                                        <button type="submit" class="btn btn-warning btn-xs"> Modifier</button>
-                                                    </form>
-                                                </td>
-                                                <td class="text-center">
-                                                    {% for notUsed in catNotUsed %}
-                                                        {% if categorie.id_category == notUsed.id_category %}
-                                                            <a href="{{ url('livresVoyageurs_deleteCat', {id_category: categorie.id_category}) }}" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-remove"></i></a>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                </td>
+                                    {% endfor %}
+                                </tbody>
 
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-
-                                </table>
-                            </div>
+                            </table>
                         </div>
+                    </div>
 
-                        <h3>
-                            Ajout
-                        </h3>
+                    <h3>
+                        Ajout
+                    </h3>
 
-                        {% if global.request.get('addCat') == 'success' %}
+                    {% if global.request.get('addCat') == 'success' %}
                         <div class="alert alert-success success">
                             <p>
                                 <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                                 Félicitation, la catégorie a été créée.
                             </p>
                         </div>
-                        {% endif %}
+                    {% endif %}
 
-                        <form id="formAddCat" action="" method="POST" class="form-inline">
-                            <!-- Category -->
-                            <div class="form-group">
-                                <label for="name_category">Libellé</label>
-                                <div class="input-group">
-                                    {{ form_row(formAddCat.name_category) }}
-                                </div>
-                                <p class="error alert alert-danger">Vous n'avez pas indiqué la catégorie</p>
+                    <form id="formAddCat" action="" method="POST" class="form-inline">
+                        <!-- Category -->
+                        <div class="form-group">
+                            <label for="name_category">Libellé</label>
+                            <div class="input-group">
+                                {{ form_row(formAddCat.name_category) }}
                             </div>
-                            <!-- Token -->
-                            {{ form_row(formAddCat._token) }}
-                            <!-- Submission -->
-                            <div class="form-group text-center">
-                                <input type="submit" name="btnSub" value="Ajouter" class="btn btn-success">
-                            </div>
-                        </form>
-                        <!-- Form: Look for an ID -->
-                        <hr>
-                        <h2 class="heading">
-                            Gestion des membres:
-                        </h2>
+                            <p class="error alert alert-danger">Vous n'avez pas indiqué la catégorie</p>
+                        </div>
+                        <!-- Token -->
+                        {{ form_row(formAddCat._token) }}
+                        <!-- Submission -->
+                        <div class="form-group text-center">
+                            <input type="submit" name="btnSub" value="Ajouter" class="btn btn-success">
+                        </div>
+                    </form>
+                    <!-- Form: Look for an ID -->
+                    <hr>
+                    <h2 class="heading">
+                        Gestion des membres:
+                    </h2>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="panel panel-default">
@@ -239,11 +251,11 @@
                                         </div>
                                     {% endif %}
                                     {% if global.request.get('idMember') == 'fail' %}
-                                    <div class="alert alert-danger">
-                                        <p class="text-center">
-                                            Ce pseudo n'existe pas.
-                                        </p>
-                                    </div>
+                                        <div class="alert alert-danger">
+                                            <p class="text-center">
+                                                Ce pseudo n'existe pas.
+                                            </p>
+                                        </div>
                                     {% endif %}
 
                                     <form id="formMember" action="" method="POST" class="form-inline">
@@ -267,167 +279,178 @@
                         </div>
                     </div>
 
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="panel panel-default">
-                                    <!-- Form: Change ROLE -->
-                                    <div class="panel-heading">
-                                        <h2 class="panel-title text-center"> Définir le rôle d'un membre </h2>
-                                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="panel panel-default">
+                                <!-- Form: Change ROLE -->
+                                <div class="panel-heading">
+                                    <h2 class="panel-title text-center">
+                                        Définir le rôle d'un membre
+                                    </h2>
+                                </div>
 
+                                <div class="panel-body">
+                                    {% if global.request.get('changeRole') == 'success' %}
+                                        <div class="alert alert-success">
+                                            <p>
+                                                <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                                Félicitation, le rôle a été modifié.
+                                            </p>
+                                        </div>
+                                    {% endif %}
+                                    {% if global.request.get('changeRole') == 'fail' %}
+                                        <div class="alert alert-danger">
+                                            <p>
+                                                <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                                Le membre n'existe pas.
+                                            </p>
+                                        </div>
+                                    {% endif %}
 
-                                    <div class="panel-body">
-                                        {% if global.request.get('changeRole') == 'success' %}
-                                            <div class="alert alert-success">
-                                                <p>
-                                                    <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                                                    Félicitation, le rôle a été modifié.
-                                                </p>
+                                    {# Change Role by ID #}
+                                    <form id="formRole" action="" method="POST" class="col-md-6">
+                                        <!-- Member Id -->
+                                        <div class="form-group">
+                                            <label for="id_member">Identifiant</label>
+                                            <div class="input-group">
+                                                {{ form_row(formRole.id_member) }}
                                             </div>
-                                        {% endif %}
+                                            <p class="error alert alert-danger">Vous n'avez pas indiqué l'identifiant</p>
+                                        </div>
+                                        <!-- Checkbox Role -->
+                                        <div class="form-group">
+                                            <label for="role_member">Rôle</label>
+                                            <div class="input-group">
+                                                {{ form_row(formRole.role_member) }}
+                                            </div>
+                                            <p class="error alert alert-danger">Vous n'avez pas indiqué le role du membre</p>
+                                        </div>
+                                        <!-- Token -->
+                                        {{ form_row(formRole._token) }}
+                                        <!-- Submission -->
+                                        <div class="form-group text-center col-md-2 col-md-offset-2">
+                                            <input type="submit" name="btnSub" value="Modifier" class="btn btn-success">
+                                        </div>
+                                    </form>
 
-                                        {# Change Role by ID #}
-                                        <form id="formRole" action="" method="POST" class="col-md-6">
-                                            <!-- Member Id -->
-                                            <div class="form-group">
-                                                <label for="id_member">Identifiant</label>
-                                                <div class="input-group">
-                                                    {{ form_row(formRole.id_member) }}
-                                                </div>
-                                                <p class="error alert alert-danger">Vous n'avez pas indiqué l'identifiant</p>
+                                    {# Change Role by Pseudo #}
+                                    <form id="formRole2" action="" method="POST" class="col-md-6">
+                                        <!-- Id du membre -->
+                                        <div class="form-group">
+                                            <label for="pseudo_member">Pseudo</label>
+                                            <div class="input-group">
+                                                {{ form_row(formRole2.pseudo_member2) }}
                                             </div>
-                                            <!-- Checkbox Role -->
-                                            <div class="form-group">
-                                                <label for="role_member">Rôle</label>
-                                                <div class="input-group">
-                                                    {{ form_row(formRole.role_member) }}
-                                                </div>
-                                                <p class="error alert alert-danger">Vous n'avez pas indiqué le role du membre</p>
+                                            <p class="error alert alert-danger">Vous n'avez pas indiqué le pseudo</p>
+                                        </div>
+                                        <!-- Role du membre -->
+                                        <div class="form-group">
+                                            <label for="role_member">Rôle</label>
+                                            <div class="input-group">
+                                                {{ form_row(formRole2.role_member2) }}
                                             </div>
-                                            <!-- Token -->
-                                            {{ form_row(formRole._token) }}
-                                            <!-- Submission -->
-                                            <div class="form-group text-center col-md-2 col-md-offset-2">
-                                                <input type="submit" name="btnSub" value="Modifier" class="btn btn-success">
-                                            </div>
-                                        </form>
-
-                                        {# Change Role by Pseudo #}
-                                        <form id="formRole2" action="" method="POST" class="col-md-6">
-                                            <!-- Id du membre -->
-                                            <div class="form-group">
-                                                <label for="pseudo_member">Pseudo</label>
-                                                <div class="input-group">
-                                                    {{ form_row(formRole2.pseudo_member2) }}
-                                                </div>
-                                                <p class="error alert alert-danger">Vous n'avez pas indiqué le pseudo</p>
-                                            </div>
-                                            <!-- Role du membre -->
-                                            <div class="form-group">
-                                                <label for="role_member">Rôle</label>
-                                                <div class="input-group">
-                                                    {{ form_row(formRole2.role_member2) }}
-                                                </div>
-                                                <p class="error alert alert-danger">Vous n'avez pas indiqué le role du membre</p>
-                                            </div>
-                                            <!-- Token -->
-                                            {{ form_row(formRole2._token) }}
-                                            <!-- Submission -->
-                                            <div class="form-group text-center col-md-2 col-md-offset-2">
-                                                <input type="submit" name="btnSub" value="Modifier" class="btn btn-success">
-                                            </div>
-                                        </form>
-                                    </div>
+                                            <p class="error alert alert-danger">Vous n'avez pas indiqué le role du membre</p>
+                                        </div>
+                                        <!-- Token -->
+                                        {{ form_row(formRole2._token) }}
+                                        <!-- Submission -->
+                                        <div class="form-group text-center col-md-2 col-md-offset-2">
+                                            <input type="submit" name="btnSub" value="Modifier" class="btn btn-success">
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Form: Delete a member-->
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h3 class="text-center panel-title">
-                                            Bannir un membre
-                                        </h3>
-                                    </div>
+                    <!-- Form: Delete a member-->
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="text-center panel-title">
+                                        Bannir un membre
+                                    </h3>
+                                </div>
 
-                                    <div class="panel-body">
-                                        {% if global.request.get('delete') == 'success' %}
-                                            <div class="alert alert-success">
-                                                <p>
-                                                    <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                                                    Le membre a bien été effacé.
-                                                </p>
+                                <div class="panel-body">
+                                    {% if global.request.get('delete') == 'success' %}
+                                        <div class="alert alert-success">
+                                            <p>
+                                                <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                                Le membre a bien été effacé.
+                                            </p>
+                                        </div>
+                                    {% endif %}
+                                    {% if global.request.get('delete') == 'fail' %}
+                                        <div class="alert alert-danger">
+                                            <p>
+                                                <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                                Le membre n'existe pas.
+                                            </p>
+                                        </div>
+                                    {% endif %}
+                                    {# Delete using ID #}
+                                    <form id="formDel" action="" method="POST" class="col-md-6 ">
+                                        <!-- ID member -->
+                                        <div class="form-group">
+                                            <label for="id_member">Identifiant</label>
+                                            <div class="input-group">
+                                                {{ form_row(formDel.id_member3) }}
                                             </div>
-                                        {% endif %}
-                                        {# Delete using ID #}
-                                        <form id="formDel" action="" method="POST" class="col-md-6 ">
-                                            <!-- ID member -->
-                                            <div class="form-group">
-                                                <label for="id_member">Identifiant</label>
-                                                <div class="input-group">
-                                                    {{ form_row(formDel.id_member3) }}
-                                                </div>
-                                                <p class="error alert alert-danger">Vous n'avez pas indiqué l'ID du membre</p>
-                                            </div>
-                                            <!-- Token -->
-                                            {{ form_row(formDel._token) }}
-                                            <!-- Submission -->
-                                            <div class="form-group text-center col-md-2 col-md-offset-2">
-                                                <input type="submit" name="btnSub" value="Supprimer" class="btn btn-success">
-                                            </div>
-                                        </form>
+                                            <p class="error alert alert-danger">Vous n'avez pas indiqué l'ID du membre</p>
+                                        </div>
+                                        <!-- Token -->
+                                        {{ form_row(formDel._token) }}
+                                        <!-- Submission -->
+                                        <div class="form-group text-center col-md-2 col-md-offset-2">
+                                            <input type="submit" name="btnSub" value="Supprimer" class="btn btn-success">
+                                        </div>
+                                    </form>
 
-                                        {# Delete using Pseudo #}
-                                        <form id="formDel2" action="" method="POST" class="col-md-6">
-                                            <!-- Pseudo membrer -->
-                                            <div class="form-group">
-                                                <label for="pseudo_member">Pseudo</label>
-                                                <div class="input-group">
-                                                    {{ form_row(formDel2.pseudo_member3) }}
-                                                </div>
-                                                <p class="error alert alert-danger">Vous n'avez pas indiqué le pseudo du membre</p>
+                                    {# Delete using Pseudo #}
+                                    <form id="formDel2" action="" method="POST" class="col-md-6">
+                                        <!-- Pseudo membrer -->
+                                        <div class="form-group">
+                                            <label for="pseudo_member">Pseudo</label>
+                                            <div class="input-group">
+                                                {{ form_row(formDel2.pseudo_member3) }}
                                             </div>
-                                            <!-- Token -->
-                                            {{ form_row(formDel2._token) }}
-                                            <!-- Submission -->
-                                            <div class="form-group text-center col-md-2 col-md-offset-2">
-                                                <input type="submit" name="btnSub" value="Supprimer" class="btn btn-success">
-                                            </div>
-                                        </form>
-                                    </div>
+                                            <p class="error alert alert-danger">Vous n'avez pas indiqué le pseudo du membre</p>
+                                        </div>
+                                        <!-- Token -->
+                                        {{ form_row(formDel2._token) }}
+                                        <!-- Submission -->
+                                        <div class="form-group text-center col-md-2 col-md-offset-2">
+                                            <input type="submit" name="btnSub" value="Supprimer" class="btn btn-success">
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
-
+                    </div>
 
                 </div>
             </main>
         </div>
 
-
-
     </div>
 
 {% endblock %}
 
-
 {% block stylesheets %}
-	{{ parent() }}
-	<link rel="stylesheet" href="{{ asset('assets/css/style/admin/admin.min.css') }}">
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/css/style/admin/admin.min.css') }}">
 {% endblock %}
-
 
 {% block javascripts %}
     {{ parent() }}
-
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
 
         // Load the Visualization API
-        google.charts.load('current', {'packages':['corechart']});
+        google.charts.load('current', {'packages': ['corechart']});
 
         // Set a callback to run when the Google Visualization API is loaded.
         google.charts.setOnLoadCallback(drawChart);
@@ -435,36 +458,40 @@
         function drawChart() {
 
             // Table : inscriptions by month
-            var dataCountry = new google.visualization.DataTable( {{ (inscriptionsByMonth | json_encode | raw) }} );
+            var dataCountry = new google.visualization.DataTable({{ (inscriptionsByMonth | json_encode | raw) }});
             var chartCountry = new google.visualization.ColumnChart(document.getElementById('chart_div_month'));
             chartCountry.draw(dataCountry, {
                 title: "Inscriptions par Mois",
-                titleTextStyle:{
+                titleTextStyle: {
                     fontName: 'Baloo',
-                    fontSize: 18,
+                    fontSize: 18
                 },
                 colors: ['#9999ff']
             });
 
             // Table : members by city
-            var dataCountry = new google.visualization.DataTable( {{ (membersByCity | json_encode | raw) }} );
+            var dataCountry = new google.visualization.DataTable({{ (membersByCity | json_encode | raw) }});
             var chartCountry = new google.visualization.ColumnChart(document.getElementById('chart_div_city'));
             chartCountry.draw(dataCountry, {
                 title: "Membres par Ville",
-                titleTextStyle:{
+                titleTextStyle: {
                     fontName: 'Baloo',
-                    fontSize: 18,
+                    fontSize: 18
                 },
                 colors: ['#9999ff']
             });
 
             // Table : books by category
-            var dataCat = new google.visualization.DataTable( {{ (booksByCat | json_encode(constant('JSON_NUMERIC_CHECK')) | raw) }} );
-            var optionsCat = { title: 'Livres par Catégories', is3D: true,
-            titleTextStyle:{
-                fontName: 'Baloo',
-                fontSize: 18,},
-            colors: ['#ccffcc','#4D4DFF','#335533','#9999ff'] };
+            var dataCat = new google.visualization.DataTable({{ (booksByCat | json_encode(constant('JSON_NUMERIC_CHECK')) | raw) }});
+            var optionsCat = {
+                title: 'Livres par Catégories',
+                is3D: true,
+                titleTextStyle: {
+                    fontName: 'Baloo',
+                    fontSize: 18
+                },
+                colors: ['#ccffcc', '#4D4DFF', '#335533', '#9999ff']
+            };
             var chartCat = new google.visualization.PieChart(document.getElementById('chart_div_cat'));
 
             chartCat.draw(dataCat, optionsCat);
@@ -472,12 +499,9 @@
         } // end drawchart
 
         // Responsive charts
-        $(window).resize(function(){
-	  	drawChart();
-	    });
-
-
+        $(window).resize(function() {
+            drawChart();
+        });
     </script>
-
 
 {% endblock %}

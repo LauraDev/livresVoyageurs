@@ -130,12 +130,23 @@ class  AdminController
                 if ($formRole->isValid()) :
                     # $pseudo = form field
                     $role = $formRole->getData();
-                    # Check in DB
-                    $roleDb = $app['idiorm.db']->for_table('members')->find_one($role['id_member']);
-                    $roleDb->role_member = $role['role_member'];
-                    $roleDb->save();
-                    # Redirection
-                    return $app->redirect('?changeRole=success');
+                    # Check if exist
+                    $exist = $app['idiorm.db']->for_table('members')
+                                                ->where('id_member', $member['id_member'])
+                                                ->count();
+                    if ($exist) {
+
+                        # Check in DB
+                        $roleDb = $app['idiorm.db']->for_table('members')->find_one($role['id_member']);
+                        $roleDb->role_member = $role['role_member'];
+                        $roleDb->save();
+                        # Redirection
+                        return $app->redirect('?changeRole=success');
+                    }
+                    else {
+                        return $app->redirect('?changeRole=fail');
+                    }
+
                 endif;
 
                 # C- Change Role by Pseudo
@@ -168,14 +179,23 @@ class  AdminController
                 if ($formRole2->isValid()) :
                     # $pseudo = form field
                     $role = $formRole2->getData();
-                    # Check in DB
-                    $roleDb = $app['idiorm.db']->for_table('members')
-                        ->where('pseudo_member', $role['pseudo_member2'])
-                        ->find_one();
-                    $roleDb->role_member = $role['role_member2'];
-                    $roleDb->save();
-                    # Redirection
-                    return $app->redirect('?changeRole=success');
+
+                    $exist = $app['idiorm.db']->for_table('members')
+                                                ->where('pseudo_member', $member['pseudo_member2'])
+                                                ->count();
+                    if ($exist) {
+                        # Check in DB
+                        $roleDb = $app['idiorm.db']->for_table('members')
+                            ->where('pseudo_member', $role['pseudo_member2'])
+                            ->find_one();
+                        $roleDb->role_member = $role['role_member2'];
+                        $roleDb->save();
+                        # Redirection
+                        return $app->redirect('?changeRole=success');
+                    }
+                    else {
+                        return $app->redirect('?changeRole=fail');
+                    }
                 endif;
 
 
@@ -199,17 +219,26 @@ class  AdminController
             # If form Valid
             if ($formDel->isValid()) :
                 $member = $formDel->getData();
-                $deleteMember = $app['idiorm.db']->for_table('members')
-                    ->find_one($member['id_member3']);
-                $deleteMember->pseudo_member   = 'anonyme';
-                $deleteMember->mail_member     = '';
-                $deleteMember->pass_member     = '';
-                $deleteMember->avatar_member   = '';
-                $deleteMember->role_member     = '';
-                $deleteMember->active_member   = 0;
-                $deleteMember->save();
-                # Redirection
-                return $app->redirect('?delete=success');
+                # Check if exists
+                $exist = $app['idiorm.db']->for_table('members')
+                                            ->where('id_member', $member['id_member3'])
+                                            ->count();
+                if ($exist) {
+                    $deleteMember = $app['idiorm.db']->for_table('members')
+                        ->find_one($member['id_member3']);
+                    $deleteMember->pseudo_member   = 'anonyme';
+                    $deleteMember->mail_member     = '';
+                    $deleteMember->pass_member     = '';
+                    $deleteMember->avatar_member   = '';
+                    $deleteMember->role_member     = '';
+                    $deleteMember->active_member   = 0;
+                    $deleteMember->save();
+                    # Redirection
+                    return $app->redirect('?delete=success');
+                }
+                else {
+                    return $app->redirect('?delete=fail');
+                }
             endif;
 
 
@@ -231,12 +260,22 @@ class  AdminController
             # If form Valid
             if ($formDel2->isValid()) :
                 $member = $formDel2->getData();
-                $delete = $app['idiorm.db']->for_table('members')
-                    ->where('pseudo_member', $member['pseudo_member3'])
-                    ->find_one();
-                $delete->delete();
-                # Redirection
-                return $app->redirect('?delete=success');
+                # Check if exists
+                $exist = $app['idiorm.db']->for_table('members')
+                                            ->where('pseudo_member', $member['pseudo_member3'])
+                                            ->count();
+                if ($exist) {
+                    $delete = $app['idiorm.db']->for_table('members')
+                        ->where('pseudo_member', $member['pseudo_member3'])
+                        ->find_one();
+                    $delete->delete();
+                    # Redirection
+                    return $app->redirect('?delete=success');
+                }
+                else {
+                    return $app->redirect('?delete=fail');
+                }
+
             endif;
 
 

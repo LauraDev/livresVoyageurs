@@ -2,6 +2,7 @@
 
 namespace LivresVoyageurs\Controller;
 
+use Swift_Image;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -286,17 +287,24 @@ class UserController
                 $mailer = new Swift_Mailer($transport);
                 // load template for the message
                 $template = $app['twig']->loadTemplate('resetPasswordMail.html.twig');
+
+                $message = new Swift_Message();
+                // embed the image for the template
+                $image   = $message->embed(Swift_Image::fromPath(PATH_IMAGES.'/logo-2.png'));
                 // Array for renderBlock
-                $parameters  = array('url' => $urlReset);
+                // $image = PATH_IMAGES . '/logo-2.png';
+                $parameters  = array('url'   => $urlReset,
+                                     'image' => $image
+            );
 
                 // Create a message
-                $message = (new Swift_Message())
+                $message
                             ->setFrom('livresvoyageurs@orange.fr')
                             ->setTo($mail['mail_member'])
                             ->setSubject($template ->renderBlock('subject', $parameters))
-                            ->setBody($template    ->renderBlock('body_text', $parameters),'text/plain')
-                            ->addPart($template    ->renderBlock('body_html', $parameters),'text/html');
-
+                            // ->setBody($template    ->renderBlock('body_text', $parameters),'text/plain')
+                            ->addPart($template    ->renderBlock('body_html', $parameters),'text/html')
+                            ;
 
                 // Send the message
                 $result = $mailer->send($message);

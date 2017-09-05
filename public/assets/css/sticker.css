@@ -1,14 +1,21 @@
 /*Stylesheet for sticker*/
-h1 {
-  text-align: center;
+body, html {
+  margin: 0;
 }
 
 #sticker {
-  border: 2px solid #000;
-  border-radius: 15px;
-  width: 50%;
+  border-right: 2px dashed #000;
+  border-bottom: 2px dashed #000;
+  width: 45%;
   padding: 5px;
-  position: relative;
+}
+
+#sticker h1 {
+  font-size: 22px;
+  color: #a2d0d8;
+  position: absolute;
+  top: 18px;
+  left: 100px;
 }
 
 #sticker .alert {
@@ -21,8 +28,14 @@ h1 {
 }
 
 #sticker .row img {
-  position: absolute;
-  left: -100px;
-  top: -20px;
+  margin-left: 35px;
   border: none;
+  width: 60px;
+}
+
+#sticker .glyphicon {
+  position: absolute;
+  top: 230px;
+  font-size: 22px;
+  z-index: 10;
 }
