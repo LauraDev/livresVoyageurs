@@ -132,7 +132,7 @@ class  AdminController
                     $role = $formRole->getData();
                     # Check if exist
                     $exist = $app['idiorm.db']->for_table('members')
-                                                ->where('id_member', $member['id_member'])
+                                                ->where('id_member', $role['id_member'])
                                                 ->count();
                     if ($exist) {
 

@@ -71,7 +71,7 @@
                                                 {% endif %}
                                             {% else %}
                                                 {% if book.pseudo_capture != app.user.pseudo_member %}
-                                                    <a href="{{ path('livresVoyageurs_addFriend', {pseudo:  book.pseudo_capture} ) }}" alt="ajouter ce membre en ami" class="btn btn-succes"> Entrer en contact *</a>
+                                                    <a href="{{ path('livresVoyageurs_addFriend', {pseudo:  book.pseudo_capture} ) }}" alt="ajouter ce membre en ami" class="btn btn-success"> Entrer en contact *</a>
                                                     <p> * En cliquant sur ce bouton, j'accepte de transmettre mon adresse e-mail à ce contact</p>
                                                 {% endif %}
                                             {% endif %}
