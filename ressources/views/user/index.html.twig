@@ -25,19 +25,19 @@
 	<div class="animation" id="headerHome" class="row">
 		<h1 id="community"> COMMUNAUTE DE <br> PARTAGE DE LIVRES </h1>
 		<p>Libérez vos livres pour faire du monde une bibliothèque!</p>
-		<p><a class="btnInscriptionHome" href="#presentation">DÉCOUVRIR</a></p>
+		<p><a class="btnInscriptionHome" href="">DÉCOUVRIR</a></p>
 	</div>
 
 	<div id="bottomHome" class="animation">
 		<p id="explain"> Vous possédez un livre que vous souhaitez mettre à la disposition de la communauté ou libérer dans la nature?
-		<p id="numberStep"> 3 ETAPES SUFFISENT ! </p>
+		<p id="numberStep" class="animated tada"> 3 ETAPES SUFFISENT ! </p>
 	</div>
 
 	<main id="mainHome">
 
 		<section id="steps">
 
-			<article class="step" id="#presentation">
+			<article class="step" id="presentation">
 				<div class="container">
 					<div class="divStep row">
 						<div class="col-md-6 animation midHeight">
@@ -143,4 +143,9 @@
 {% block stylesheets %}
 	{{ parent() }}
 	<link rel="stylesheet" href="{{ asset('assets/css/style/index.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/scripts/index.js') }}"></script>
 {% endblock %}

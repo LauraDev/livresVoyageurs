@@ -6,13 +6,6 @@
   font-style: normal;
 }
 
-/* 
-* =======================================================
-*
-* 	GENERAL
-*
-* ======================================================= 
-*/
 html, body {
   height: 100%;
   margin: 0;
@@ -32,11 +25,17 @@ html, body {
 
 ul {
   list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 li {
   padding: 0;
   margin: 0;
+}
+
+a:hover, a:active, a:focus {
+  text-decoration: none;
 }
 
 .displayFlex {
@@ -50,13 +49,6 @@ h2 {
   margin: 35px 0 20px 0;
 }
 
-/* 
-* =======================================================
-*
-* 	MENU
-*
-* ======================================================= 
-*/
 .all-menus {
   flex-direction: column;
   padding-top: 30px;
@@ -69,7 +61,7 @@ h2 {
 
 #company {
   font-size: 2em;
-  color: #00ADEE;
+  color: #a2d0d8;
 }
 
 .navbar {
@@ -111,13 +103,6 @@ h2 {
   letter-spacing: .21px;
 }
 
-/* 
-* =======================================================
-*
-*   SECOND	MENU
-*
-* ======================================================= 
-*/
 .right-menu2 {
   width: 100%;
   justify-content: flex-end;
@@ -139,28 +124,82 @@ h2 {
   color: darkgrey;
 }
 
-/* 
-* =======================================================
-*
-* 	MAIN
-*
-* ======================================================= 
-*/
 #contact {
   height: 100%;
 }
 
-/* 
-* =======================================================
-*
-* 	FOOTER
-*
-* ======================================================= 
-*/
-/* 
-* =======================================================
-*
-* 	RESPONSIVE: MEDIA-QUERY
-*
-* ======================================================= 
-*/
+.titleForm {
+  background-color: #a2d0d8;
+  border-top-left-radius: 20px;
+  color: white;
+}
+
+h1 {
+  margin: 0 0 15px 0;
+  padding: 15px;
+}
+
+h2 {
+  margin: 0 0 15px 0;
+  padding: 15px;
+}
+
+.contour {
+  border: 1px solid #F4F5F9;
+  border-bottom-right-radius: 20px;
+  border-top-left-radius: 20px;
+  box-shadow: 6px 24px 61px -12px rgba(0, 0, 0, 0.4);
+  background-color: white;
+  margin: 50px 0;
+}
+
+.contentForm {
+  padding: 30px;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #a2d0d8;
+  overflow: hidden;
+  width: 100%;
+  height: 0;
+  transition: .5s ease;
+}
+
+.bookCard:hover .overlay {
+  height: 100%;
+  padding-top: 85px;
+}
+
+.card-title {
+  font-size: 1em;
+}
+
+.textOverlay {
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 0.85em;
+}
+
+#formAddBook_disponibility_book {
+  margin: 0 20px 0 0;
+}
+
+#formAddBook_disponibility_book label {
+  font-weight: normal;
+}
+
+.card-title {
+  height: 30px;
+  text-align: center;
+}
+
+.imgCard {
+  max-height: 250px;
+  width: 100%;
+  display: block;
+  margin: auto;
+}

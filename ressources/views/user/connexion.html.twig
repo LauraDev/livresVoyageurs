@@ -16,72 +16,81 @@
 
         
         <div class="col-md-offset-3 col-md-6">
-            
-            <h1> Connexion </h1>
-
-            {% if error %}
-                <div class="alert alert-danger">
-                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                    {{ error | replace({"Bad credentials." : " Identifiants et/ou mot de passe incorrect."}) }}
+            <div class="card contour">
+                <div class="titleForm text-center">
+                    <h1> Connexion </h1>
                 </div>
-            {% endif %}
 
-            {% if global.request.get('inscription') == 'success' %}
-                <div class="alert alert-success">
-                    <p><i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                    Félicitation, votre inscription est effective.
-                        <br>Vous pouvez maintenant vous connecter.</p>
-                </div>
-            {% endif %}
+                <div class="contentForm">
+                    {% if error %}
+                        <div class="alert alert-danger">
+                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                            {{ error | replace({"Bad credentials." : " Identifiants et/ou mot de passe incorrect."}) }}
+                        </div>
+                    {% endif %}
 
-            {% if global.request.get('mdp') == 'success' %}
-                <div class="alert alert-success">
-                    <p><i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                    Félicitation, votre mot de passe a bien été changé.
-                        <br>Vous pouvez maintenant vous connecter.</p>
-                </div>
-            {% endif %}
+                    {% if global.request.get('inscription') == 'success' %}
+                        <div class="alert alert-success">
+                            <p><i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                            Félicitation, votre inscription est effective.
+                                <br>Vous pouvez maintenant vous connecter.</p>
+                        </div>
+                    {% endif %}
+
+                    {% if global.request.get('mdp') == 'success' %}
+                        <div class="alert alert-success">
+                            <p><i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                            Félicitation, votre mot de passe a bien été changé.
+                                <br>Vous pouvez maintenant vous connecter.</p>
+                        </div>
+                    {% endif %}
 
 
-            <!-- Connexion Form -->
-            <form id="formMemberConnexion" action="{{ url('connexion_login_check')}}" method="post">
+                    <!-- Connexion Form -->
+                    <form id="formMemberConnexion" action="{{ url('connexion_login_check')}}" method="post">
 
-                <!-- Pseudo -->
-                <div class="form-group">
-                    <label for="pseudo_member">Pseudo</label>
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <input type="text" name="_username" class="form-control" value="{{ last_username }}" required>
+                        <!-- Pseudo -->
+                        <div class="form-group">
+                            <label for="pseudo_member">Pseudo</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input type="text" name="_username" class="form-control" value="{{ last_username }}" required>
+                            </div>
+                            <p class="error alert alert-danger">Vous n'avez pas indiqué votre Pseudo</p>
+                            <p class="error alert alert-danger">Ce pseudo n'existe pas</p>
+                        </div>
+                        <!-- Password -->
+                        <div class="form-group">
+                            <label for="pass_member">Mot de passe</label>
+                            <div class="input-group">
+                                <div class="input-group-addon"><span class="ion-android-lock"></span></div>
+                                <input type="password" name="_password" class="form-control" required>
+                            </div>
+                            <p class="error alert alert-danger">Vous n'avez pas indiqué votre Mot de passe</p>
+                            <p class="error alert alert-danger">Mot de passe incorrect</p>
+                        </div>
+                        <!-- Submission -->
+                        <div class="form-group text-center">
+                            <input type="submit" name="btnSub" value="Entrer" id="btn_memberConnexion" class="btn btn-success">
+                        </div>
+
+
+                    </form>
+
+
+                    <!-- Reset Password -->
+                    <div>
+                        <a href="{{ url('livresVoyageurs_resetPassword') }}" title="lien vers la réinitialisation du mot de passe">Mot de passe perdu?</a>
                     </div>
-                    <p class="error alert alert-danger">Vous n'avez pas indiqué votre Pseudo</p>
-                    <p class="error alert alert-danger">Ce pseudo n'existe pas</p>
                 </div>
-                <!-- Password -->
-                <div class="form-group">
-                    <label for="pass_member">Mot de passe</label>
-                    <div class="input-group">
-                        <div class="input-group-addon"><span class="ion-android-lock"></span></div>
-                        <input type="password" name="_password" class="form-control" required>
-                    </div>
-                    <p class="error alert alert-danger">Vous n'avez pas indiqué votre Mot de passe</p>
-                    <p class="error alert alert-danger">Mot de passe incorrect</p>
-                </div>
-                <!-- Submission -->
-                <div class="form-group text-center">
-                    <input type="submit" name="btnSub" value="Entrer" id="btn_memberConnexion" class="btn btn-success">
-                </div>
-
-
-            </form>
-
-
-            <!-- Reset Password -->
-            <div>
-                <a href="{{ url('livresVoyageurs_resetPassword') }}" title="lien vers la réinitialisation du mot de passe">Mot de passe perdu?</a>
             </div>
-
         </div> <!-- col-md -->
 
     </div> <!-- row -->
 
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/css/style/connexion/connexion.min.css') }}">
 {% endblock %}

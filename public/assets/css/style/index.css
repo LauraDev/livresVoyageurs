@@ -5,6 +5,15 @@
   background-color: transparent;
 }
 
+.navbar {
+  position: fixed;
+  top: 0;
+  background-color: transparent;
+  z-index: 2;
+}
+
+
+
 
 /*
 * =======================================================
@@ -28,7 +37,7 @@
 #headerHome {
   min-height: 41vh;
   margin-left: 50px;
-  margin-top: 50px;
+  margin-top: 200px;
 }
 
 #community {
@@ -51,7 +60,7 @@
 
 #bottomHome {
   position: relative;
-  top: 240px;
+  top: 190px;
   width: 100%;
   text-align: center;
   font-size: 1.4em;
@@ -64,10 +73,12 @@
   text-align: center;
   font-size: 2em;
   margin-top: 20px;
+  -ms-animation-delay: 2.5s;
+  -moz-animation-delay: 2.5s;
+  -webkit-animation-delay: 2.5s;
 }
 
-
-/*
+/* 
 * =======================================================
 *
 * 	MAIN

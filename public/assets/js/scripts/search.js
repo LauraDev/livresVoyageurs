@@ -2,7 +2,7 @@ $(document).ready(function() {
 
     // MASK JS - Add (-) while customer is typing ISBN
     $('#search').mask('000-0-0000-0000-0');
-
+    
     $('#research').click(function(event) {
 
         // 1- Stop propagation submit
@@ -14,7 +14,7 @@ $(document).ready(function() {
         if ($("#search").val() == '')
         {
             $('#search').attr('placeholder','Que recherchez-vous?');
-        }
+        } 
         else
         {
             // If the user wrote something

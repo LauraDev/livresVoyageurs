@@ -17,82 +17,88 @@
 
         
         <div class="col-md-offset-3 col-md-6">
-            
-            <h1> Inscription </h1>
-
-            {% if global.request.get('inscription') == 'exist' %}
-                <div class="alert alert-danger">
-                    <p><i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                    Ce pseudo existe déja.</p>
-                </div>
-            {% endif %}
-            <!-- Inscription form -->
-            <form id="formMemberInscription" action="" method="POST" enctype="multipart/form-data">
-
-                <!-- Pseudo -->
-                <div class="form-group">
-                    <label for="pseudo_member">Pseudo *</label>
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        {{ form_widget(form.pseudo_member) }}
-                    </div>
-                    {{ form_errors(form.pseudo_member) }}
-                </div>
-                <!-- Email -->
-                <div class="form-group">
-                    <label for="mail_member">Email *</label>
-                    <div class="input-group">
-                        <div class="input-group-addon">@</div>
-                        {{ form_widget(form.mail_member) }}
-                    </div>
-                    {{ form_errors(form.mail_member) }}
-                </div>
-                <!-- Password -->
-                <div class="form-group">
-                    <label for="pass_member">Mot de passe *</label>
-                    <!-- Help-text -->
-                    <p id="pass-helptext">Votre mot de passe doit contenir au moins 6 caractères, une majuscule et un chiffre</p>
-                    <!-- Password complexity -->
-                    <p id="password_strength"></p>
-                    <div class="input-group">
-                        <div class="input-group-addon"><span class="ion-android-lock"></span></div>
-                        {{ form_widget(form.pass_member.first) }}
-                        {{ form_widget(form.pass_member.second) }}
-                    </div>
-                    {{ form_errors(form.pass_member.first) }}
-                    {{ form_errors(form.pass_member.second) }}
-                </div>
-                <!-- Picture -->
-                <div class="form-group">
-                    <label for="avatar_member">Avatar</label>
-                    <div class="input-group">
-                        {{ form_row(form.avatar_member) }}
-                    </div>
-                </div>
-                    {{ form_row(form.role_member) }}
-                <!-- Captcha -->
-                <div class="form-group">
-                    <div class="input-group">
-                        {{ form_widget(form.captcha) }}
-                    </div>
-                    {{ form_errors(form.captcha) }}
-                </div>
-                <!-- Terms and Conditions-->
-                <div class="form-group">
-                    <div class="input-group">
-                        {{ form_label(form.termsAccepted) }}
-                        {{ form_widget(form.termsAccepted) }}
-                    </div>
-                    {{ form_errors(form.termsAccepted) }}
-                </div>
-                <!-- Token -->
-                    {{ form_row(form._token) }}
-                <!-- Submission -->
-                <div class="form-group text-center">
-                    <input type="submit" name="btnSub" value="Entrer" id="btn_memberInscription" class="btn btn-success">
+            <div class="card contour">
+                <div class="titleForm text-center">
+                    <h1> Inscription </h1>
                 </div>
 
-            </form>
+                <div class="contentForm">
+
+                    {% if global.request.get('inscription') == 'exist' %}
+                        <div class="alert alert-danger">
+                            <p><i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                            Ce pseudo existe déja.</p>
+                        </div>
+                    {% endif %}
+                    <!-- Inscription form -->
+                    <form id="formMemberInscription" action="" method="POST" enctype="multipart/form-data">
+
+                        <!-- Pseudo -->
+                        <div class="form-group">
+                            <label for="pseudo_member">Pseudo *</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                {{ form_widget(form.pseudo_member) }}
+                            </div>
+                            {{ form_errors(form.pseudo_member) }}
+                        </div>
+                        <!-- Email -->
+                        <div class="form-group">
+                            <label for="mail_member">Email *</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">@</div>
+                                {{ form_widget(form.mail_member) }}
+                            </div>
+                            {{ form_errors(form.mail_member) }}
+                        </div>
+                        <!-- Password -->
+                        <div class="form-group">
+                            <label for="pass_member">Mot de passe *</label>
+                            <!-- Help-text -->
+                            <p id="pass-helptext">Votre mot de passe doit contenir au moins 6 caractères, une majuscule et un chiffre</p>
+                            <!-- Password complexity -->
+                            <p id="password_strength"></p>
+                            <div class="input-group">
+                                <div class="input-group-addon"><span class="ion-android-lock"></span></div>
+                                {{ form_widget(form.pass_member.first) }}
+                                {{ form_widget(form.pass_member.second) }}
+                            </div>
+                            {{ form_errors(form.pass_member.first) }}
+                            {{ form_errors(form.pass_member.second) }}
+                        </div>
+                        <!-- Picture -->
+                        <div class="form-group">
+                            <label for="avatar_member">Avatar</label>
+                            <div class="input-group">
+                                {{ form_row(form.avatar_member) }}
+                            </div>
+                        </div>
+                            {{ form_row(form.role_member) }}
+                        <!-- Captcha -->
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{ form_widget(form.captcha) }}
+                            </div>
+                            {{ form_errors(form.captcha) }}
+                        </div>
+                        <!-- Terms and Conditions-->
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{ form_widget(form.termsAccepted) }}
+                                {{ form_label(form.termsAccepted) }}
+                            </div>
+                            {{ form_errors(form.termsAccepted) }}
+                        </div>
+                        <!-- Token -->
+                            {{ form_row(form._token) }}
+                        <!-- Submission -->
+                        <div class="form-group text-center">
+                            <input type="submit" name="btnSub" value="Entrer" id="btn_memberInscription" class="btn btn-success">
+                        </div>
+
+                    </form>
+                </div>
+            </div>
         </div> <!-- col-md -->
 
     </div> <!-- row -->
@@ -103,6 +109,7 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css" integrity="sha256-AWdeVMUYtwLH09F6ZHxNgvJI37p+te8hJuSMo44NVm0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{{ asset('assets/css/style/inscription/inscription.min.css') }}">
 {% endblock %}
 
 {% block javascripts %}
