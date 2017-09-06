@@ -4,6 +4,7 @@ body, html {
 }
 
 #sticker {
+  margin: 10px 0 0 10px;
   border-right: 2px dashed #000;
   border-bottom: 2px dashed #000;
   width: 45%;
