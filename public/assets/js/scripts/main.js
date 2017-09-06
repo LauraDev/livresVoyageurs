@@ -18,8 +18,8 @@
 
 
 	// Go to next section
-	var gotToNextSection = function(){
-		var el = $('.learn-more'),
+	var goToNextSection = function(){
+		var el = $('.learn'),
 			w = el.width(),
 			divide = -w/2;
 		el.css('margin-left', divide);
@@ -128,7 +128,7 @@
 	// Document on load.
 	$(function(){
 		
-		gotToNextSection();
+		goToNextSection();
 		loadPage();
 		styleToggle();
 		

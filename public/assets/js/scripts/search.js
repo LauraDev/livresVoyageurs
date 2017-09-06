@@ -3,7 +3,7 @@ $(document).ready(function() {
     // MASK JS - Add (-) while customer is typing ISBN
     $('#search').mask('000-0-0000-0000-0');
     
-    $('#research').click(function() {
+    $('#research').click(function(event) {
 
         // 1- Stop propagation submit
         event.preventDefault();
@@ -13,7 +13,7 @@ $(document).ready(function() {
         // If the input is empty, change the placeholder
         if ($("#search").val() == '') 
         {
-            $('#search').attr('placeholder','Que rechercher-vous?');
+            $('#search').attr('placeholder','Que recherchez-vous?');
         } 
         else
         {

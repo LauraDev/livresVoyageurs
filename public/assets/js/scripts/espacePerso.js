@@ -35,9 +35,10 @@ $(document).ready(function() {
     });
     document.getElementById("formAddBook_ISBN_book").addEventListener("blur", function() {
         // Set the ISBN
-        var myIsbn = document.getElementById("formAddBook_ISBN_book").value;
+        var myIsbn = document.getElementById("formAddBook_ISBN_book");
         // Set the api variable
-        var googleAPI = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + myIsbn.replace(/-/g, '');
+        var googleAPI = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + myIsbn.value.replace(/-/g, '');
+        $("#formAddBook_ISBN_book").val(myIsbn.value.replace(/-/g, ''))
         //alert(googleAPI);
         // Make an ajax call to get the json data as response.
         $.getJSON(googleAPI, function (response) {
@@ -66,7 +67,7 @@ $(document).ready(function() {
                     document.getElementById("bookImage").setAttribute('src', item.volumeInfo.imageLinks.smallThumbnail);
                     document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Titre: " + item.volumeInfo.title + "</li>";
                     document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Auteur: " + item.volumeInfo.authors + "</li>";
-                    document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Description: " + item.searchInfo.textSnippet + "</li>";
+                    // document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Description: " + item.searchInfo.textSnippet + "</li>";
                     document.getElementById("bookInfos").innerHTML += "<li class='list-group-item'>Langue: " + item.volumeInfo.language + "</li>";
                     // Set the book infos in the hidden input
                     document.getElementById("formAddBook_photo_book").value    = item.volumeInfo.imageLinks.smallThumbnail;
@@ -149,4 +150,6 @@ $(document).ready(function() {
         $('html,body').scrollTop(scrollmem);
     });
 
+    //
+    $(`<br>`).prependTo($("#formAddBook_disponibility_book_1"))
 }) // document ready

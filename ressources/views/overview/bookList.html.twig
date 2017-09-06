@@ -15,26 +15,28 @@
 
         {# <div class="col-md-offset-3 col-md-6"> #}
 
-            <h1> Livres disponibles </h1>
 
             <!-- List: liberated books -->
-            <div class="row">
+            <div class="col-xs-10 col-sm-offset-2">
+                <h1> Livres disponibles </h1>
+                
                 {% if bookList is empty %}
                     <div>
                         <p> Aucun livre n'a encore été libéré sur ce site.</p>
                     </div>
                 {% else %}
                     {% for book in bookList %}
-                        <div class="card col-md-12">
-                            <img class="card-img-top img img-responsive col-md-2" src="{{ book.photo_book }}" alt="Card image cap">
-                            <div class="card-block col-md-10">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">
-                                        <h4 class="card-title">{{ book.title_book }}</h4>
+                        <div class="card col-xs-12 col-sm-4 col-md-3 bookCard">
+                            <img class="img imgCard" src="{{ book.photo_book }}" alt="Card image cap">
+                            <li class="list-group-item"><h4 class="card-title">{{ book.title_book }}</h4></li>
+                            
+                            <div class="overlay">
+                                <ul class="list-group list-group-flush col-md-11 col-md-offset-1">
+                                    <li class="list-group-item textOverlay">
                                         <p> {{ book.summary_book | replace({"&#39;" : "'"})}} </p>
                                     </li>
-                                    <li class="list-group-item">Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</li>
-                                    <li class="list-group-item">
+                                    <li class="list-group-item textOverlay">Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</li>
+                                    <li class="list-group-item textOverlay">
 
                                         {# Display the pseudo of the member in possession of the book#}
                                         {% if book.pseudo_capture == 'none' %}
@@ -79,9 +81,7 @@
                                             <a href="{{ path('livresVoyageurs_inscription') }}" alt="Liens vers l'inscription" class="btn btn-primary"> Inscrivez-vous pour capturer ce livre </a>
                                         {% endif %}
                                     </li>
-                                    <div class="card-footer text-muted">
-                                        <li>Date de libération: {{ book.date_book | date("d/m/Y")  }}</li>
-                                    </div>
+                                    <li class="list-group-item textOverlay">Date de libération: {{ book.date_book | date("d/m/Y")  }}</li>
                                     <a href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'histoire du livre"  target="_blank" class="btn btn-primary col-md-12">Suivre son chemin</a>
                                 </ul>
                             </div> <!-- card block -->

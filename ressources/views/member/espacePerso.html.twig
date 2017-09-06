@@ -20,161 +20,193 @@
 
     <div class="row">
 
-        <h1> Tableau de bord </h1>
         <div class="row">
-            <div class="col-md-2">
-                <img class="img img-responsive img-circle" src="{{ asset('assets/images/avatar/' ~ app.user.avatar_member) }}">
+            <div class="col-md-2 text-center">
+                <div class="row">
+                    <h1> Tableau de bord </h1>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <img class="img img-responsive img-circle" src="{{ asset('assets/images/avatar/' ~ app.user.avatar_member) }}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3> Bonjour {{ app.user.pseudo_member }}</h3>
+                        <p> Membre actif depuis le: {{ app.user.date_member | date("d/m/Y") }} </p>
+                        <p> Email: {{ app.user.mail_member }} </p>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-offset-1 col-md-9">
-                <h2> Bonjour {{ app.user.pseudo_member }}</h2>
-                <p> Membre actif depuis le: {{ app.user.date_member | date("d/m/Y") }} </p>
-                <p> Email: {{ app.user.mail_member }} </p>
-            </div>
-        </div>
+        
+        <div class="col-md-offset-1 col-md-9 tab-content">
+            <!-- Centered Tabs -->
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+                <li class="active"><a data-toggle="tab" href="#addBook" role="tab" aria-controls="addBook">Libérer un Livre</a></li>
+                <li><a data-toggle="tab" href="#capture" role="tab" aria-controls="capture">Capturer un Livre</a></li>
+                <li><a data-toggle="tab" href="#stickers" role="tab" aria-controls="stickers">Etiquettes Imprimables</a></li>
+                <li><a data-toggle="tab" href="#bookList" role="tab" aria-controls="bookList">Suivre mes Livres</a></li>
+                <li><a data-toggle="tab" href="#friendList" role="tab" aria-controls="friendList">Amis</a></li>
+                <li><a data-toggle="tab" href="#account" role="tab" aria-controls="account">Mon Compte</a></li>
+            </ul>
 
-
-        <!-- Centered Tabs -->
-        <ul class="nav nav-tabs nav-justified" role="tablist">
-            <li class="active"><a data-toggle="tab" href="#addBook" role="tab" aria-controls="addBook">Libérer un Livre</a></li>
-            <li><a data-toggle="tab" href="#capture" role="tab" aria-controls="capture">Capturer un Livre</a></li>
-            <li><a data-toggle="tab" href="#stickers" role="tab" aria-controls="stickers">Etiquettes Imprimables</a></li>
-            <li><a data-toggle="tab" href="#bookList" role="tab" aria-controls="bookList">Suivre mes Livres</a></li>
-            <li><a data-toggle="tab" href="#friendList" role="tab" aria-controls="friendList">Amis</a></li>
-            <li><a data-toggle="tab" href="#account" role="tab" aria-controls="account">Mon Compte</a></li>
-        </ul>
-
-        <div class="col-md-offset-3 col-md-6 tab-content">
 
             <!-- Form: Add a book -->
             <div id="addBook" class="tab-pane fade in active" role="tabpanel">
 
-                <!-- Form: Captured book liberation -->
-                <h2> Libérer un livre voyageur </h2>
-
-                {% if global.request.get('liberation') == 'success' %}
-                    <div class="alert alert-success">
-                        <p class="text-center">
-                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                            Félicitation, votre libération a été enregistrée.
-                        </p>
-                    </div>
-                {% endif %}
-                {% if global.request.get('liberation') == 'fail' %}
-                    <div class="alert alert-danger">
-                        <p class="text-center">
-                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                            Numéro unique incorrect
-                        </p>
-                    </div>
-                {% endif %}
-
-                <form id="formLiberationBook" action="" method="POST">
-
-                    <!-- Id Book -->
-                    <div class="form-group">
-                        <label for="id_books">Numéro unique inscript sur l'étiquette du livre *</label>
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
-                            {{ form_widget(formLiberation.id_books) }}
+                <div class="col-md-6">
+                    <div class="card contour">
+                        <div class="titleForm text-center">
+                            <h2> Créer un livre voyageur </h2>
                         </div>
-                        <p class="error alert alert-danger">{{ form_errors(formLiberation.id_books) }}</p>
-                    </div>
 
-                    {{ form_row(formLiberation._token) }}
-                    <!-- Submission -->
-                    <div class="form-group text-center">
-                        <input type="submit" name="btnSub" value="Remettre en liberté" class="btn btn-success">
-                    </div>
-                </form>
+                        <div class="contentForm">
+                            {% if global.request.get('addBook') == 'success' %}
+                                <div class="alert alert-success">
+                                    <p>
+                                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                        Votre livre a été enregistré.
+                                    </p>
+                                    <a href="{{ path('livresVoyageurs_espace_sticker', {pseudo: app.user.pseudo_member, uniqueId: global.request.get('idBook'), title: global.request.get('title')  } ) }}" title="Lien vers l'étiquette du livre" target="_blank">Cliquez sur ce lien pour télécharger l'étiquette de votre livre</a>
+                                </div>
+                            {% endif %}
 
+                            <!-- Display ISBN API return -->
+                            <div class="card">
+                                <div class="col-md-3">
+                                    <img class="card-img-top img img-responsive" id="bookImage" src="" alt="">
+                                </div>
+                                <div class="card-block col-md-9">
+                                    <ul class="list-group list-group-flush" id="bookInfos"></ul>
+                                </div>
+                            </div>
 
-                <h2> Créer un livre voyageur </h2>
+                            <form id="formAddBook" action="" method="POST">
 
-                {% if global.request.get('addBook') == 'success' %}
-                    <div class="alert alert-success">
-                        <p>
-                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                            Félicitation, votre livre a été enregistré.
-                        </p>
-                        <a href="{{ path('livresVoyageurs_espace_sticker', {pseudo: app.user.pseudo_member, uniqueId: global.request.get('idBook'), title: global.request.get('title')  } ) }}" title="Lien vers l'étiquette du livre" target="_blank">Cliquez sur ce lien pour télécharger l'étiquette de votre livre</a>
-                    </div>
-                {% endif %}
+                                <!-- Id Member -->
+                                {{ form_row(formAddBook.id_member) }}
+                                <!-- Id Author -->
+                                {{ form_row(formAddBook.authors) }}
+                                <!-- Title -->
+                                {{ form_row(formAddBook.title_book) }}
+                                <!-- Summary -->
+                                {{ form_row(formAddBook.summary_book) }}
+                                <!-- Photo -->
+                                {{ form_row(formAddBook.photo_book) }}
+                                <!-- Languge -->
+                                {{ form_row(formAddBook.language_book) }}
+                                
+                                <!-- ISBN -->
+                                <div class="form-group">
+                                    <label for="ISBN_book">ISBN: Numéro à 13 chiffres, inscript au-dessus du code barre du livre *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
+                                        {{ form_widget(formAddBook.ISBN_book) }}
+                                    </div>
+                                    <p class="error alert alert-danger">{{ form_errors(formAddBook.ISBN_book) }}</p>
+                                    <p class="error alert alert-danger" id="isbnInconnu">ISBN inconnu</p>
+                                </div>
+                                <!-- Category -->
+                                <div class="form-group">
+                                    <label for="id_category">Catégorie</label>
+                                    <div class="input-group">
+                                        {{ form_row(formAddBook.id_category) }}
+                                    </div>
+                                    <p class="error alert alert-danger">Vous n'avez pas indiqué la catégorie</p>
+                                </div>
+                                <!-- address - Table Startpoints -->
+                                <div class="form-group">
+                                    <label for="address">Ville *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                                        {{ form_widget(formAddBook.addressStart) }}
+                                    </div>
+                                    <p class="error alert alert-danger">{{ form_errors(formAddBook.addressStart) }}</p>
+                                    <p class="error alert alert-danger">Le nom de la ville est incorrecte</p>
+                                </div>
+                                    <!-- city_starpoint - Table Startpoints -->
+                                    {{ form_row(formAddBook.city_startpoint) }}
+                                    <!-- lat_starpoint - Table Startpoints -->
+                                    {{ form_row(formAddBook.lat_startpoint) }}
+                                    <!-- lng_starpoint - Table Startpoints -->
+                                    {{ form_row(formAddBook.lng_startpoint) }}
+                                <!-- Disponibility -->
+                                <div class="form-group">
+                                    <label for="disponibility_book">Mode de libération</label>
+                                    <div class="input-group">
+                                        <div>
+                                            {{ form_widget(formAddBook.disponibility_book.0) }}
+                                            {{ form_label(formAddBook.disponibility_book.0) }}
+                                        </div>
+                                        <div>
+                                            {{ form_widget(formAddBook.disponibility_book.1) }}
+                                            {{ form_label(formAddBook.disponibility_book.1) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Token -->
+                                {{ form_row(formAddBook._token) }}
+                                <!-- Submission -->
+                                <div class="form-group text-center">
+                                    <input type="submit" name="btnSub" value="Ajouter" class="btn btn-success">
+                                </div>
+                            </form>
 
-                <form id="formAddBook" action="" method="POST">
-
-                    <!-- Id Member -->
-                    {{ form_row(formAddBook.id_member) }}
-                    <!-- Id Author -->
-                    {{ form_row(formAddBook.authors) }}
-                    <!-- Title -->
-                    {{ form_row(formAddBook.title_book) }}
-                    <!-- Summary -->
-                    {{ form_row(formAddBook.summary_book) }}
-                    <!-- Photo -->
-                    {{ form_row(formAddBook.photo_book) }}
-                    <!-- Languge -->
-                    {{ form_row(formAddBook.language_book) }}
-                    <!-- ISBN -->
-                    <div class="form-group">
-                        <label for="ISBN_book">ISBN: Numéro à 13 chiffres, inscript au-dessus du code barre du livre *</label>
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
-                            {{ form_widget(formAddBook.ISBN_book) }}
                         </div>
-                        <p class="error alert alert-danger">{{ form_errors(formAddBook.ISBN_book) }}</p>
-                        <p class="error alert alert-danger" id="isbnInconnu">ISBN inconnu</p>
-                    </div>
-                    <!-- Category -->
-                    <div class="form-group">
-                        <label for="id_category">Catégorie</label>
-                        <div class="input-group">
-                            {{ form_row(formAddBook.id_category) }}
-                        </div>
-                        <p class="error alert alert-danger">Vous n'avez pas indiqué la catégorie</p>
-                    </div>
-                    <!-- address - Table Startpoints -->
-                    <div class="form-group">
-                        <label for="address">Ville *</label>
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                            {{ form_widget(formAddBook.addressStart) }}
-                        </div>
-                        <p class="error alert alert-danger">{{ form_errors(formAddBook.addressStart) }}</p>
-                        <p class="error alert alert-danger">Le nom de la ville est incorrecte</p>
-                    </div>
-                        <!-- city_starpoint - Table Startpoints -->
-                        {{ form_row(formAddBook.city_startpoint) }}
-                        <!-- lat_starpoint - Table Startpoints -->
-                        {{ form_row(formAddBook.lat_startpoint) }}
-                        <!-- lng_starpoint - Table Startpoints -->
-                        {{ form_row(formAddBook.lng_startpoint) }}
-                    <!-- Disponibility -->
-                    <div class="form-group">
-                        <label for="disponibility_book">Mode de libération</label>
-                        <div class="input-group">
-                            {{ form_row(formAddBook.disponibility_book) }}
-                        </div>
-                    </div>
-                    <!-- Token -->
-                    {{ form_row(formAddBook._token) }}
-                    <!-- Submission -->
-                    <div class="form-group text-center">
-                        <input type="submit" name="btnSub" value="Ajouter" class="btn btn-success">
-                    </div>
-                </form>
-
-                <!-- Display ISBN API return -->
-                <div class="card">
-                    <div class="col-md-3">
-                        <img class="card-img-top img img-responsive" id="bookImage" src="" alt="">
-                    </div>
-                    <div class="card-block col-md-9">
-                        <ul class="list-group list-group-flush" id="bookInfos"></ul>
                     </div>
                 </div>
+                
+                <div class="col-md-offset-1 col-md-5">
+                    <!-- Form: Captured book liberation -->
+                    <div class="card contour">
+                        <div class="titleForm text-center">
+                            <h2> Libérer un livre voyageur </h2>
+                        </div>
 
+                        <div class="contentForm">
+                            {% if global.request.get('liberation') == 'success' %}
+                                <div class="alert alert-success">
+                                    <p class="text-center">
+                                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                        Votre libération a été enregistrée.
+                                    </p>
+                                </div>
+                            {% endif %}
+                            {% if global.request.get('liberation') == 'fail' %}
+                                <div class="alert alert-danger">
+                                    <p class="text-center">
+                                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                        Numéro unique incorrect
+                                    </p>
+                                </div>
+                            {% endif %}
+
+                            <form id="formLiberationBook" action="" method="POST">
+
+                                <!-- Id Book -->
+                                <div class="form-group">
+                                    <label for="id_books">Numéro unique inscript sur l'étiquette du livre *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
+                                        {{ form_widget(formLiberation.id_books) }}
+                                    </div>
+                                    <p class="error alert alert-danger">{{ form_errors(formLiberation.id_books) }}</p>
+                                </div>
+
+                                {{ form_row(formLiberation._token) }}
+                                <!-- Submission -->
+                                <div class="form-group text-center">
+                                    <input type="submit" name="btnSub" value="Remettre en liberté" class="btn btn-success">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+                    
                 
             </div> <!-- addBook -->
+
 
 
 
@@ -182,67 +214,75 @@
             <!-- Form: Book I have captured -->
             <div id="capture" class="tab-pane fade" role="tabpanel">
 
-                <h2> Déclarer une capture </h2>
-
-                {% if global.request.get('capture') == 'success' %}
-                    <div class="alert alert-success">
-                        <p class="text-center">
-                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                            Félicitation, votre capture a été enregistré.
-                        </p>
-                    </div>
-                {% endif %}
-                {% if global.request.get('capture') == 'fail' %}
-                    <div class="alert alert-danger">
-                        <p class="text-center">
-                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                            Numéro unique incorrect
-                        </p>
-                    </div>
-                {% endif %}
-
-                <form id="formCapturedBook" action="" method="POST">
-
-                    <!-- Id Book - Table Pointers -->
-                    <div class="form-group">
-                        <label for="id_book">Numéro unique inscript sur l'étiquette du livre *</label>
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
-                            {{ form_widget(formCapture.id_book) }}
+                <div class="col-md-offset-2 col-md-7">
+                    <div class="card contour">
+                        <div class="titleForm text-center">
+                            <h2> Déclarer une capture </h2>
                         </div>
-                        <p class="error alert alert-danger">{{ form_errors(formCapture.id_book) }}</p>
-                    </div>
-                    <!-- address - Table Pointers -->
-                    <div class="form-group">
-                        <label for="address">Ville *</label>
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                            {{ form_widget(formCapture.address) }}
-                        </div>
-                        <p class="error alert alert-danger">{{ form_errors(formCapture.address) }}</p>
-                        <p class="error alert alert-danger">Le nom de la ville est incorrecte</p>
-                    </div>
-                    <!-- city_pointer - Table Pointers -->
-                    {{ form_row(formCapture.city_pointer) }}
-                    <!-- lat_pointer - Table Pointers -->
-                    {{ form_row(formCapture.lat_pointer) }}
-                    <!-- lng_pointer - Table Pointers -->
-                    {{ form_row(formCapture.lng_pointer) }}
-                    <!-- Commentaire - Table Capture -->
-                    <div class="form-group">
-                        <label for="comment_capture">Commentaire</label>
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-align-left"></i></span>
-                            {{ form_row(formCapture.comment_capture) }}
-                        </div>
-                    </div>
 
-                    {{ form_row(formCapture._token) }}
-                    <!-- Submission -->
-                    <div class="form-group text-center">
-                        <input type="submit" name="btnSub" value="Déclarer comme capturé" class="btn btn-success">
+                        <div class="contentForm">
+                            {% if global.request.get('capture') == 'success' %}
+                                <div class="alert alert-success">
+                                    <p class="text-center">
+                                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                        Votre capture a été enregistré.
+                                    </p>
+                                </div>
+                            {% endif %}
+                            {% if global.request.get('capture') == 'fail' %}
+                                <div class="alert alert-danger">
+                                    <p class="text-center">
+                                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                        Numéro unique incorrect
+                                    </p>
+                                </div>
+                            {% endif %}
+
+                            <form id="formCapturedBook" action="" method="POST">
+
+                                <!-- Id Book - Table Pointers -->
+                                <div class="form-group">
+                                    <label for="id_book">Numéro unique inscript sur l'étiquette du livre *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
+                                        {{ form_widget(formCapture.id_book) }}
+                                    </div>
+                                    <p class="error alert alert-danger">{{ form_errors(formCapture.id_book) }}</p>
+                                </div>
+                                <!-- address - Table Pointers -->
+                                <div class="form-group">
+                                    <label for="address">Ville *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                                        {{ form_widget(formCapture.address) }}
+                                    </div>
+                                    <p class="error alert alert-danger">{{ form_errors(formCapture.address) }}</p>
+                                    <p class="error alert alert-danger">Le nom de la ville est incorrecte</p>
+                                </div>
+                                <!-- city_pointer - Table Pointers -->
+                                {{ form_row(formCapture.city_pointer) }}
+                                <!-- lat_pointer - Table Pointers -->
+                                {{ form_row(formCapture.lat_pointer) }}
+                                <!-- lng_pointer - Table Pointers -->
+                                {{ form_row(formCapture.lng_pointer) }}
+                                <!-- Commentaire - Table Capture -->
+                                <div class="form-group">
+                                    <label for="comment_capture">Commentaire</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-align-left"></i></span>
+                                        {{ form_row(formCapture.comment_capture) }}
+                                    </div>
+                                </div>
+
+                                {{ form_row(formCapture._token) }}
+                                <!-- Submission -->
+                                <div class="form-group text-center">
+                                    <input type="submit" name="btnSub" value="Déclarer comme capturé" class="btn btn-success">
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </form>
+                </div>
 
             </div> <!-- capture -->
 
@@ -283,36 +323,44 @@
                             <p> Vous n'avez pas encore libéré de livre.</p>
                         </div>
                     {% else %}
+
+                    {# <div class="container">
+                        <img src="img_avatar.png" alt="Avatar" class="image">
+                        <div class="overlay">
+                            <div class="text">Hello World</div>
+                        </div>
+                    </div> #}
+
                         {% for book in bookList %}
                             {% if book.disponibility_book == 0 %}
-                                <div class="card col-md-4">
-                                        <img class="card-img-top img img-responsive" src="{{ book.photo_book }}" alt="Card image cap">
-                                    <div class="card-block">
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item"><h4 class="card-title">{{ book.title_book }}</h4></li>
-                                            <li class="list-group-item">Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</li>
-                                            <li class="list-group-item">Numéro unique: {{ book.id_book }}</li>
-                                            <div class="card-footer text-muted">
-                                                <li class="list-group-item" style="background-color:#f7f7f9">Livre libéré</li>
-                                                <a
-                                                    href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'étiquette du livre"
-                                                    target="_blank" class="btn btn-primary col-md-12">
-                                                        Suivre son chemin
-                                                </a>
-                                            </div>
+                                <div class="card col-md-3 bookCard">
+                                    <img class="img imgCard" src="{{ book.photo_book }}" alt="Card image cap">
+                                    <li class="list-group-item"><h4 class="card-title">{{ book.title_book }}</h4></li>
+                                                                    
+                                    <div class="overlay">
+
+                                        <ul class="list-group list-group-flush col-md-11 col-md-offset-1">
+                                            <li class="list-group-item textOverlay">Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</li>
+                                            <li class="list-group-item textOverlay">Numéro unique: {{ book.id_book }}</li>
+                                            <li class="list-group-item textOverlay" style="background-color:#f7f7f9">Livre libéré</li>
+                                            <a
+                                                href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'étiquette du livre"
+                                                target="_blank" class="btn btn-primary col-md-12">
+                                                    Suivre son chemin
+                                            </a>
                                         </ul>
                                     </div> <!-- card block -->
                                 </div> <!-- card col-md -->
 
                             {% else %}
-                                <div class="card col-md-4" style="background-color:#e7ffe7">
-                                    <img class="card-img-top img img-responsive" src="{{ book.photo_book }}" alt="Card image cap">
-                                    <div class="card-block">
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item" style="background-color:#e7ffe7"><h4 class="card-title">{{ book.title_book }}</h4></li>
-                                            <li class="list-group-item" style="background-color:#e7ffe7">Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</li>
-                                            <li class="list-group-item" style="background-color:#e7ffe7">Numéro unique: {{ book.id_book }}</li>
-                                            <div class="card-footer text-muted">
+                                <div class="card col-md-3 bookCard">
+                                    <img class="img imgCard" src="{{ book.photo_book }}" alt="Card image cap">
+                                    <li class="list-group-item" style="background-color:#e7ffe7"><h4 class="card-title">{{ book.title_book }}</h4></li>
+                                    <div class="overlay">
+                                        <ul class="list-group list-group-flush col-md-11 col-md-offset-1">
+                                            <li class="list-group-item textOverlay">Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</li>
+                                            <li class="list-group-item textOverlay">Numéro unique: {{ book.id_book }}</li>
+                                            <div class="card-footer text-muted textOverlay">
                                                 <form id="formChangeDispo" action="{{ path('livresVoyageurs_espace_post', {pseudo: app.user.pseudo_member} ) }}" method="post">
                                                     <!--  ID BOOK -->
                                                     <input type="hidden" value="{{book.id_book}}" id="id_book" name="id_book">
@@ -320,7 +368,7 @@
                                                     <input type="hidden" value="0" id="disponibility_book" name="disponibility_book">
                                                     <!-- Submission -->
                                                     <div class="form-group text-center">
-                                                        <input type="submit" name="btnSub" value="Déclarer comme libéré" class="btn btn-success">
+                                                        <input type="submit" name="btnSub" value="Déclarer comme libéré" class="btn btn-success col-md-12">
                                                     </div>
                                                 </form>
                                             </div>
@@ -431,108 +479,138 @@
 
             <!-- Form: Personal data management -->
             <div id="account" class="tab-pane fade">
-                <h2> Compte </h2>
+                <div class="col-md-6">
+                    <div class="card contour">
 
-                {% if global.request.get('account') == 'success' %}
-                    <div class="alert alert-success">
-                        <p>
-                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                            Félicitation, votre compte a été modifié avec succès.
-                        </p>
-                    </div>
-                {% endif %}
-
-                <form id="formMemberModification" action="" method="POST" enctype="multipart/form-data">
-
-                    <!-- Pseudo -->
-                    <div class="form-group">
-                        <label for="pseudo_member">Pseudo *</label>
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            {{ form_widget(formAccount.pseudo_member) }}
+                        <div class="titleForm text-center">
+                            <h2> Compte </h2>
                         </div>
-                        <!-- Pseudo Errors -->
-                        <p class="error alert alert-danger">{{ form_errors(formAccount.pseudo_member) }}</p>
-                        <p class="error alert alert-danger">Ce pseudo existe déjà</p>
-                    </div>
-                    <!-- Email -->
-                    <div class="form-group">
-                        <label for="mail_member">Email *</label>
-                        <div class="input-group">
-                            <div class="input-group-addon">@</div>
-                            {{ form_widget(formAccount.mail_member) }}
-                        </div>
-                        <p class="error alert alert-danger">{{ form_errors(formAccount.mail_member) }}</p>
-                    </div>
-                    <!-- Picture -->
-                    <div class="form-group">
-                        <label for="avatar_member">Avatar</label>
-                        <div class="input-group">
-                            {{ form_row(formAccount.avatar_member) }}
-                        </div>
-                    </div>
-                    <!-- Token -->
-                    {{ form_row(formAccount._token) }}
-                    <!-- Submission -->
-                    <div class="form-group text-center">
-                        <input type="submit" name="btnSub" value="Modifier" class="btn btn-success">
-                    </div>
-                </form>
 
+                        <div class="contentForm">
+
+                            {% if global.request.get('account') == 'success' %}
+                                <div class="alert alert-success">
+                                    <p>
+                                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                        Votre compte a été modifié avec succès.
+                                    </p>
+                                </div>
+                            {% endif %}
+
+                            <form id="formMemberModification" action="" method="POST" enctype="multipart/form-data">
+
+                                <!-- Pseudo -->
+                                <div class="form-group">
+                                    <label for="pseudo_member">Pseudo *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                        {{ form_widget(formAccount.pseudo_member) }}
+                                    </div>
+                                    <!-- Pseudo Errors -->
+                                    <p class="error alert alert-danger">{{ form_errors(formAccount.pseudo_member) }}</p>
+                                    <p class="error alert alert-danger">Ce pseudo existe déjà</p>
+                                </div>
+                                <!-- Email -->
+                                <div class="form-group">
+                                    <label for="mail_member">Email *</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon">@</div>
+                                        {{ form_widget(formAccount.mail_member) }}
+                                    </div>
+                                    <p class="error alert alert-danger">{{ form_errors(formAccount.mail_member) }}</p>
+                                </div>
+                                <!-- Picture -->
+                                <div class="form-group">
+                                    <label for="avatar_member">Avatar</label>
+                                    <div class="input-group">
+                                        {{ form_row(formAccount.avatar_member) }}
+                                    </div>
+                                </div>
+                                <!-- Token -->
+                                {{ form_row(formAccount._token) }}
+                                <!-- Submission -->
+                                <div class="form-group text-center">
+                                    <input type="submit" name="btnSub" value="Modifier" class="btn btn-success">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
 
 
                 <!-- Form: Password management -->
-                <h2> Mot de Passe </h2>
+                <div class="col-md-offset-1 col-md-5">
+                    <!-- Form: Captured book liberation -->
+                    <div class="card contour">
 
-                {% if global.request.get('pass') == 'success' %}
-                    <div class="alert alert-success">
-                        <p>
-                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                            Félicitation, votre mot de passe a été modifié avec succès.
-                        </p>
-                    </div>
-                {% endif %}
-
-                <form id="formPassModification" action="" method="POST">
-
-                    <!-- Password -->
-                    <div class="form-group">
-                        <label for="pass_member">Mot de passe *</label>
-                        <!-- Help-text -->
-                        <p id="pass-helptext">Votre mot de passe doit contenir au moins 6 caractères, une majuscule et un chiffre</p>
-                        <!-- Password complexity -->
-                        <p id="password_strength"></p>
-                        <div class="input-group">
-                            <div class="input-group-addon"><span class="ion-android-lock"></span></div>
-                            {{ form_widget(formAccountPass.pass_member.first) }}
-                            {{ form_widget(formAccountPass.pass_member.second) }}
+                        <div class="titleForm text-center">
+                            <h2> Mot de Passe </h2>
                         </div>
-                        <!-- Password Errors -->
-                        {{ form_errors(formAccountPass.pass_member.first) }}
-                        {{ form_errors(formAccountPass.pass_member.second) }}
+
+                        <div class="contentForm">
+
+                            {% if global.request.get('pass') == 'success' %}
+                                <div class="alert alert-success">
+                                    <p>
+                                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                        Votre mot de passe a été modifié avec succès.
+                                    </p>
+                                </div>
+                            {% endif %}
+
+                            <form id="formPassModification" action="" method="POST">
+
+                                <!-- Password -->
+                                <div class="form-group">
+                                    <label for="pass_member">Mot de passe *</label>
+                                    <!-- Help-text -->
+                                    <p id="pass-helptext">Votre mot de passe doit contenir au moins 6 caractères, une majuscule et un chiffre</p>
+                                    <!-- Password complexity -->
+                                    <p id="password_strength"></p>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><span class="ion-android-lock"></span></div>
+                                        {{ form_widget(formAccountPass.pass_member.first) }}
+                                        {{ form_widget(formAccountPass.pass_member.second) }}
+                                    </div>
+                                    <!-- Password Errors -->
+                                    {{ form_errors(formAccountPass.pass_member.first) }}
+                                    {{ form_errors(formAccountPass.pass_member.second) }}
+                                </div>
+                                <!-- Token -->
+                                {{ form_row(formAccountPass._token) }}
+                                <!-- Submission -->
+                                <div class="form-group text-center">
+                                    <input type="submit" name="btnSub" value="Modifier" class="btn btn-success">
+                                </div>
+
+                            </form>
+                        </div>
                     </div>
-                    <!-- Token -->
-                    {{ form_row(formAccountPass._token) }}
-                    <!-- Submission -->
-                    <div class="form-group text-center">
-                        <input type="submit" name="btnSub" value="Modifier" class="btn btn-success">
+                </div>
+
+                <!-- Delete account -->
+                <div class="col-md-offset-1 col-md-5">
+                    <div class="card contour deleteDiv">
+
+                        <div class="titleForm text-center">
+                            <h2> Supprimer mon compte </h2>
+                        </div>
+
+                        <div class="contentForm text-center">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#myModal">
+                                Supprimer
+                            </button>
+                        </div>
                     </div>
-
-                </form>
-
-
-                <!-- Form: Password management -->
-                <h2> Supprimer mon compte </h2>
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-                    Supprimer
-                </button>
+                </div>    
+                            
                 <div class="modal fade" tabindex="-1" role="dialog" id="myModal" >
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" class="text-center">Suppression de compte</h4>
+                                <h4 class="modal-title text-center">Suppression de compte</h4>
                             </div>
                             <div class="modal-body">
                                 <p class="text-center">Etes-vous sûr de vouloir supprimer votre compte?<br>
@@ -548,7 +626,6 @@
                 </div><!-- /.modal -->
 
 
-                </form>
             </div> <!-- Account -->
 
         </div> <!-- col-md-6 -->
