@@ -228,7 +228,7 @@ class  MemberController
 
         #2b : Liberate a book
         $formLiberation = $app['form.factory']->createNamedBuilder("formLiberation", FormType::class)
-        
+
             # Form Fields
             ->add('id_books', TextType::class, [
                 'required'          =>  true,
@@ -642,7 +642,7 @@ class  MemberController
         $deleteMember->pseudo_member   = 'anonyme';
         $deleteMember->mail_member     = '';
         $deleteMember->pass_member     = '';
-        $deleteMember->avatar_member   = '';
+        $deleteMember->avatar_member   = 'default.png';
         $deleteMember->role_member     = '';
         $deleteMember->active_member   = 0;
         $deleteMember->save();

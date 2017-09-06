@@ -1,11 +1,13 @@
+
+
 -- phpMyAdmin SQL Dump
--- version 4.6.5.2
+-- version 4.7.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Aug 31, 2017 at 07:01 PM
+-- Generation Time: Sep 06, 2017 at 02:36 PM
 -- Server version: 5.6.35
--- PHP Version: 7.0.15
+-- PHP Version: 7.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -40,7 +42,10 @@ INSERT INTO `authors` (`id_author`, `firstname_author`, `lastname_author`) VALUE
 (7, 'Oscar', 'Wilde'),
 (8, 'Isaac', 'Asimov'),
 (9, 'Eric', 'Worre'),
-(10, 'Kyle', 'Gray');
+(10, 'Kyle', 'Gray'),
+(11, 'Charles', 'Duhigg'),
+(12, 'Robin', 'Hobb'),
+(13, 'Jean-Philippe', 'Jaworski');
 
 -- --------------------------------------------------------
 
@@ -56,7 +61,7 @@ CREATE TABLE `books` (
   `title_book` varchar(100) NOT NULL,
   `summary_book` longtext NOT NULL,
   `photo_book` varchar(255) NOT NULL,
-  `ISBN_book` int(13) NOT NULL,
+  `ISBN_book` bigint(20) NOT NULL,
   `disponibility_book` tinyint(4) NOT NULL DEFAULT '0',
   `language_book` varchar(60) NOT NULL DEFAULT 'Français',
   `date_book` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -68,21 +73,35 @@ CREATE TABLE `books` (
 --
 
 INSERT INTO `books` (`id_book`, `id_member`, `id_author`, `id_category`, `title_book`, `summary_book`, `photo_book`, `ISBN_book`, `disponibility_book`, `language_book`, `date_book`, `pseudo_capture`) VALUES
-(39373419, 5, 7, 2, 'Le portrait de Dorian Gray', 'Pendant des semaines, il ne montait pas, et il oubliait l&#39;horrible chose peinte en se tournant, le coeur léger et rempli de joies insouciantes, vers les plaisirs de la simple existence.', 'http://books.google.com/books/content?id=2Aw_HAAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 207, 0, 'Français', '2017-08-29 14:35:59', 'hugo'),
-(54281662, 2, 10, 1, 'Angels', 'Angels: How to See, Hear and Feel Your Angels is a beautiful introductory guide that will show you how to start working with these angelic beings, allowing their light to heal and support you.', 'http://books.google.com/books/content?id=0ZZKnwEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 978, 0, 'Anglais', '2017-08-30 08:18:48', 'lola'),
-(55860054, 2, 9, 5, 'Go Pro', 'Over twenty years ago, Worre began focusing on developing the skills to become a network marketing expert.', 'http://books.google.com/books/content?id=iUeNmwEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 978, 0, 'Anglais', '2017-08-31 12:12:14', 'lola'),
-(70515656, 2, 9, 1, 'Go Pro', 'Over twenty years ago, Worre began focusing on developing the skills to become a network marketing expert.', 'http://books.google.com/books/content?id=iUeNmwEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 978, 0, 'Anglais', '2017-08-31 15:16:56', 'lola'),
+(12389869, 8, 12, 1, 'L\'Assassin royal (Tome 1) - L\'Apprenti assassin', 'Depuis toujours, les Loinvoyant règnent sur le royaume des Six-Duchés, battu par le vents, utilisant une force mystérieuse pour contenir l&#39;intrusion des Pirates rouges qui ravagent les côtes et laissent dans leur sillage de morts ...', 'http://books.google.com/books/content?id=sgc9Kzpa0XYC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api', 9782756406053, 1, 'Français', '2017-09-05 13:28:13', 'lola'),
+(23877124, 2, 12, 3, 'L\'Assassin royal (Tome 1) - L\'Apprenti assassin', 'Depuis toujours, les Loinvoyant règnent sur le royaume des Six-Duchés, battu par le vents, utilisant une force mystérieuse pour contenir l&#39;intrusion des Pirates rouges qui ravagent les côtes et laissent dans leur sillage de morts ...', 'http://books.google.com/books/content?id=sgc9Kzpa0XYC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api', 978, 1, 'Français', '2017-09-04 08:13:49', 'anonyme'),
+(29474524, 2, 4, 1, 'Les rois maudits -', 'La célébrissime fresque de Maurice Druon, considérée comme un modèle du roman historique, enfin disponible en numérique !', 'http://books.google.com/books/content?id=Hp4nAgAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api', 9782259223355, 1, 'Français', '2017-09-04 08:10:24', 'anonyme'),
+(36349569, 2, 12, 1, 'L\'Assassin royal (Tome 1) - L\'Apprenti assassin', 'Depuis toujours, les Loinvoyant règnent sur le royaume des Six-Duchés, battu par le vents, utilisant une force mystérieuse pour contenir l&#39;intrusion des Pirates rouges qui ravagent les côtes et laissent dans leur sillage de morts ...', 'http://books.google.com/books/content?id=sgc9Kzpa0XYC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api', 978, 0, 'Français', '2017-09-04 08:17:09', 'anonyme'),
+(36471846, 8, 13, 6, 'Janua Vera', 'Entre rêves vaporeux et froide réalité, un moment de lecture unique. Janua vera a été récompensé par le prix du Cafard Cosmique 2008.', 'http://books.google.com/books/content?id=L-3xPgAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 9782070355709, 0, 'Français', '2017-09-06 08:14:48', 'lola'),
+(37312796, 2, 12, 1, 'L\'Assassin royal (Tome 1) - L\'Apprenti assassin', 'Depuis toujours, les Loinvoyant règnent sur le royaume des Six-Duchés, battu par le vents, utilisant une force mystérieuse pour contenir l&#39;intrusion des Pirates rouges qui ravagent les côtes et laissent dans leur sillage de morts ...', 'http://books.google.com/books/content?id=sgc9Kzpa0XYC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api', 9782756406053, 0, 'Français', '2017-09-04 08:30:03', 'anonyme'),
+(39373419, 5, 7, 2, 'Le portrait de Dorian Gray', 'Pendant des semaines, il ne montait pas, et il oubliait l&#39;horrible chose peinte en se tournant, le coeur léger et rempli de joies insouciantes, vers les plaisirs de la simple existence.', 'http://books.google.com/books/content?id=2Aw_HAAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 207, 1, 'Français', '2017-08-29 14:35:59', 'anonyme'),
+(39493599, 2, 12, 6, 'L\'Assassin royal (Tome 1) - L\'Apprenti assassin', 'Depuis toujours, les Loinvoyant règnent sur le royaume des Six-Duchés, battu par le vents, utilisant une force mystérieuse pour contenir l&#39;intrusion des Pirates rouges qui ravagent les côtes et laissent dans leur sillage de morts ...', 'http://books.google.com/books/content?id=sgc9Kzpa0XYC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api', 978, 0, 'Français', '2017-09-04 08:13:24', 'anonyme'),
+(44125526, 2, 8, 3, 'Fondation', 'Récompensé par le prix Hugo de la &quot;meilleure série de science-fiction de tous les temps Le cycle de Fondation est l&#39;œuvre socle de la S-F moderne, celle que tous les amateurs du genre ont lue ou liront un jour.', 'http://books.google.com/books/content?id=TWKQPwAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 978, 1, 'Français', '2017-09-04 07:42:41', 'anonyme'),
+(45682786, 2, 12, 1, 'L\'Assassin royal (Tome 1) - L\'Apprenti assassin', 'Depuis toujours, les Loinvoyant règnent sur le royaume des Six-Duchés, battu par le vents, utilisant une force mystérieuse pour contenir l&#39;intrusion des Pirates rouges qui ravagent les côtes et laissent dans leur sillage de morts ...', 'http://books.google.com/books/content?id=sgc9Kzpa0XYC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api', 978, 0, 'Français', '2017-09-04 08:19:29', 'anonyme'),
+(54281662, 2, 10, 1, 'Angels', 'Angels: How to See, Hear and Feel Your Angels is a beautiful introductory guide that will show you how to start working with these angelic beings, allowing their light to heal and support you.', 'http://books.google.com/books/content?id=0ZZKnwEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 978, 1, 'Anglais', '2017-08-30 08:18:48', 'lola'),
+(55860054, 2, 9, 5, 'Go Pro', 'Over twenty years ago, Worre began focusing on developing the skills to become a network marketing expert.', 'http://books.google.com/books/content?id=iUeNmwEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 9780988667907, 0, 'Anglais', '2017-08-31 12:12:14', 'anonyme'),
+(66255587, 2, 11, 5, 'The Power of Habit', 'In The Power of Habit, award-winning New York Times business reporter Charles Duhigg takes us to the thrilling edge of scientific discoveries that explain why habits exist and how they can be changed.', 'http://books.google.com/books/content?id=3IWKOZM-8isC&printsec=frontcover&img=1&zoom=5&source=gbs_api', 978, 1, 'Anglais', '2017-09-02 17:31:28', 'anonyme'),
+(70515656, 2, 9, 1, 'Go Pro', 'Over twenty years ago, Worre began focusing on developing the skills to become a network marketing expert.', 'http://books.google.com/books/content?id=iUeNmwEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 978, 0, 'Anglais', '2017-08-31 15:16:56', 'anonyme'),
+(81787612, 2, 12, 4, 'L\'Assassin royal (Tome 1) - L\'Apprenti assassin', 'Depuis toujours, les Loinvoyant règnent sur le royaume des Six-Duchés, battu par le vents, utilisant une force mystérieuse pour contenir l&#39;intrusion des Pirates rouges qui ravagent les côtes et laissent dans leur sillage de morts ...', 'http://books.google.com/books/content?id=sgc9Kzpa0XYC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api', 9782756406053, 1, 'Français', '2017-09-05 10:19:05', 'anonyme'),
 (84115063, 3, 7, 12, 'Le portrait de Dorian Gray', 'Pendant des semaines, il ne montait pas, et il oubliait l&#39;horrible chose peinte en se tournant, le coeur léger et rempli de joies insouciantes, vers les plaisirs de la simple existence.', 'http://books.google.com/books/content?id=2Aw_HAAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 2070384853, 1, 'Français', '2017-08-28 11:02:28', 'none'),
 (85195737, 2, 2, 1, 'Le vieil homme et la mer', 'On a vu avec raison dans Le vieil homme et la mer un des chefs-d&#39;œuvre de Hemingway.', 'http://books.google.com/books/content?id=ZGJplwEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 2070360075, 0, 'Français', '2017-08-28 10:57:10', 'loli'),
 (85463023, 3, 5, 1, 'La communauté de l\'Anneau', 'Aux temps reculés de ce récit, la Terre est peuplée d&#39;innombrables créatures : les Hobbits, apparentés à l&#39;Homme, les Elfes et les Nains vivent en paix dans la Comté.', 'http://books.google.com/books/content?id=L_iqAAAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 2147483647, 0, 'Français', '2017-08-28 11:01:14', 'none'),
 (85581514, 2, 4, 9, 'Les rois maudits -', 'La célébrissime fresque de Maurice Druon, considérée comme un modèle du roman historique, enfin disponible en numérique !', 'http://books.google.com/books/content?id=Hp4nAgAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api', 2147483647, 0, 'Français', '2017-08-28 10:58:37', 'none'),
 (86178682, 3, 8, 13, 'Fondation', 'Récompensé par le prix Hugo de la &quot;meilleure série de science-fiction de tous les temps Le cycle de Fondation est l&#39;œuvre socle de la S-F moderne, celle que tous les amateurs du genre ont lue ou liront un jour.', 'http://books.google.com/books/content?id=TWKQPwAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 2147483647, 0, 'Français', '2017-08-28 11:03:37', 'none'),
+(86956636, 2, 8, 2, 'Fondation', 'Récompensé par le prix Hugo de la &quot;meilleure série de science-fiction de tous les temps Le cycle de Fondation est l&#39;œuvre socle de la S-F moderne, celle que tous les amateurs du genre ont lue ou liront un jour.', 'http://books.google.com/books/content?id=TWKQPwAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 978, 1, 'Français', '2017-09-04 07:42:03', 'anonyme'),
 (87069644, 3, 6, 12, 'Le procès', 'Le procès intenté à Joseph K., qui ne connaîtra pas ses juges, ne relève d&#39;aucun code et ne pouvait s&#39;achever ni sur un acquittement ni sur une damnation, puisque Joseph K. n&#39;était coupable que d&#39;exister.', 'http://books.google.com/books/content?id=JTkMPAAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 2070378403, 1, 'Français', '2017-08-28 11:01:48', 'none'),
 (87603955, 2, 1, 12, 'L\'étranger', 'Quand la sonnerie a encore retenti, que la porte du box s&#39;est ouverte, c&#39;est le silence de la salle qui est monté vers moi, le silence, et cette singulière sensation que j&#39;ai eue lorsque j&#39;ai constaté que le jeune journaliste avait ...', 'http://books.google.com/books/content?id=o1goAQAAIAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 2070360024, 0, 'Français', '2017-08-28 10:56:20', 'none'),
-(88021618, 2, 9, 10, 'Go Pro', 'Over twenty years ago, Worre began focusing on developing the skills to become a network marketing expert.', 'http://books.google.com/books/content?id=iUeNmwEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 978, 0, 'Anglais', '2017-08-30 15:55:19', 'anonyme'),
+(88021618, 2, 9, 10, 'Go Pro', 'Over twenty years ago, Worre began focusing on developing the skills to become a network marketing expert.', 'http://books.google.com/books/content?id=iUeNmwEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 978, 1, 'Anglais', '2017-08-30 15:55:19', 'anonyme'),
 (88045274, 2, 3, 12, 'Le Comte de Monte Cristo', 'Une seule collection de lecture pour tous niveaux !', 'http://books.google.com/books/content?id=KdfFCQAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api', 2147483647, 1, 'Français', '2017-08-28 10:57:57', 'none'),
 (89051065, 3, 6, 12, 'Le procès', 'Le procès intenté à Joseph K., qui ne connaîtra pas ses juges, ne relève d&#39;aucun code et ne pouvait s&#39;achever ni sur un acquittement ni sur une damnation, puisque Joseph K. n&#39;était coupable que d&#39;exister.', 'http://books.google.com/books/content?id=JTkMPAAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 2070378403, 0, 'Français', '2017-08-28 11:01:39', 'none'),
-(89928469, 3, 8, 13, 'Fondation', 'Récompensé par le prix Hugo de la &quot;meilleure série de science-fiction de tous les temps Le cycle de Fondation est l&#39;œuvre socle de la S-F moderne, celle que tous les amateurs du genre ont lue ou liront un jour.', 'http://books.google.com/books/content?id=TWKQPwAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 2147483647, 0, 'Français', '2017-08-28 11:03:25', 'lola');
+(89549641, 2, 4, 3, 'Les rois maudits -', 'La célébrissime fresque de Maurice Druon, considérée comme un modèle du roman historique, enfin disponible en numérique !', 'http://books.google.com/books/content?id=Hp4nAgAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api', 978, 0, 'Français', '2017-09-04 08:11:24', 'anonyme'),
+(89928469, 3, 8, 13, 'Fondation', 'Récompensé par le prix Hugo de la &quot;meilleure série de science-fiction de tous les temps Le cycle de Fondation est l&#39;œuvre socle de la S-F moderne, celle que tous les amateurs du genre ont lue ou liront un jour.', 'http://books.google.com/books/content?id=TWKQPwAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api', 2147483647, 0, 'Français', '2017-08-28 11:03:25', 'anonyme'),
+(96287193, 2, 12, 1, 'L\'Assassin royal (Tome 1) - L\'Apprenti assassin', 'Depuis toujours, les Loinvoyant règnent sur le royaume des Six-Duchés, battu par le vents, utilisant une force mystérieuse pour contenir l&#39;intrusion des Pirates rouges qui ravagent les côtes et laissent dans leur sillage de morts ...', 'http://books.google.com/books/content?id=sgc9Kzpa0XYC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api', 978, 0, 'Français', '2017-09-04 08:22:11', 'anonyme');
 
 -- --------------------------------------------------------
 
@@ -93,7 +112,7 @@ INSERT INTO `books` (`id_book`, `id_member`, `id_author`, `id_category`, `title_
 CREATE TABLE `captures` (
   `id_pointer` int(11) NOT NULL,
   `id_member` int(11) NOT NULL DEFAULT '0',
-  `comment_capture` varchar(500) NOT NULL
+  `comment_capture` varchar(500) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 --
@@ -110,7 +129,15 @@ INSERT INTO `captures` (`id_pointer`, `id_member`, `comment_capture`) VALUES
 (8, 2, 'Vraiment bien'),
 (9, 2, 'Vraiment bien'),
 (10, 2, 'Sympa!'),
-(11, 6, 'Great..');
+(11, 6, 'Great..'),
+(13, 2, NULL),
+(14, 2, NULL),
+(15, 2, NULL),
+(16, 2, NULL),
+(17, 1, NULL),
+(18, 2, NULL),
+(19, 8, 'Super'),
+(20, 8, 'cg');
 
 -- --------------------------------------------------------
 
@@ -141,7 +168,7 @@ INSERT INTO `categories` (`id_category`, `name_category`) VALUES
 (11, 'Jeunesse'),
 (12, 'Littérature'),
 (13, 'Sciences'),
-(14, 'Voyages');
+(16, 'Voyages');
 
 -- --------------------------------------------------------
 
@@ -178,7 +205,7 @@ CREATE TABLE `friends` (
 
 INSERT INTO `friends` (`id_friend`, `id_member_1`, `id_member_2`, `action_friend`, `status_friend`, `date_friend`) VALUES
 (1, 2, 3, 3, 0, '2017-08-29 10:03:16'),
-(2, 2, 5, 5, 0, '2017-08-29 12:39:35');
+(2, 2, 5, 5, 3, '2017-08-29 12:39:35');
 
 -- --------------------------------------------------------
 
@@ -205,10 +232,12 @@ CREATE TABLE `members` (
 INSERT INTO `members` (`id_member`, `pseudo_member`, `mail_member`, `pass_member`, `avatar_member`, `token_member`, `date_member`, `role_member`, `active_member`) VALUES
 (0, 'none', '', '', 'default.png', '', '2017-08-29 09:48:59', '', 0),
 (1, 'anonyme', '', '', 'default.png', '', '2017-08-28 10:49:02', '', 0),
-(2, 'lola', 'laura_traore@hotmail.fr', '88cacb3050c47cc412f73b2a91caeae620e2dc69', 'lola.png', '', '2017-08-28 10:50:04', 'ROLE_ADMIN', 0),
+(2, 'anonyme', '', '', 'default.png', '', '2017-08-28 10:50:04', '', 0),
 (3, 'luciol', 'lgallay@orange.fr', '94794a9cc06abf4be9f480d227eb0e15b945494a', 'default.png', '', '2017-08-28 10:59:56', 'ROLE_ADMIN', 0),
 (5, 'hugo', 'wf3@hl-media.fr', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3', 'default.png', '', '2017-08-29 14:30:11', 'ROLE_MEMBER', 0),
-(6, 'loli', 'loli@hotmail.fr', '4b9f836522388e0bdad930ecc008b5984c905692', 'default.png', '', '2017-08-31 16:52:41', 'ROLE_MEMBER', 0);
+(6, 'loli', 'loli@hotmail.fr', '4b9f836522388e0bdad930ecc008b5984c905692', 'default.png', '', '2017-08-31 16:52:41', 'ROLE_MEMBER', 0),
+(7, 'jo', 'jo@hotmail.fr', 'ade5bf7f23ab45a1ed70bb150c39a45144f6c525', 'default.png', '', '2017-09-02 16:24:38', 'ROLE_MEMBER', 0),
+(8, 'lola', 'lola@gmail.com', '34819c3a20d194cca761cc20873a14e92e37c633', 'default.png', '', '2017-09-05 13:13:18', 'ROLE_MEMBER', 0);
 
 -- --------------------------------------------------------
 
@@ -240,7 +269,16 @@ INSERT INTO `pointers` (`id_pointer`, `id_book`, `lat_pointer`, `lng_pointer`, `
 (8, 12345678, 51.5074, -0.127758, 'London', '2017-08-31 16:02:50'),
 (9, 12345678, 51.5074, -0.127758, 'London', '2017-08-31 16:07:43'),
 (10, 89928469, 45.9364, 4.71873, 'Anse', '2017-08-31 16:11:17'),
-(11, 85195737, -21.3328, 55.4718, 'Saint Pierre', '2017-08-31 16:54:52');
+(11, 85195737, -21.3328, 55.4718, 'Saint Pierre', '2017-08-31 16:54:52'),
+(12, 897, 51.5074, -0.127758, 'London', '2017-09-02 09:35:32'),
+(13, 897, 51.5074, -0.127758, 'London', '2017-09-02 09:36:31'),
+(14, 3937, 51.5074, -0.127758, 'London', '2017-09-02 09:45:55'),
+(15, 39373419, 51.5074, -0.127758, 'London', '2017-09-02 09:54:34'),
+(16, 39373419, 25.7617, -80.1918, 'Miami', '2017-09-02 09:55:30'),
+(17, 39373419, 21.1702, 72.8311, 'Surat', '2017-09-02 09:59:47'),
+(18, 12456987, 41.8781, -87.6298, 'Chicago', '2017-09-02 10:54:43'),
+(19, 54281662, 36.1699, -115.14, 'Las Vegas', '2017-09-06 10:36:36'),
+(20, 54281662, 43.8367, 4.36005, 'Nimes', '2017-09-06 10:39:29');
 
 -- --------------------------------------------------------
 
@@ -273,7 +311,19 @@ INSERT INTO `startpoints` (`id_book`, `lat_startpoint`, `lng_startpoint`, `city_
 (54281662, 45.764, 4.83566, 'Lyon'),
 (88021618, 45.764, 4.83566, 'Lyon'),
 (55860054, 51.5074, -0.127758, 'London'),
-(70515656, 46.2044, 6.14316, 'Geneva');
+(70515656, 46.2044, 6.14316, 'Geneva'),
+(66255587, 48.8566, 2.35222, 'Paris'),
+(44125526, 50.6292, 3.05726, 'Lille'),
+(29474524, 27.0238, 74.2179, 'Rajasthan'),
+(89549641, 51.5074, -0.127758, 'London'),
+(23877124, 50.1109, 8.68213, 'Frankfurt'),
+(36349569, 47.6062, -122.332, 'Seattle'),
+(45682786, 51.4556, 7.01156, 'Essen'),
+(96287193, 42.6064, -83.1498, 'Troy'),
+(37312796, 37.7397, -121.425, 'Tracy'),
+(81787612, 50.6292, 3.05726, 'Lille'),
+(12389869, 45.764, 4.83566, 'Lyon'),
+(36471846, 51.5074, -0.127758, 'London');
 
 -- --------------------------------------------------------
 
@@ -289,7 +339,7 @@ CREATE TABLE `view_books` (
 ,`title_book` varchar(100)
 ,`summary_book` longtext
 ,`photo_book` varchar(255)
-,`ISBN_book` int(13)
+,`ISBN_book` bigint(20)
 ,`disponibility_book` tinyint(4)
 ,`language_book` varchar(60)
 ,`date_book` timestamp
@@ -332,20 +382,20 @@ CREATE TABLE `view_friends` (
 -- (See below for the actual view)
 --
 CREATE TABLE `view_story` (
-`avatar_member` varchar(250)
+`id_book` int(8)
+,`title_book` varchar(100)
+,`date_book` timestamp
+,`avatar_member` varchar(250)
 ,`pseudo_member` varchar(50)
 ,`lat_startpoint` float
 ,`lng_startpoint` float
 ,`city_startpoint` varchar(60)
-,`id_book` int(8)
-,`title_book` varchar(100)
-,`date_book` timestamp
-,`pseudo_captures` varchar(50)
-,`avatar_captures` varchar(250)
 ,`lat_pointer` float
 ,`lng_pointer` float
 ,`city_pointer` varchar(150)
 ,`date_pointer` timestamp
+,`pseudo_captures` varchar(50)
+,`avatar_captures` varchar(250)
 );
 
 -- --------------------------------------------------------
@@ -373,7 +423,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `view_story`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_story`  AS  select `m`.`avatar_member` AS `avatar_member`,`m`.`pseudo_member` AS `pseudo_member`,`s`.`lat_startpoint` AS `lat_startpoint`,`s`.`lng_startpoint` AS `lng_startpoint`,`s`.`city_startpoint` AS `city_startpoint`,`b`.`id_book` AS `id_book`,`b`.`title_book` AS `title_book`,`b`.`date_book` AS `date_book`,`mm`.`pseudo_member` AS `pseudo_captures`,`mm`.`avatar_member` AS `avatar_captures`,`p`.`lat_pointer` AS `lat_pointer`,`p`.`lng_pointer` AS `lng_pointer`,`p`.`city_pointer` AS `city_pointer`,`p`.`date_pointer` AS `date_pointer` from (((((`books` `b` join `members` `m` on((`b`.`id_member` = `m`.`id_member`))) left join `pointers` `p` on((`b`.`id_book` = `p`.`id_book`))) join `captures` `c` on((`m`.`id_member` = `c`.`id_member`))) join `members` `mm` on((`c`.`id_member` = `mm`.`id_member`))) join `startpoints` `s` on((`b`.`id_book` = `s`.`id_book`))) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_story`  AS  select `b`.`id_book` AS `id_book`,`b`.`title_book` AS `title_book`,`b`.`date_book` AS `date_book`,`m`.`avatar_member` AS `avatar_member`,`m`.`pseudo_member` AS `pseudo_member`,`s`.`lat_startpoint` AS `lat_startpoint`,`s`.`lng_startpoint` AS `lng_startpoint`,`s`.`city_startpoint` AS `city_startpoint`,`p`.`lat_pointer` AS `lat_pointer`,`p`.`lng_pointer` AS `lng_pointer`,`p`.`city_pointer` AS `city_pointer`,`p`.`date_pointer` AS `date_pointer`,`mm`.`pseudo_member` AS `pseudo_captures`,`mm`.`avatar_member` AS `avatar_captures` from (((((`books` `b` join `members` `m` on((`b`.`id_member` = `m`.`id_member`))) join `startpoints` `s` on((`b`.`id_book` = `s`.`id_book`))) left join `pointers` `p` on((`b`.`id_book` = `p`.`id_book`))) left join `captures` `c` on((`p`.`id_pointer` = `c`.`id_pointer`))) left join `members` `mm` on((`c`.`id_member` = `mm`.`id_member`))) ;
 
 --
 -- Indexes for dumped tables
@@ -450,12 +500,12 @@ ALTER TABLE `startpoints`
 -- AUTO_INCREMENT for table `authors`
 --
 ALTER TABLE `authors`
-  MODIFY `id_author` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_author` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id_category` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id_category` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT for table `chats`
 --
@@ -470,12 +520,12 @@ ALTER TABLE `friends`
 -- AUTO_INCREMENT for table `members`
 --
 ALTER TABLE `members`
-  MODIFY `id_member` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_member` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `pointers`
 --
 ALTER TABLE `pointers`
-  MODIFY `id_pointer` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_pointer` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
 -- Constraints for dumped tables
 --
@@ -484,21 +534,21 @@ ALTER TABLE `pointers`
 -- Constraints for table `books`
 --
 ALTER TABLE `books`
-  ADD CONSTRAINT `books_ibfk_1` FOREIGN KEY (`id_member`) REFERENCES `members` (`id_member`),
+  ADD CONSTRAINT `books_ibfk_1` FOREIGN KEY (`id_member`) REFERENCES `members` (`id_member`) ON UPDATE CASCADE,
   ADD CONSTRAINT `books_ibfk_2` FOREIGN KEY (`id_author`) REFERENCES `authors` (`id_author`),
-  ADD CONSTRAINT `books_ibfk_3` FOREIGN KEY (`id_category`) REFERENCES `categories` (`id_category`),
-  ADD CONSTRAINT `books_ibfk_4` FOREIGN KEY (`pseudo_capture`) REFERENCES `members` (`pseudo_member`);
+  ADD CONSTRAINT `books_ibfk_3` FOREIGN KEY (`id_category`) REFERENCES `categories` (`id_category`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `books_ibfk_4` FOREIGN KEY (`pseudo_capture`) REFERENCES `members` (`pseudo_member`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `captures`
 --
 ALTER TABLE `captures`
-  ADD CONSTRAINT `captures_ibfk_1` FOREIGN KEY (`id_member`) REFERENCES `members` (`id_member`),
+  ADD CONSTRAINT `captures_ibfk_1` FOREIGN KEY (`id_member`) REFERENCES `members` (`id_member`) ON UPDATE CASCADE,
   ADD CONSTRAINT `captures_ibfk_2` FOREIGN KEY (`id_pointer`) REFERENCES `pointers` (`id_pointer`);
 
 --
 -- Constraints for table `chats`
 --
 ALTER TABLE `chats`
-  ADD CONSTRAINT `chats_ibfk_1` FOREIGN KEY (`id_sender`) REFERENCES `members` (`id_member`),
-  ADD CONSTRAINT `chats_ibfk_2` FOREIGN KEY (`id_receiver`) REFERENCES `members` (`id_member`);
+  ADD CONSTRAINT `chats_ibfk_1` FOREIGN KEY (`id_sender`) REFERENCES `members` (`id_member`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `chats_ibfk_2` FOREIGN KEY (`id_receiver`) REFERENCES `members` (`id_member`) ON UPDATE CASCADE;

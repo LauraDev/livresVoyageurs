@@ -57,7 +57,7 @@ $(document).ready(function() {
             bounds.extend(loc);
         var infowindow = new google.maps.InfoWindow({
             content: contentStart,
-            maxWidth: 200
+
         });
         // ajout de la boite d'info et du listener
         marker.addListener('click', function() {
@@ -99,7 +99,7 @@ $(document).ready(function() {
             // Define markers infos
             var infowindow = new google.maps.InfoWindow({
                 content: contentCapture,
-                maxWidth: 200
+    
 
             });
             // add listener
@@ -109,7 +109,7 @@ $(document).ready(function() {
             infowindow.open(map, markers[i]);
 
             // Marker position
-            posCapt[0] = {lat: latStart , lng: lngStart }
+            posCapt[0] = {lat: latStart , lng: lngStart };
             posCapt[i] = {lat:latPoint , lng:lngPoint};
 
             // Extend bounds

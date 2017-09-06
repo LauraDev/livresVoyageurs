@@ -19,7 +19,7 @@
             <!-- List: liberated books -->
             <div class="col-xs-10 col-sm-offset-2">
                 <h1> Livres disponibles </h1>
-                
+
                 {% if bookList is empty %}
                     <div>
                         <p> Aucun livre n'a encore été libéré sur ce site.</p>
@@ -29,7 +29,7 @@
                         <div class="card col-xs-12 col-sm-4 col-md-3 bookCard">
                             <img class="img imgCard" src="{{ book.photo_book }}" alt="Card image cap">
                             <li class="list-group-item"><h4 class="card-title">{{ book.title_book }}</h4></li>
-                            
+
                             <div class="overlay">
                                 <ul class="list-group list-group-flush col-md-11 col-md-offset-1">
                                     <li class="list-group-item textOverlay">
@@ -66,12 +66,12 @@
                                             {# Create the path to contact the member who has the book #}
                                             {% if book.pseudo_capture == 'none' %}
                                                 {% if book.pseudo_member != app.user.pseudo_member %}
-                                                    <a href="{{ path('livresVoyageurs_addFriend', {pseudo:  book.pseudo_member} ) }}" alt="ajouter ce membre en ami" class="btn btn-primary"> Entrer en contact * </a> 
+                                                    <a href="{{ path('livresVoyageurs_addFriend', {pseudo:  book.pseudo_member} ) }}" alt="ajouter ce membre en ami" class="btn btn-primary"> Entrer en contact * </a>
                                                     <p> * En cliquant sur ce bouton, j'accepte de transmettre mon adresse e-mail à ce contact</p>
                                                 {% endif %}
                                             {% else %}
                                                 {% if book.pseudo_capture != app.user.pseudo_member %}
-                                                    <a href="{{ path('livresVoyageurs_addFriend', {pseudo:  book.pseudo_capture} ) }}" alt="ajouter ce membre en ami" class="btn btn-primary"> Entrer en contact *</a> 
+                                                    <a href="{{ path('livresVoyageurs_addFriend', {pseudo:  book.pseudo_capture} ) }}" alt="ajouter ce membre en ami" class="btn btn-succes"> Entrer en contact *</a>
                                                     <p> * En cliquant sur ce bouton, j'accepte de transmettre mon adresse e-mail à ce contact</p>
                                                 {% endif %}
                                             {% endif %}

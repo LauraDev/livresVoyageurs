@@ -38,7 +38,7 @@
                     </div>
                 </div>
             </div>
-        
+
         <div class="col-md-offset-1 col-md-9 tab-content">
             <!-- Centered Tabs -->
             <ul class="nav nav-tabs nav-justified" role="tablist">
@@ -95,10 +95,10 @@
                                 {{ form_row(formAddBook.photo_book) }}
                                 <!-- Languge -->
                                 {{ form_row(formAddBook.language_book) }}
-                                
+
                                 <!-- ISBN -->
                                 <div class="form-group">
-                                    <label for="ISBN_book">ISBN: Numéro à 13 chiffres, inscript au-dessus du code barre du livre *</label>
+                                    <label for="ISBN_book">ISBN: Numéro à 13 chiffres <br> Inscript au-dessus du code barre du livre *</label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
                                         {{ form_widget(formAddBook.ISBN_book) }}
@@ -137,10 +137,12 @@
                                         <div>
                                             {{ form_widget(formAddBook.disponibility_book.0) }}
                                             {{ form_label(formAddBook.disponibility_book.0) }}
+                                            <span class=" glyphicon glyphicon-question-sign"></span>
                                         </div>
                                         <div>
                                             {{ form_widget(formAddBook.disponibility_book.1) }}
                                             {{ form_label(formAddBook.disponibility_book.1) }}
+                                            <span class=" glyphicon glyphicon-question-sign"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -155,7 +157,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-md-offset-1 col-md-5">
                     <!-- Form: Captured book liberation -->
                     <div class="card contour">
@@ -185,7 +187,7 @@
 
                                 <!-- Id Book -->
                                 <div class="form-group">
-                                    <label for="id_books">Numéro unique inscript sur l'étiquette du livre *</label>
+                                    <label for="id_books">Numéro unique <br> Inscript sur l'étiquette du livre *</label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
                                         {{ form_widget(formLiberation.id_books) }}
@@ -203,8 +205,8 @@
                     </div>
 
                 </div>
-                    
-                
+
+
             </div> <!-- addBook -->
 
 
@@ -242,7 +244,7 @@
 
                                 <!-- Id Book - Table Pointers -->
                                 <div class="form-group">
-                                    <label for="id_book">Numéro unique inscript sur l'étiquette du livre *</label>
+                                    <label for="id_book">Numéro unique <br> Inscript sur l'étiquette du livre *</label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
                                         {{ form_widget(formCapture.id_book) }}
@@ -336,7 +338,7 @@
                                 <div class="card col-md-3 bookCard">
                                     <img class="img imgCard" src="{{ book.photo_book }}" alt="Card image cap">
                                     <li class="list-group-item"><h4 class="card-title">{{ book.title_book }}</h4></li>
-                                                                    
+
                                     <div class="overlay">
 
                                         <ul class="list-group list-group-flush col-md-11 col-md-offset-1">
@@ -450,7 +452,7 @@
                                     <div class="card">
                                     <div class="card-body">
                                         <h4 class="card-title"> {{ friend.pseudo_member_2 }} </h4>
-                                        <p class="card-text"> {{ friend.mail_member_2 }} </p>
+                                        <p class="card-text"> <a href="mailto:{{friend.mail_member_2}}">{{ friend.mail_member_2 }}</a> </p>
                                         <a href="{{ path('livresVoyageurs_blockFriend', {pseudo:  friend.pseudo_member_2} ) }}" alt="bloquer ce contact" class="btn btn-primary"> Supprimer ce contact </a>
                                     </div>
                                     </div>
@@ -603,8 +605,8 @@
                             </button>
                         </div>
                     </div>
-                </div>    
-                            
+                </div>
+
                 <div class="modal fade" tabindex="-1" role="dialog" id="myModal" >
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">

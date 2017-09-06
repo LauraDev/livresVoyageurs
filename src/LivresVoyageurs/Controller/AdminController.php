@@ -229,7 +229,7 @@ class  AdminController
                     $deleteMember->pseudo_member   = 'anonyme';
                     $deleteMember->mail_member     = '';
                     $deleteMember->pass_member     = '';
-                    $deleteMember->avatar_member   = '';
+                    $deleteMember->avatar_member   = 'default.png';
                     $deleteMember->role_member     = '';
                     $deleteMember->active_member   = 0;
                     $deleteMember->save();
@@ -265,10 +265,16 @@ class  AdminController
                                             ->where('pseudo_member', $member['pseudo_member3'])
                                             ->count();
                 if ($exist) {
-                    $delete = $app['idiorm.db']->for_table('members')
+                    $deleteMember = $app['idiorm.db']->for_table('members')
                         ->where('pseudo_member', $member['pseudo_member3'])
                         ->find_one();
-                    $delete->delete();
+                        $deleteMember->pseudo_member   = 'anonyme';
+                        $deleteMember->mail_member     = '';
+                        $deleteMember->pass_member     = '';
+                        $deleteMember->avatar_member   = 'default.png';
+                        $deleteMember->role_member     = '';
+                        $deleteMember->active_member   = 0;
+                        $deleteMember->save();
                     # Redirection
                     return $app->redirect('?delete=success');
                 }
