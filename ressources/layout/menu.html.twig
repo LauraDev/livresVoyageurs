@@ -19,6 +19,9 @@
 				</svg>
 				<p id="company">Les Livres Voyageurs</p>
 			</a>
+			{# Burger Menu #}
+			<span class="animation hidden-sm hidden-md hidden-lg" style="font-size:30px;cursor:pointer" onclick="openNav()" id="burger-xs">&#9776;</span>
+
 		</div> <!-- left-menu -->
 
 
@@ -26,7 +29,7 @@
 			<!-- right-menu -->
 			<div class="right-menu displayFlex">
 
-				<ul class="displayFlex">
+				<ul class="displayFlex hidden-xs">
 					{% if is_granted('IS_AUTHENTICATED_FULLY') %}
 						<li {% if active_page == 'Accueil' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_home') }}"> Accueil </a></li>
 						<li><a href="{{ path('livresVoyageurs_deconnexion') }}"> Déconnexion </a></li>
@@ -41,11 +44,11 @@
 					{% if is_granted('ROLE_ADMIN') %}
 						<li><a href="{{ path('livresVoyageurs_administrator', {pseudoAdmin: app.user.pseudo_member} ) }}" class="blackBorder">Administration </a></li>
 					{% endif %}
-					
+
 				</ul>
-				
+
 				{# Burger Menu #}
-				<span class="animation" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+				<span class="animation hidden-xs" style="font-size:30px;cursor:pointer" onclick="openNav()" >&#9776;</span>
 
 
 			</div> <!-- right-menu -->
@@ -56,6 +59,16 @@
 
 				<ul>
 					{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+						<div class="hidden-sm hidden-md hidden-lg">
+							<li {% if active_page == 'Accueil' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_home') }}"> Accueil </a></li>
+							<li><a href="{{ path('livresVoyageurs_deconnexion') }}"> Déconnexion </a></li>
+							{% if is_granted('ROLE_MEMBER') %}
+								<li><a href="{{ path('livresVoyageurs_espace', {pseudo: app.user.pseudo_member} ) }}"><span class="ion-person"/> Mon Espace </a></li>
+							{% endif %}
+							{% if is_granted('ROLE_ADMIN') %}
+								<li><a href="{{ path('livresVoyageurs_administrator', {pseudoAdmin: app.user.pseudo_member} ) }}">Administration </a></li>
+							{% endif %}
+						</div>
 						<li class="animation" {% if active_page == 'Disponible' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_bookList') }}"><span class="ion-ios-book"/> Livres Disponibles </a></li>
 						<li class="animation" {% if active_page == 'Recherche' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_search') }}"><span class="ion-search"/> Recherche </a></li>
 						<li class="animation" {% if active_page == 'Connexion' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_contact') }}"><span class="ion-email"/> Contact </a></li>
@@ -68,7 +81,7 @@
 				</ul>
 			</div>
 
-		</div>	
+		</div>
 	</div> <!-- container -->
 </nav>
 

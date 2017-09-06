@@ -265,7 +265,7 @@ class  AdminController
                                             ->where('pseudo_member', $member['pseudo_member3'])
                                             ->count();
                 if ($exist) {
-                    $delete = $app['idiorm.db']->for_table('members')
+                    $deleteMember = $app['idiorm.db']->for_table('members')
                         ->where('pseudo_member', $member['pseudo_member3'])
                         ->find_one();
                     $delete->pseudo_member   = 'Anonyme';

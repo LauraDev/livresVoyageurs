@@ -64,6 +64,18 @@ h2 {
   color: #a2d0d8;
 }
 
+@media (max-width: 701px) {
+  #company {
+    font-size: 1.75em;
+  }
+}
+
+@media (max-width: 649px) {
+  #company {
+    font-size: 1.5em;
+  }
+}
+
 .navbar {
   width: 100%;
   margin: 0;
@@ -90,6 +102,18 @@ h2 {
   color: #343f45;
 }
 
+@media (max-width: 900px) {
+  .right-menu a {
+    font-size: .95em;
+  }
+}
+
+@media (max-width: 780px) {
+  .right-menu a {
+    font-size: .9em;
+  }
+}
+
 .right-menu a:hover {
   text-decoration: none;
   color: darkgrey;
@@ -101,6 +125,10 @@ h2 {
   text-transform: uppercase;
   border-radius: 4px;
   letter-spacing: .21px;
+}
+
+#burger-xs {
+  margin-left: 15%;
 }
 
 .right-menu2 {

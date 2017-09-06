@@ -228,7 +228,7 @@ class  MemberController
 
         #2b : Liberate a book
         $formLiberation = $app['form.factory']->createNamedBuilder("formLiberation", FormType::class)
-        
+
             # Form Fields
             ->add('id_books', TextType::class, [
                 'required'          =>  true,

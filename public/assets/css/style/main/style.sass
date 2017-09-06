@@ -1,4 +1,4 @@
-@font-face 
+@font-face
     font-family: 'icomoon'
     src: url("../fonts/icomoon/icomoon.eot?srf3rx")
     src: url("../fonts/icomoon/icomoon.eot?srf3rx#iefix") format("embedded-opentype"), url("../fonts/icomoon/icomoon.ttf?srf3rx") format("truetype"), url("../fonts/icomoon/icomoon.woff?srf3rx") format("woff"), url("../fonts/icomoon/icomoon.svg?srf3rx#icomoon") format("svg")
@@ -7,147 +7,157 @@
 
 
 
-// /* 
+// /*
 // * =======================================================
 // *
 // * 	GENERAL
 // *
-// * ======================================================= 
+// * =======================================================
 // */
-html , body 
+html , body
     height: 100%
     margin: 0
     padding: 0
     line-height: 1
 
 
-.container 
+.container
     height: 100%
     width: 75%
     margin: auto
 
 
-.page 
+.page
     min-height: 100vh
 
 
-ul 
+ul
     list-style: none
     padding: 0
     margin: 0
 
-li 
+li
     padding: 0
     margin: 0
 
-a:hover, a:active, a:focus 
+a:hover, a:active, a:focus
     text-decoration: none
 
 
-p, figure 
+p, figure
 
 
 
-h1, h2, h3, h4, h5, h6 
+h1, h2, h3, h4, h5, h6
 
 
 
-.displayFlex 
+.displayFlex
     display: flex
 
 
 
-h2 
+h2
     font-size: 30px
     font-weight: 400
     line-height: 1.1
     margin: 35px 0 20px 0
 
 
-// /* 
+// /*
 // * =======================================================
 // *
 // * 	MENU
 // *
-// * ======================================================= 
+// * =======================================================
 // */
-.all-menus 
+.all-menus
     flex-direction: column
     padding-top: 30px
 
 
-.logo 
+.logo
     display: flex
     align-items: center
 
 
-#company 
+#company
     font-size: 2em
     color: #a2d0d8
+    @media (max-width: 701px)
+        font-size: 1.75em
+    @media (max-width: 649px)
+        font-size: 1.5em
 
-
-.navbar 
+.navbar
     width: 100%
     margin: 0
     padding: 16px 0
     background-color: #F4F5F9
 
 
-.space 
+.space
     justify-content: space-between
     height: 80px
 
-.left-menu 
+.left-menu
     // padding-left: 200px
     // height: 300px
 
-.right-menu  
+.right-menu
     align-items: center
 
 
-.right-menu li 
-    padding: 15px 
+.right-menu li
+    padding: 15px
 
-.right-menu a 
+.right-menu a
     font-size: 1.2em
-    padding: 10px 
+    padding: 10px
     color: #343f45
+    @media (max-width: 900px)
+        font-size: .95em
+    @media (max-width: 780px)
+        font-size: .9em
 
-.right-menu a:hover 
+.right-menu a:hover
     text-decoration: none
     color: darkgrey
 
-.blackBorder 
+.blackBorder
     border: 0.7px solid #343f45
     font-weight: 500
     text-transform: uppercase
     border-radius: 4px
     // box-shadow: inset 0 0 0 2px #343f45
-    letter-spacing: .21px  
+    letter-spacing: .21px
+
+#burger-xs
+    margin-left: 15%
 
 
-// /* 
+// /*
 // * =======================================================
 // *
 // *   SECOND	MENU
 // *
-// * ======================================================= 
+// * =======================================================
 // */
 
-.right-menu2 
+.right-menu2
     width: 100%
     justify-content: flex-end
     margin-top: 15px
 
-.right-menu2 li 
-    padding: 15px 
+.right-menu2 li
+    padding: 15px
 
-.right-menu2 a 
+.right-menu2 a
     font-size: 1.3em
-    padding: 10px 
+    padding: 10px
     color: #343f45
 
-.right-menu2 a:hover 
+.right-menu2 a:hover
     text-decoration: none
     color: darkgrey
 
@@ -156,15 +166,15 @@ h2
 
 
 
-// /* 
+// /*
 // * =======================================================
 // *
 // * 	MAIN
 // *
-// * ======================================================= 
+// * =======================================================
 // */
 
-#contact 
+#contact
     height: 100%
 
 // Forms
@@ -180,7 +190,7 @@ h2
     margin: 0 0 15px 0
     padding: 15px
 
-.contour 
+.contour
     border: 1px solid #F4F5F9
     border-bottom-right-radius: 20px
     border-top-left-radius: 20px
@@ -193,7 +203,7 @@ h2
 
 
 // Capture: cards
-.overlay 
+.overlay
     position: absolute
     bottom: 0
     left: 0
@@ -204,14 +214,14 @@ h2
     height: 0
     transition: .5s ease
 
-.bookCard:hover .overlay 
+.bookCard:hover .overlay
     height: 100%
     padding-top: 85px
 
 .card-title
     font-size: 1em
 
-.textOverlay 
+.textOverlay
     white-space: nowrap
     overflow: hidden
     font-size: 0.85em
@@ -230,20 +240,20 @@ h2
     margin: auto
 
 
-// /* 
+// /*
 // * =======================================================
 // *
 // * 	FOOTER
 // *
-// * ======================================================= 
+// * =======================================================
 // */
 
 
 
-// /* 
+// /*
 // * =======================================================
 // *
 // * 	RESPONSIVE: MEDIA-QUERY
 // *
-// * ======================================================= 
+// * =======================================================
 // */
