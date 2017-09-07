@@ -26,17 +26,17 @@
                     </div>
                 {% else %}
                     {% for book in bookList %}
-                        <div class="card col-xs-12 col-sm-4 col-md-3 bookCard">
+                        <div class="card col-xs-6 col-sm-4 col-md-3 bookCard">
                             <img class="img imgCard" src="{{ book.photo_book }}" alt="Card image cap">
                             <li class="list-group-item"><h4 class="card-title">{{ book.title_book }}</h4></li>
 
                             <div class="overlay">
-                                <ul class="list-group list-group-flush col-md-11 col-md-offset-1">
+
                                     {# <li class="list-group-item textOverlay">
                                         <p> {{ book.summary_book | replace({"&#39;" : "'"})}} </p>
                                     </li> #}
-                                    <li class="list-group-item textOverlay">Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</li>
-                                    <li class="list-group-item textOverlay">
+                                    <p>Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</p>
+
 
                                         {# Display the pseudo of the member in possession of the book#}
                                         {% if book.pseudo_capture == 'none' %}
@@ -48,16 +48,16 @@
                                         {# If the user is connected (a member) allow him to contact the member who has the book #}
                                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                             {# If the 2 members are not already in contact #}
-                                            {% if global.request.get('addFriend') == 'success' and global.request.get('friend') == book.pseudo_capture 
+                                            {% if global.request.get('addFriend') == 'success' and global.request.get('friend') == book.pseudo_capture
                                                 or global.request.get('addFriend') == 'success' and global.request.get('friend') == book.pseudo_member %}
                                                 <div class="alert alert-success">
                                                     <p><i class="fa fa-thumbs-up" aria-hidden="true"></i>
                                                         Votre demande a bien été effectuée.
                                                     </p>
                                                 </div>
-                                            
+
                                             {#  If one of the 2 members already asked for contact #}
-                                            {% elseif global.request.get('addFriend') == 'exist' and global.request.get('friend') == book.pseudo_capture 
+                                            {% elseif global.request.get('addFriend') == 'exist' and global.request.get('friend') == book.pseudo_capture
                                                 or global.request.get('addFriend') == 'exist' and global.request.get('friend') == book.pseudo_member %}
                                                 <div class="alert alert-danger">
                                                     <p><i class="fa fa-thumbs-up" aria-hidden="true"></i>
@@ -68,31 +68,23 @@
                                             {# Create the path to contact the member who has the book #}
                                             {% elseif book.pseudo_capture == 'none' %}
                                                     {% if book.pseudo_member != app.user.pseudo_member and book.pseudo_member != 'Anonyme' %}
-                                                        <a href="{{ path('livresVoyageurs_addFriend', {pseudo:  book.pseudo_member} ) }}" alt="ajouter ce membre en ami" class="btn btn-primary"> Entrer en contact * </a> 
+                                                        <a href="{{ path('livresVoyageurs_addFriend', {pseudo:  book.pseudo_member} ) }}" alt="ajouter ce membre en ami" class="btn btn-primary"> Entrer en contact * </a>
                                                         {# <p> * En cliquant sur ce bouton, j'accepte de transmettre mon adresse e-mail à ce contact</p> #}
                                                     {% endif %}
                                             {% else %}
-<<<<<<< HEAD
-                                                {% if book.pseudo_capture != app.user.pseudo_member %}
-                                                    <a href="{{ path('livresVoyageurs_addFriend', {pseudo:  book.pseudo_capture} ) }}" alt="ajouter ce membre en ami" class="btn btn-success"> Entrer en contact *</a>
-                                                    <p> * En cliquant sur ce bouton, j'accepte de transmettre mon adresse e-mail à ce contact</p>
-                                                {% endif %}
-=======
                                                     {% if book.pseudo_capture != app.user.pseudo_member and book.pseudo_capture != 'Anonyme' %}
-                                                        <a href="{{ path('livresVoyageurs_addFriend', {pseudo:  book.pseudo_capture} ) }}" alt="ajouter ce membre en ami" class="btn btn-primary"> Entrer en contact *</a> 
+                                                        <a href="{{ path('livresVoyageurs_addFriend', {pseudo:  book.pseudo_capture} ) }}" alt="ajouter ce membre en ami" class="btn btn-primary"> Entrer en contact *</a>
                                                         {# <p> * En cliquant sur ce bouton, j'accepte de transmettre mon adresse e-mail à ce contact</p> #}
                                                     {% endif %}
->>>>>>> afe3cc97eec5ad89e314a74a99898d3b8415173e
                                             {% endif %}
 
                                         {# If the user is not connected #}
                                         {% else %}
                                             <a href="{{ path('livresVoyageurs_inscription') }}" alt="Liens vers l'inscription" class="btn btn-primary"> Inscrivez-vous pour capturer ce livre </a>
                                         {% endif %}
-                                    </li>
-                                    <li class="list-group-item textOverlay">Date de libération: {{ book.date_book | date("d/m/Y")  }}</li>
-                                    <a href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'histoire du livre"  target="_blank" class="btn btn-primary col-md-12">Suivre son chemin</a>
-                                </ul>
+
+                                    <p>Date de libération: {{ book.date_book | date("d/m/Y")  }}</p>
+                                    <a href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'histoire du livre"  target="_blank" class="btn btn-primary">Suivre son chemin</a>
                             </div> <!-- card block -->
                         </div> <!-- card col-md -->
                     {% endfor %}

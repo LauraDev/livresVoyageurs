@@ -57,8 +57,8 @@
                 <div class="col-md-6">
                     <div class="card contour">
                         <div class="titleForm text-center">
-                            <h2> 
-                                Créer un livre voyageur  
+                            <h2>
+                                Créer un livre voyageur
                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="Vous souhaitez partager votre livre et suivre son chemin ? Utiliser ce formulaire pour les livres n'ayant pas encore été enregistré sur ce site"><span class="glyphicon glyphicon-question-sign"></span></a>
                             </h2>
                         </div>
@@ -165,8 +165,8 @@
                     <!-- Form: Captured book liberation -->
                     <div class="card contour">
                         <div class="titleForm text-center">
-                            <h2> 
-                                Libérer un livre voyageur 
+                            <h2>
+                                Libérer un livre voyageur
                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="Vous souhaitez remettre en liberté un livre possédant déjà une étiquette ?"><span class="glyphicon glyphicon-question-sign"></span></a>
                             </h2>
                         </div>
@@ -224,8 +224,8 @@
                 <div class="col-md-offset-2 col-md-7">
                     <div class="card contour">
                         <div class="titleForm text-center">
-                            <h2> 
-                                Déclarer une capture 
+                            <h2>
+                                Déclarer une capture
                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="Vous avez retrouvez un livre voyageur? Merci d'aider à retracer son chemin"><span class="glyphicon glyphicon-question-sign"></span></a>
                             </h2>
                         </div>
@@ -349,16 +349,16 @@
 
                                     <div class="overlay">
 
-                                        <ul class="list-group list-group-flush col-md-11 col-md-offset-1">
-                                            <li class="list-group-item textOverlay">Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</li>
-                                            <li class="list-group-item textOverlay">Numéro unique: {{ book.id_book }}</li>
-                                            <li class="list-group-item textOverlay" style="background-color:#f7f7f9">Livre libéré</li>
+
+                                            <p>Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</p>
+                                            <p id="unique">Numéro unique: {{ book.id_book }}</p>
+                                            <p id="free">Livre libéré</p>
                                             <a
                                                 href="{{ path('livresVoyageurs_history', {id_book: book.id_book } ) }}" title="Lien vers l'étiquette du livre"
                                                 target="_blank" class="btn btn-primary col-md-12">
                                                     Suivre son chemin
                                             </a>
-                                        </ul>
+
                                     </div> <!-- card block -->
                                 </div> <!-- card col-md -->
 
@@ -367,9 +367,9 @@
                                     <img class="img imgCard" src="{{ book.photo_book }}" alt="Card image cap">
                                     <li class="list-group-item" style="background-color:#e7ffe7"><h4 class="card-title">{{ book.title_book }}</h4></li>
                                     <div class="overlay">
-                                        <ul class="list-group list-group-flush col-md-11 col-md-offset-1">
-                                            <li class="list-group-item textOverlay">Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</li>
-                                            <li class="list-group-item textOverlay">Numéro unique: {{ book.id_book }}</li>
+
+                                            <p>Auteur: {{ book.firstname_author }} {{ book.lastname_author }}</p>
+                                            <p>Numéro unique: {{ book.id_book }}</p>
                                             <div class="card-footer text-muted textOverlay">
                                                 <form id="formChangeDispo" action="{{ path('livresVoyageurs_espace_post', {pseudo: app.user.pseudo_member} ) }}" method="post">
                                                     <!--  ID BOOK -->
@@ -387,7 +387,6 @@
                                                 class="btn btn-primary col-md-12">
                                                     Suivre son chemin
                                             </a>
-                                        </ul>
                                     </div> <!-- card block -->
                                 </div> <!-- card col-md -->
                             {% endif %} <!-- disponibility -->

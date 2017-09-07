@@ -73,6 +73,7 @@
 						<li class="animation" {% if active_page == 'Recherche' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_search') }}"><span class="ion-search"/> Recherche </a></li>
 						<li class="animation" {% if active_page == 'Connexion' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_contact') }}"><span class="ion-email"/> Contact </a></li>
 					{% else %}
+						<li {% if active_page == 'Connexion' %} class="active "{% endif%}><a href="{{ path('livresVoyageurs_connexion') }}" class="hidden-sm hidden-md hidden-lg">Connexion </a></li>
 						<li class="animation" {% if active_page == 'Disponible' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_bookList') }}"><span class="ion-ios-book"/> Livres Disponibles </a></li>
 						<li class="animation" {% if active_page == 'Capture' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_newCapture') }}"><span class="ion-share"/> Enregistrer une Capture </a></li>
 						<li class="animation" {% if active_page == 'Recherche' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_search') }}"><span class="ion-search"/> Recherche </a></li>
