@@ -21,7 +21,7 @@
     <div class="row">
 
         <div class="row">
-            <div class="col-md-2 text-center">
+            <div class="col-md-2 text-center hello">
                 <div class="row">
                     <h1> Tableau de bord </h1>
                 </div>
@@ -39,7 +39,7 @@
                 </div>
             </div>
 
-        <div class="col-md-offset-1 col-md-9 tab-content">
+        <div class="col-md-10 tab-content">
             <!-- Centered Tabs -->
             <ul class="nav nav-tabs nav-justified" role="tablist">
                 <li class="active"><a data-toggle="tab" href="#addBook" role="tab" aria-controls="addBook">Libérer un Livre</a></li>
@@ -57,7 +57,10 @@
                 <div class="col-md-6">
                     <div class="card contour">
                         <div class="titleForm text-center">
-                            <h2> Créer un livre voyageur </h2>
+                            <h2> 
+                                Créer un livre voyageur  
+                                <a href="#" data-toggle="tooltip" data-placement="bottom" title="Vous souhaitez partager votre livre et suivre son chemin ? Utiliser ce formulaire pour les livres n'ayant pas encore été enregistré sur ce site"><span class="glyphicon glyphicon-question-sign"></span></a>
+                            </h2>
                         </div>
 
                         <div class="contentForm">
@@ -137,12 +140,12 @@
                                         <div>
                                             {{ form_widget(formAddBook.disponibility_book.0) }}
                                             {{ form_label(formAddBook.disponibility_book.0) }}
-                                            <span class=" glyphicon glyphicon-question-sign"></span>
+                                            <a href="#" data-toggle="tooltip" data-placement="bottom" title="Libérez votre livre dans un lieu publique (parc, gare, café,...)"><span class="glyphicon glyphicon-question-sign"></span></a>
                                         </div>
                                         <div>
                                             {{ form_widget(formAddBook.disponibility_book.1) }}
                                             {{ form_label(formAddBook.disponibility_book.1) }}
-                                            <span class=" glyphicon glyphicon-question-sign"></span>
+                                            <a href="#" data-toggle="tooltip" data-placement="bottom" title="Partagez votre livre avec un membre du site"><span class="glyphicon glyphicon-question-sign"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -162,7 +165,10 @@
                     <!-- Form: Captured book liberation -->
                     <div class="card contour">
                         <div class="titleForm text-center">
-                            <h2> Libérer un livre voyageur </h2>
+                            <h2> 
+                                Libérer un livre voyageur 
+                                <a href="#" data-toggle="tooltip" data-placement="bottom" title="Vous souhaitez remettre en liberté un livre possédant déjà une étiquette ?"><span class="glyphicon glyphicon-question-sign"></span></a>
+                            </h2>
                         </div>
 
                         <div class="contentForm">
@@ -206,7 +212,6 @@
 
                 </div>
 
-
             </div> <!-- addBook -->
 
 
@@ -219,7 +224,10 @@
                 <div class="col-md-offset-2 col-md-7">
                     <div class="card contour">
                         <div class="titleForm text-center">
-                            <h2> Déclarer une capture </h2>
+                            <h2> 
+                                Déclarer une capture 
+                                <a href="#" data-toggle="tooltip" data-placement="bottom" title="Vous avez retrouvez un livre voyageur? Merci d'aider à retracer son chemin"><span class="glyphicon glyphicon-question-sign"></span></a>
+                            </h2>
                         </div>
 
                         <div class="contentForm">
@@ -335,7 +343,7 @@
 
                         {% for book in bookList %}
                             {% if book.disponibility_book == 0 %}
-                                <div class="card col-md-3 bookCard">
+                                <div class="card col-sm-3 col-xs-6 bookCard">
                                     <img class="img imgCard" src="{{ book.photo_book }}" alt="Card image cap">
                                     <li class="list-group-item"><h4 class="card-title">{{ book.title_book }}</h4></li>
 
@@ -355,7 +363,7 @@
                                 </div> <!-- card col-md -->
 
                             {% else %}
-                                <div class="card col-md-3 bookCard">
+                                <div class="card col-sm-3 col-xs-6 bookCard">
                                     <img class="img imgCard" src="{{ book.photo_book }}" alt="Card image cap">
                                     <li class="list-group-item" style="background-color:#e7ffe7"><h4 class="card-title">{{ book.title_book }}</h4></li>
                                     <div class="overlay">
@@ -564,7 +572,7 @@
 
                                 <!-- Password -->
                                 <div class="form-group">
-                                    <label for="pass_member">Mot de passe *</label>
+                                    <label for="pass_member">Modifier mon mot de passe *</label>
                                     <!-- Help-text -->
                                     <p id="pass-helptext">Votre mot de passe doit contenir au moins 6 caractères, une majuscule et un chiffre</p>
                                     <!-- Password complexity -->

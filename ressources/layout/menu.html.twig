@@ -29,14 +29,14 @@
 			<!-- right-menu -->
 			<div class="right-menu displayFlex">
 
-				<ul class="displayFlex hidden-xs">
+				<ul class="displayFlex animation hidden-xs">
 					{% if is_granted('IS_AUTHENTICATED_FULLY') %}
 						<li {% if active_page == 'Accueil' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_home') }}"> Accueil </a></li>
 						<li><a href="{{ path('livresVoyageurs_deconnexion') }}"> Déconnexion </a></li>
 					{% else %}
-						<li class="animation" {% if active_page == 'Accueil' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_home') }}"> Accueil </a></li>
-						<li class="animation" {% if active_page == 'Inscription' %} class="active"{% endif%}><a class="blackBorder" href="{{ path('livresVoyageurs_inscription') }}"> Inscription </a></li>
-						<li class="animation" {% if active_page == 'Connexion' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_connexion') }}">Connexion </a></li>
+						<li {% if active_page == 'Accueil' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_home') }}"> Accueil </a></li>
+						<li {% if active_page == 'Inscription' %} class="active"{% endif%}><a class="blackBorder" href="{{ path('livresVoyageurs_inscription') }}"> Inscription </a></li>
+						<li {% if active_page == 'Connexion' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_connexion') }}">Connexion </a></li>
 					{% endif %}
 					{% if is_granted('ROLE_MEMBER') %}
 						<li><a href="{{ path('livresVoyageurs_espace', {pseudo: app.user.pseudo_member} ) }}" class="blackBorder"><span class="ion-person"/> Mon Espace </a></li>

@@ -73,7 +73,6 @@ $(document).ready(function() {
 
         var latPoint = Number($('.lat_pointer').eq(i).html())
         var lngPoint = Number($('.lng_pointer').eq(i).html())
-            var markers = [];
             var pos = new google.maps.LatLng( latPoint , lngPoint);
             var contentCapture =
             '<div class="iw-container">'+
@@ -89,7 +88,7 @@ $(document).ready(function() {
                 '</div>'
             '</div>'
             // Create captures marker
-            markers[i] = new google.maps.Marker({
+            var markers = new google.maps.Marker({
                 position: pos,
                 map: map,
                 id: i+1,
@@ -103,14 +102,14 @@ $(document).ready(function() {
 
             });
             // add listener
-            markers[i].addListener('click', function() {
-                infowindow.open(map, markers[i]);
+            markers.addListener('click', function() {
+                infowindow.open(map, markers);
             });
-            infowindow.open(map, markers[i]);
+            infowindow.open(map, markers);
 
             // Marker position
             posCapt[0] = {lat: latStart , lng: lngStart };
-            posCapt[i] = {lat:latPoint , lng:lngPoint};
+            posCapt[i+1] = {lat:latPoint , lng:lngPoint};
 
             // Extend bounds
             loc[i] = {lat:latPoint , lng:lngPoint};
