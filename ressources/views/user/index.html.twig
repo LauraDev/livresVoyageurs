@@ -28,6 +28,8 @@
 		<p><a class="btnInscriptionHome" href="">DÉCOUVRIR</a></p>
 	</div>
 
+	<img id="pointerBook" src="{{ asset('assets/images/books.png') }}" alt="Image">
+
 	<div id="bottomHome" class="animation">
 		<p id="explain"> Vous possédez un livre que vous souhaitez mettre à la disposition de la communauté ou libérer dans la nature ?
 		<p id="numberStep" class="animated tada"> 3 ETAPES SUFFISENT ! </p>
@@ -40,20 +42,20 @@
 			<article class="step" id="presentation">
 				<div class="container">
 					<div class="divStep row">
-						<div class="col-md-6 animation midHeight">
-							<div class="largeImage animation midHeight">
-								<img src="" alt="Image">
-							</div>
-						</div>
-						<div class="col-md-1 animation">
+						<div class="col-md-1 col-md-push-7 animation">
 							<p class="stepNumber">1</p>
 						</div>
-						<div class="col-md-5 text animation midHeight">
+						<div class="col-md-5 text col-md-push-7 animation midHeight">
 							<h2>Étiquetez</h2>
 							<p class="text-justify">Créer un livre voyageur dans votre espace membre puis imprimer son étiquette.
 								Celle-ci vous permettra de suivre votre livre tout au long de son périple.
 							</p>
 							{# <p class="button"><a href="{{ path('livresVoyageurs_espace_sticker', { pseudo: 'Lola123', uniqueId: 18976845 , title: 'Les fables de la fontaine'  } ) }}" target="_blank">DÉCOUVRIR</a></p> #}
+						</div>
+						<div class="col-md-6 col-md-pull-6 animation midHeight">
+							<div class="largeImage animation midHeight">
+								<img src="{{ asset('assets/images/sticker.png') }}" alt="Image">
+							</div>
 						</div>
 					</div> <!-- row -->
 				</div> <!-- container -->
@@ -87,15 +89,10 @@
 			<article class="step" id="">
 				<div class="container">
 					<div class="divStep row">
-						<div class="col-md-6 animation midHeight">
-							<div class="largeImage animation midHeight">
-								<img src="{{ asset('assets/images/suiver.jpg') }}" alt="Image">
-							</div>
-						</div>
-						<div class="col-md-1 animation">
+						<div class="col-md-1 col-md-push-7 animation">
 							<p class="stepNumber">3</p>
 						</div>
-						<div class="col-md-5 text animation midHeight">
+						<div class="col-md-5 col-md-push-7 text animation midHeight">
 							<h2>Suivez</h2>
 							<p class="text-justify"> Connectez-vous sur le site et suivez le trajet de votre livre.</p>
 							<p class="text-justify"> Vous serez en mesure de savoir qui a lu votre livre,
@@ -105,6 +102,11 @@
 								feront le tour du monde.
 							</p>
 							<p class="button"><a href="{{ path('livresVoyageurs_history', {id_book: 39373419 } ) }}" target="_blank">DÉCOUVRIR</a></p>
+						</div>
+						<div class="col-md-6 col-md-pull-6 animation midHeight">
+							<div class="largeImage animation midHeight">
+								<img src="{{ asset('assets/images/suiver.jpg') }}" class="img img-responsive" alt="Image">
+							</div>
 						</div>
 					</div> <!-- row -->
 				</div> <!-- container -->

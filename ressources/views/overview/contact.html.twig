@@ -81,3 +81,12 @@
     </section>
 
 {% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        #contact {
+            min-height: 75vh
+        }
+    </style>
+{% endblock %}

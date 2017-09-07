@@ -15,7 +15,7 @@
 {% block content %}
 
     <div class="row">
-        <div class="col-md-offset-3 col-md-6">
+        <div class="col-md-offset-3 col-md-6" id="marginNewCapt">
             <div class="card contour">
                 <div class="titleForm text-center">
                     <h1> Enregistrer une capture </h1>
@@ -90,6 +90,14 @@
 
 {% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        #marginNewCapt {
+            min-height: 75vh
+        }
+    </style>
+{% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
