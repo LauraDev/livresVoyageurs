@@ -163,5 +163,9 @@ $(document).ready(function() {
 		window.location = linkLocation;
 	}
 
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+
 
 });

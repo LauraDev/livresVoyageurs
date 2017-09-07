@@ -68,15 +68,15 @@
 						<div class="col-md-5 text animation midHeight">
 							<h2>Partagez</h2>
 							<p> Plusieurs possibilités s'offrent à vous : </p>
-							<p class="text-justify"><strong> - La libération contrôlée: </strong> partagez votre livre avec un ami, un collègue ou un membre du site. Ce mode vous permet de connaître la prochaine destination de votre livre.</p>
-							<p class="text-justify"><strong>	- La libération dans la nature: </strong> libérez votre livre dans un lieu publique (parc, gare, café,...) et laissez le hasard prendre les choses en main.</p>
+							<p class="text-justify"><strong> - La libération contrôlée : </strong> partagez votre livre avec un ami, un collègue ou un membre du site. Ce mode vous permet de connaître la prochaine destination de votre livre.</p>
+							<p class="text-justify"><strong>	- La libération dans la nature : </strong> libérez votre livre dans un lieu publique (parc, gare, café,...) et laissez le hasard prendre les choses en main.</p>
 							<p> Qui sait quelles seront les futures pérégrinations de votre livre ?
 							</p>
 							<p class="button"><a href="{{ path('livresVoyageurs_bookList') }}">DÉCOUVRIR</a></p>
 						</div>
 						<div class="col-md-6 animation midHeight">
 							<div class="largeImage inverseXL animation midHeight">
-								<img src="" alt="Image">
+								<img src="{{ asset('assets/images/liberer.jpeg') }}" alt="Image">
 							</div>
 						</div>
 					</div> <!-- row -->
@@ -89,7 +89,7 @@
 					<div class="divStep row">
 						<div class="col-md-6 animation midHeight">
 							<div class="largeImage animation midHeight">
-								<img src="" alt="Image">
+								<img src="{{ asset('assets/images/suiver.jpg') }}" alt="Image">
 							</div>
 						</div>
 						<div class="col-md-1 animation">
@@ -110,31 +110,32 @@
 				</div> <!-- container -->
 			</article>
 
-			<article class="teasers" id="">
-				<div class="container">
-					<div class="divStep row">
-						<div class="col-md-12 animation">
-							<img class="appIcons" src="" alt="">
-							<img class="appIcons" src="" alt="">
-							<a class="btnInscriptionHome2" href="{{ path('livresVoyageurs_inscription') }}">JE M'INSCRIS GRATUITEMENT</a>
-						</div>
-					</div> <!-- row -->
-				</div> <!-- container -->
-			</article>
+			{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+				<article class="teasers" id="">
+					<div class="container">
+						<div class="divStep row">
+							<div class="col-md-12 animation">
+								<img class="appIcons" src="" alt="">
+								<img class="appIcons" src="" alt="">
+								<a class="btnInscriptionHome2" href="{{ path('livresVoyageurs_inscription') }}">JE M'INSCRIS GRATUITEMENT</a>
+							</div>
+						</div> <!-- row -->
+					</div> <!-- container -->
+				</article>
 
-			<article class="teasers" id="">
-				<div class="container">
-					<div class="divStep row">
-						<div class="col-md-12 animation">
-							<h2>Plus de XXX livres partagés en france </h2>
-							<img class="picsComunity" src="" alt="">
-							<img class="picsComunity" src="" alt="">
-							<a class="btnInscriptionHome2" href="{{ path('livresVoyageurs_inscription') }}">REJOIGNEZ LA COMMUNAUTE AUJOURD"HUI</a>
-						</div>
-					</div> <!-- row -->
-				</div> <!-- container -->
-			</article>
-
+				<article class="teasers" id="">
+					<div class="container">
+						<div class="divStep row">
+							<div class="col-md-12 animation">
+								<h2>Plus de XXX livres partagés en france </h2>
+								<img class="picsComunity" src="" alt="">
+								<img class="picsComunity" src="" alt="">
+								<a class="btnInscriptionHome2" href="{{ path('livresVoyageurs_inscription') }}">REJOIGNEZ LA COMMUNAUTE AUJOURD"HUI</a>
+							</div>
+						</div> <!-- row -->
+					</div> <!-- container -->
+				</article>
+			{% endif %}
 		</section>
 	</main>
 

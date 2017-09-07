@@ -37,8 +37,8 @@ $(document).ready(function() {
             case 3:
             $("#password_strength").html(`
                 <div class="progress">
-                    <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
-                    <span class="sr-only">50% Complete (warning)</span>
+                    <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                    <span class="sr-only">40% Complete (danger)</span>
                     </div>
                 </div>
             `);

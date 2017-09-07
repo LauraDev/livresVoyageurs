@@ -639,7 +639,7 @@ class  MemberController
         # Current member
         $deleteMember = $app['idiorm.db']->for_table('members')
                                             ->find_one($app['user']->getId_member());
-        $deleteMember->pseudo_member   = 'anonyme';
+        $deleteMember->pseudo_member   = 'Anonyme';
         $deleteMember->mail_member     = '';
         $deleteMember->pass_member     = '';
         $deleteMember->avatar_member   = 'default.png';
