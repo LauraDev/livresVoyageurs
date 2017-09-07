@@ -40,6 +40,23 @@ a {
   background-color: #f4f5f9;
 }
 
+#marginCapt {
+  margin-bottom: 100px;
+}
+
+#marginSticker {
+  min-height: 60vh;
+  margin-left: 15px;
+}
+
+#marginBooks {
+  min-height: 60vh;
+}
+
+#marginFriends {
+  min-height: 60vh;
+}
+
 @media (max-width: 1470px) {
   .nav-tabs > li > a {
     font-size: 0.8em;

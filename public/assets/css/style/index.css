@@ -30,9 +30,6 @@
   top: -360px;
   left: -36%;
 }
-.bg {
-  width: 150%;
-}
 
 #headerHome {
   min-height: 41vh;
@@ -46,6 +43,11 @@
 
 #headerHome p {
   font-size: 2em;
+}
+#pointerBook {
+  position: absolute;
+  right: 200px;
+  top: 200px;
 }
 
 .btnInscriptionHome, .btnInscriptionHome2 {
@@ -86,9 +88,7 @@
 * =======================================================
 */
 #mainHome {
-  height: 500%;
-  position: relative;
-  top: 380px;
+  margin-top: 380px; 
 }
 
 #steps {
@@ -97,7 +97,7 @@
 
 .step, .teasers {
   height: 25%;
-  margin: 150px 0;
+  margin-top: 100px;
 }
 
 .divStep {
@@ -117,11 +117,6 @@
 
 .midHeight {
   height: 500px;
-}
-
-.largeImage {
-  height: 100%;
-  max-width: 75%;
 }
 
 .inverseXL {
@@ -178,4 +173,56 @@
 
 .btnInscriptionHome2:hover {
   color: black;
+}
+
+
+/* Media queries */
+@media (max-width: 1470px) {
+  .bg-clipper {
+    top: -300px;
+  }
+}
+@media (max-width: 1300px) {
+  .bg-clipper {
+    top: -250px;
+  }
+}
+@media (max-width: 1100px) {
+  .bg-clipper {
+    top: -150px;
+  }
+  #community {
+    font-size: 3em;
+  }
+  .inverseXL {
+    position: static;
+  }
+  
+  .inverseXS {
+    position: static;
+  }
+  .divStep {
+    position: static;
+  }
+  .midHeight {
+    height: auto;
+    margin: 40px 0;
+  }
+}
+.bg {
+  width: 150%;
+}
+@media (max-width: 900px) {
+  .bg-clipper {
+    top: -80px;
+  }
+  #community {
+    font-size: 2em;
+  }
+  #headerHome>p {
+    font-size: 1.5em
+  }
+}
+.bg {
+  width: 150%;
 }

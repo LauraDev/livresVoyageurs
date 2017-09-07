@@ -221,7 +221,7 @@
             <!-- Form: Book I have captured -->
             <div id="capture" class="tab-pane fade" role="tabpanel">
 
-                <div class="col-md-offset-2 col-md-7">
+                <div class="col-md-offset-2 col-md-7" id="marginCapt">
                     <div class="card contour">
                         <div class="titleForm text-center">
                             <h2>
@@ -301,24 +301,26 @@
             <!-- Stickers -->
             <div id="stickers" class="tab-pane fade" role="tabpanel">
 
-                <h2> Etiquettes à imprimer </h2>
-                <div class="row">
-                    {% if bookList is empty %}
-                        <div>
-                            <p> Vous n'avez pas encore libéré de livre.</p>
-                        </div>
-                    {% else %}
-                        {% for book in bookList | slice(0,10) %}
-                            <ul class="list-group list-group-flush">
-                                <li>
-                                    <a href="{{ path('livresVoyageurs_espace_sticker', { pseudo: app.user.pseudo_member, uniqueId: book.id_book , title: book.title_book } ) }}" title="Lien vers l'étiquette du livre" target="_blank">
-                                    Etiquette du livre: {{ book.title_book }}
-                                    </a>
-                                </li>
-                            </ul>
-                        {% endfor %}
-                    {% endif %} <!-- list empty -->
-                </div>  <!-- row -->
+                <div class="col-xs-10 col-xs-offset-2">
+                    <h2> Etiquettes à imprimer </h2>
+                    <div class="row" id="marginSticker">
+                        {% if bookList is empty %}
+                            <div>
+                                <p> Vous n'avez pas encore libéré de livre.</p>
+                            </div>
+                        {% else %}
+                            {% for book in bookList | slice(0,10) %}
+                                <ul class="list-group list-group-flush">
+                                    <li>
+                                        <a href="{{ path('livresVoyageurs_espace_sticker', { pseudo: app.user.pseudo_member, uniqueId: book.id_book , title: book.title_book } ) }}" title="Lien vers l'étiquette du livre" target="_blank">
+                                        Etiquette du livre: {{ book.title_book }}
+                                        </a>
+                                    </li>
+                                </ul>
+                            {% endfor %}
+                        {% endif %} <!-- list empty -->
+                    </div>  <!-- row -->
+                </div>
             </div> <!-- stickers -->
 
 
@@ -327,7 +329,7 @@
             <div id="bookList" class="tab-pane fade" role="tabpanel">
 
                 <h2> Livres </h2>
-                <div class="row">
+                <div class="row" id="marginBooks">
                     {% if bookList is empty %}
                         <div>
                             <p> Vous n'avez pas encore libéré de livre.</p>
@@ -401,89 +403,90 @@
             <div id="friendList" class="tab-pane fade" role="tabpanel">
 
 
-                {# {{ dump(pendingList)}} #}
-                {% if not pendingList is empty %}
-                    <h2> En attente de réponse </h2>
-                    {% for pending in pendingList %}
-                        {% if pending.id_member_1 == app.user.id_member %}
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <img class="img img-responsive" src="{{ asset('assets/images/avatar/' ~  pending.avatar_member_2) }}" alt="Card image cap">
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h4 class="card-title"> {{ pending.pseudo_member_2 }} </h4>
-                                            <a href="{{ path('livresVoyageurs_acceptFriend', {pseudo:  pending.pseudo_member_2} ) }}" alt="accepter la demande de contact" class="btn btn-primary"> Accepter * </a>
-                                            <a href="{{ path('livresVoyageurs_declineFriend', {pseudo:  pending.pseudo_member_2} ) }}" alt="refuser la demande de contact" class="btn btn-primary"> Refuser </a>
-                                            <p class="card-text"> * En cliquant sur ce bouton, j'accepte de transmettre mon adresse e-mail à ce contact</p>
+                <div class="col-xs-10 col-xs-offset-2" id="marginFriends">
+                    {# {{ dump(pendingList)}} #}
+                    {% if not pendingList is empty %}
+                        <h2> En attente de réponse </h2>
+                        {% for pending in pendingList %}
+                            {% if pending.id_member_1 == app.user.id_member %}
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <img class="img img-responsive" src="{{ asset('assets/images/avatar/' ~  pending.avatar_member_2) }}" alt="Card image cap">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="card-title"> {{ pending.pseudo_member_2 }} </h4>
+                                                <a href="{{ path('livresVoyageurs_acceptFriend', {pseudo:  pending.pseudo_member_2} ) }}" alt="accepter la demande de contact" class="btn btn-primary"> Accepter * </a>
+                                                <a href="{{ path('livresVoyageurs_declineFriend', {pseudo:  pending.pseudo_member_2} ) }}" alt="refuser la demande de contact" class="btn btn-primary"> Refuser </a>
+                                                <p class="card-text"> * En cliquant sur ce bouton, j'accepte de transmettre mon adresse e-mail à ce contact</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        {% else %}
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <img class="card-img-top img img-responsive" src="{{ asset('assets/images/avatar/' ~ pending.avatar_member_1) }}" alt="Card image cap">
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h4 class="card-title"> {{ pending.pseudo_member_1 }} </h4>
-                                            <a href="{{ path('livresVoyageurs_acceptFriend', {pseudo:  pending.pseudo_member_1} ) }}" alt="accepter la demande de contact" class="btn btn-primary"> Accepter * </a>
-                                            <a href="{{ path('livresVoyageurs_declineFriend', {pseudo:  pending.pseudo_member_1} ) }}" alt="refuser la demande de contact" class="btn btn-primary"> Refuser </a>
-                                            <p class="card-text"> * En cliquant sur ce bouton, j'accepte de transmettre mon adresse e-mail à ce contact</p>
+                            {% else %}
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <img class="card-img-top img img-responsive" src="{{ asset('assets/images/avatar/' ~ pending.avatar_member_1) }}" alt="Card image cap">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="card-title"> {{ pending.pseudo_member_1 }} </h4>
+                                                <a href="{{ path('livresVoyageurs_acceptFriend', {pseudo:  pending.pseudo_member_1} ) }}" alt="accepter la demande de contact" class="btn btn-primary"> Accepter * </a>
+                                                <a href="{{ path('livresVoyageurs_declineFriend', {pseudo:  pending.pseudo_member_1} ) }}" alt="refuser la demande de contact" class="btn btn-primary"> Refuser </a>
+                                                <p class="card-text"> * En cliquant sur ce bouton, j'accepte de transmettre mon adresse e-mail à ce contact</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
 
-                {# {{ dump(friendList) }} #}
-                {% if friendList is empty %}
-                    <div>
+                    {# {{ dump(friendList) }} #}
+                    {% if friendList is empty %}
+                        <div>
+                            <h2> Contacts </h2>
+                            <p> Vous n'avez pas encore de contact.</p>
+                        </div>
+                    {% else %}
                         <h2> Contacts </h2>
-                        <p> Vous n'avez pas encore de contact.</p>
-                    </div>
-                {% else %}
-                    <h2> Contacts </h2>
-                    {% for friend in friendList %}
-                        {% if friend.id_member_1 == app.user.id_member %}
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <img class="img img-responsive" src="{{ asset('assets/images/avatar/' ~  friend.avatar_member_2) }}" alt="Card image cap">
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="card">
-                                    <div class="card-body">
-                                        <h4 class="card-title"> {{ friend.pseudo_member_2 }} </h4>
-                                        <p class="card-text">
-                                            <a href="mailto:{{friend.mail_member_2}}">{{ friend.mail_member_2 }}</a> </p>
-                                        <a href="{{ path('livresVoyageurs_blockFriend', {pseudo:  friend.pseudo_member_2} ) }}" alt="bloquer ce contact" class="btn btn-primary"> Supprimer ce contact </a>
+                        {% for friend in friendList %}
+                            {% if friend.id_member_1 == app.user.id_member %}
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <img class="img img-responsive" src="{{ asset('assets/images/avatar/' ~  friend.avatar_member_2) }}" alt="Card image cap">
                                     </div>
+                                    <div class="col-sm-6">
+                                        <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title"> {{ friend.pseudo_member_2 }} </h4>
+                                            <p class="card-text"> <a href="mailto:{{friend.mail_member_2}}">{{ friend.mail_member_2 }}</a> </p>
+                                            <a href="{{ path('livresVoyageurs_blockFriend', {pseudo:  friend.pseudo_member_2} ) }}" alt="bloquer ce contact" class="btn btn-primary"> Supprimer ce contact </a>
+                                        </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        {% else %}
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <img class="card-img-top img img-responsive" src="{{ asset('assets/images/avatar/' ~ friend.avatar_member_1) }}" alt="Card image cap">
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="card">
-                                    <div class="card-body">
-                                        <h4 class="card-title"> {{ friend.pseudo_member_1 }} </h4>
-                                        <p class="card-text"> {{ friend.mail_member_1 }} </p>
-                                        <a href="{{ path('livresVoyageurs_blockFriend', {pseudo:  friend.pseudo_member_1} ) }}" alt="bloquer ce contact" class="btn btn-primary"> Supprimer ce contact </a>
+                            {% else %}
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <img class="card-img-top img img-responsive" src="{{ asset('assets/images/avatar/' ~ friend.avatar_member_1) }}" alt="Card image cap">
                                     </div>
+                                    <div class="col-sm-6">
+                                        <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title"> {{ friend.pseudo_member_1 }} </h4>
+                                            <p class="card-text"> {{ friend.mail_member_1 }} </p>
+                                            <a href="{{ path('livresVoyageurs_blockFriend', {pseudo:  friend.pseudo_member_1} ) }}" alt="bloquer ce contact" class="btn btn-primary"> Supprimer ce contact </a>
+                                        </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
             </div> <!-- friendList -->
 
 

@@ -7,8 +7,9 @@ $(document).ready(function() {
     $(window).scroll(function() {
         
         $('.navbar').css('background-color','#F4F5F9');
+        $('.bg-clipper').hide();
         
-        });
+    });
 
 
 }) // document ready
