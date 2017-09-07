@@ -80,7 +80,7 @@
 
                                         {# If the user is not connected #}
                                         {% else %}
-                                            <a href="{{ path('livresVoyageurs_inscription') }}" alt="Liens vers l'inscription" class="btn btn-primary"> Inscrivez-vous pour capturer ce livre </a>
+                                            <a href="{{ path('livresVoyageurs_inscription') }}" alt="Liens vers l'inscription" class="btn btn-primary" id="btnInscr"> Inscrivez-vous <br> pour capturer ce livre </a>
                                         {% endif %}
 
                                     <p>Date de libération: {{ book.date_book | date("d/m/Y")  }}</p>
@@ -96,8 +96,18 @@
 
 {% endblock %}
 
-
 {% block stylesheets %}
 	{{ parent() }}
-	<link rel="stylesheet" href="{{ asset('assets/css/style/bookList/bookList.min.css') }}">
+<style>
+@media (max-width: 1285px) {
+    .overlay {
+        padding:0 5px;
+    }
+}
+    @media (max-width: 768px) {
+        #btnInscr {
+            padding: 0;
+        }
+    }
+</style>
 {% endblock %}

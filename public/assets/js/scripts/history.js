@@ -35,7 +35,7 @@ $(document).ready(function() {
         var contentStart =
             '<div class="iw-container">'+
                 '<div class="iw-title">'+
-                    '<h1 class="text-center">Point de départ : ' +$('.city_startpoint').html() + '</h1>' +
+                    '<h1 class="text-center">1 - Point de départ : ' +$('.city_startpoint').html() + '</h1>' +
                 '</div>'+
                 '<div class="row">' +
                     '<img class="col-xs-4 img" src="/livresVoyageurs/public/assets/images/avatar/' + $('.avatar_startpoint').html() +'" alt="Avatar membre" />' +
@@ -77,12 +77,12 @@ $(document).ready(function() {
             var contentCapture =
             '<div class="iw-container">'+
                 '<div class="iw-title">'+
-                '<h1 class="text-center">Capturé le : '+ $('.date_pointer').eq(i).html() +'</h1>' +
+                '<h1 class="text-center">'+(i+2)+' - Capturé le : '+ $('.date_pointer').eq(i).html() +'</h1>' +
                 '</div>'+
                 '<div class="row">' +
-                    '<img class="col-xs-4 img" src="/livresVoyageurs/public/assets/images/avatar/' + $('.avatar_pointer').html() +'" alt="Avatar membre" />' +
+                    '<img class="col-xs-4 img" src="/livresVoyageurs/public/assets/images/avatar/' + $('.avatar_pointer').eq(i).html() +'" alt="Avatar membre" />' +
                     '<div class="col-xs-8">'+
-                        '<h2>Par : ' + $('.pseudo_pointer').html() + '</h2>' +
+                        '<h2>Par : ' + $('.pseudo_pointer').eq(i).html() + '</h2>' +
                     '</div>'+
                     '<h3 class="text-center">' + $('.city_pointer').eq(i).html() +'</h3>' +
                 '</div>'
@@ -98,7 +98,7 @@ $(document).ready(function() {
             // Define markers infos
             var infowindow = new google.maps.InfoWindow({
                 content: contentCapture,
-    
+
 
             });
             // add listener

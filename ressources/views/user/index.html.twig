@@ -25,10 +25,10 @@
 	<div class="animation" id="headerHome" class="row">
 		<h1 id="community"> COMMUNAUTÉ DE <br> PARTAGE DE LIVRES </h1>
 		<p>Libérez vos livres pour faire du monde une bibliothèque !</p>
-		<p><a class="btnInscriptionHome" href="">DÉCOUVRIR</a></p>
+		<p><a class="btnInscriptionHome" href="#">DÉCOUVRIR</a></p>
 	</div>
 
-	<img id="pointerBook" src="{{ asset('assets/images/books.png') }}" alt="Image">
+	<img class="animation" id="pointerBook" src="{{ asset('assets/images/books.png') }}" alt="Image">
 
 	<div id="bottomHome" class="animation">
 		<p id="explain"> Vous possédez un livre que vous souhaitez mettre à la disposition de la communauté ou libérer dans la nature ?
@@ -101,7 +101,7 @@
 							<p class="text-justify"> Certains livres resteront près de chez vous, d'autres
 								feront le tour du monde.
 							</p>
-							<p class="button"><a href="{{ path('livresVoyageurs_history', {id_book: 39373419 } ) }}" target="_blank">DÉCOUVRIR</a></p>
+							<p class="button"><a href="{{ path('livresVoyageurs_history', {id_book: 71649948 } ) }}" target="_blank">DÉCOUVRIR</a></p>
 						</div>
 						<div class="col-md-6 col-md-pull-6 animation midHeight">
 							<div class="largeImage animation midHeight">
@@ -112,7 +112,7 @@
 				</div> <!-- container -->
 			</article>
 
-			{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+			{# {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
 				<article class="teasers" id="">
 					<div class="container">
 						<div class="divStep row">
@@ -137,7 +137,7 @@
 						</div> <!-- row -->
 					</div> <!-- container -->
 				</article>
-			{% endif %}
+			{% endif %} #}
 		</section>
 	</main>
 

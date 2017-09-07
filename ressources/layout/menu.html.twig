@@ -73,6 +73,7 @@
 						<li class="animation" {% if active_page == 'Recherche' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_search') }}"><span class="ion-search"/> Recherche </a></li>
 						<li class="animation" {% if active_page == 'Connexion' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_contact') }}"><span class="ion-email"/> Contact </a></li>
 					{% else %}
+						<li {% if active_page == 'Inscription' %} class="active"{% endif%}><a class="hidden-sm hidden-md hidden-lg" href="{{ path('livresVoyageurs_inscription') }}"> Inscription </a></li>
 						<li {% if active_page == 'Connexion' %} class="active "{% endif%}><a href="{{ path('livresVoyageurs_connexion') }}" class="hidden-sm hidden-md hidden-lg">Connexion </a></li>
 						<li class="animation" {% if active_page == 'Disponible' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_bookList') }}"><span class="ion-ios-book"/> Livres Disponibles </a></li>
 						<li class="animation" {% if active_page == 'Capture' %} class="active"{% endif%}><a href="{{ path('livresVoyageurs_newCapture') }}"><span class="ion-share"/> Enregistrer une Capture </a></li>
@@ -102,7 +103,6 @@
 	}
 
 	.sidenav a {
-		padding: 8px;
 		text-decoration: none;
 		font-size: 1.2em;
 		color: #818181;
@@ -122,6 +122,12 @@
 		margin-left: 50px;
 	}
 
+	#mySidenav {
+	    z-index: 5;
+	}
+	#mySidenav a {
+		padding: 15px 0 15px 25px
+	}
 	@media screen and (max-height: 450px) {
 	.sidenav {padding-top: 15px;}
 	.sidenav a {font-size: 18px;}
@@ -131,7 +137,7 @@
 
 <script>
 	function openNav() {
-		document.getElementById("mySidenav").style.width = "280px";
+		document.getElementById("mySidenav").style.width = "245px";
 	}
 
 	function closeNav() {

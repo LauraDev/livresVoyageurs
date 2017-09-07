@@ -80,7 +80,7 @@
   -webkit-animation-delay: 2.5s;
 }
 
-/* 
+/*
 * =======================================================
 *
 * 	MAIN
@@ -88,7 +88,7 @@
 * =======================================================
 */
 #mainHome {
-  margin-top: 380px; 
+  margin-top: 380px;
 }
 
 #steps {
@@ -186,6 +186,9 @@
   .bg-clipper {
     top: -250px;
   }
+  #pointerBook{
+      display: none;
+  }
 }
 @media (max-width: 1100px) {
   .bg-clipper {
@@ -197,7 +200,7 @@
   .inverseXL {
     position: static;
   }
-  
+
   .inverseXS {
     position: static;
   }
